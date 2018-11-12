@@ -1,9 +1,15 @@
 package edu_cn.pku.course.pkucourse;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -17,11 +23,27 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import edu_cn.pku.course.Utils;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+
+    /**
+     * Keep track of the loading task to ensure we can cancel it if requested.
+     */
+    private CoursesLoadingTask mLoadingTask = null;
+    private View mProgressView;
+    private ListView mListView;
+
+    @SuppressLint("CutPasteId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,10 +72,45 @@ public class MainActivity extends AppCompatActivity
         View parentView = navigationView.getHeaderView(0);
         TextView nameView = parentView.findViewById(R.id.nav_header_title);
         TextView schoolView = parentView.findViewById(R.id.nav_header_subtitle);
-
         SharedPreferences sharedPreferences = getSharedPreferences("login_info", Context.MODE_PRIVATE);
         nameView.setText(sharedPreferences.getString("name", null));
         schoolView.setText(sharedPreferences.getString("school", null));
+
+        mListView = findViewById(R.id.coursesListView);
+        mProgressView = findViewById(R.id.loading_progress);
+
+        showProgress(true);
+        mLoadingTask = new CoursesLoadingTask();
+        mLoadingTask.execute((Void) null);
+    }
+
+    /**
+     * Shows the progress UI and hides the login form.
+     */
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
+    private void showProgress(final boolean show) {
+        // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
+        // for very easy animations. If available, use these APIs to fade-in
+        // the progress spinner.
+        int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
+
+        mListView.setVisibility(show ? View.GONE : View.VISIBLE);
+        mListView.animate().setDuration(shortAnimTime).alpha(
+                show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                mListView.setVisibility(show ? View.GONE : View.VISIBLE);
+            }
+        });
+
+        mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
+        mProgressView.animate().setDuration(shortAnimTime).alpha(
+                show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
+            }
+        });
     }
 
     @Override
@@ -108,7 +165,6 @@ public class MainActivity extends AppCompatActivity
                     .setNegativeButton(android.R.string.no, null).show();
         }
 
-
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
@@ -123,5 +179,48 @@ public class MainActivity extends AppCompatActivity
         Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
         finish();
+    }
+
+    @SuppressLint("StaticFieldLeak")
+    private class CoursesLoadingTask extends AsyncTask<Void, Void, String> {
+
+        CoursesLoadingTask() {
+        }
+
+        @Override
+        protected String doInBackground(Void... params) {
+            return Utils.courseHttpPostRequest("http://course.pku.edu.cn/webapps/portal/execute/tabs/tabAction", "action=refreshAjaxModule&modId=_4_1&tabId=_1_1&tab_tab_group_id=_3_1");
+        }
+
+        @Override
+        protected void onPostExecute(final String str) {
+            mLoadingTask = null;
+            showProgress(false);
+
+            if (str.startsWith(Utils.errorPrefix)) {
+                if (str.equals(Utils.errorPrefix + Utils.errorPasswordIncorrect))
+                    signOut();
+                else {
+                    View contextView = findViewById(R.id.coursesListView);
+                    Snackbar.make(contextView, str, Snackbar.LENGTH_SHORT).show();
+                }
+            } else {
+                String[] rawSplit = str.split("</li>");
+                List<String> courses_list = new ArrayList<>();
+                for (int i = 0; i < rawSplit.length - 1; i++) {
+                    courses_list.add(Utils.betweenStrings(rawSplit[i], "target=\"_top\">", "</a>"));
+                }
+                final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>
+                        (MainActivity.this, android.R.layout.simple_list_item_1, courses_list);
+                mListView.setAdapter(arrayAdapter);
+                arrayAdapter.notifyDataSetChanged();
+            }
+        }
+
+        @Override
+        protected void onCancelled() {
+            mLoadingTask = null;
+            showProgress(false);
+        }
     }
 }

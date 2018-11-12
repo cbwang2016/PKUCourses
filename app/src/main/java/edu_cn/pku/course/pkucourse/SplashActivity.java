@@ -8,10 +8,18 @@ import android.content.Intent;
 
 public class SplashActivity extends AppCompatActivity {
 
+    public static Context contextOfApplication;
+
+    public static Context getContextOfApplication() {
+        return contextOfApplication;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
+
+        contextOfApplication = getApplicationContext();
 
         SharedPreferences sharedPreferences = getSharedPreferences("login_info", Context.MODE_PRIVATE);
         String session_id = sharedPreferences.getString("session_id", null);
