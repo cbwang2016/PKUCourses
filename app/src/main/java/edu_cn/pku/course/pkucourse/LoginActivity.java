@@ -114,8 +114,8 @@ public class LoginActivity extends AppCompatActivity {
         View focusView = null;
 
         // Check for a valid password, if the user entered one.
-        if (!TextUtils.isEmpty(password) && !isPasswordValid(password)) {
-            mPasswordView.setError(getString(R.string.error_invalid_password));
+        if (TextUtils.isEmpty(password)) {
+            mPasswordView.setError(getString(R.string.error_field_required));
             focusView = mPasswordView;
             cancel = true;
         }
@@ -123,10 +123,6 @@ public class LoginActivity extends AppCompatActivity {
         // Check for a valid studentid address.
         if (TextUtils.isEmpty(studentid)) {
             mStudentidView.setError(getString(R.string.error_field_required));
-            focusView = mStudentidView;
-            cancel = true;
-        } else if (!isstudentidValid(studentid)) {
-            mStudentidView.setError(getString(R.string.error_invalid_studentid));
             focusView = mStudentidView;
             cancel = true;
         }
@@ -260,12 +256,25 @@ public class LoginActivity extends AppCompatActivity {
                     if (session_id == null)
                         throw new Exception("session_id not found");
 
-                    //Save session_id using SharedPreferences;
+                    conn.disconnect();
+
+                    //get Basic info
+                    request = "http://course.pku.edu.cn/webapps/portal/execute/topframe?tab_tab_group_id=_3_1&frameSize=LARGE";
+                    url = new URL(request);
+                    conn = (HttpURLConnection) url.openConnection();
+                    conn.setInstanceFollowRedirects(false);
+                    conn.setRequestProperty("Cookie", "session_id=" + session_id);
+                    in = conn.getInputStream();
+                    str = convertStreamToString(in);
+                    String infos = Utils.betweenStrings(str, "<span id=\"loggedInUserName\">", "</span>");
+
                     SharedPreferences sharedPreferences = getSharedPreferences("login_info", Context.MODE_PRIVATE);
                     SharedPreferences.Editor editor = sharedPreferences.edit();
                     editor.putString("session_id", session_id);
                     editor.putString("student_id", mstudentid);
                     editor.putString("password", mPassword);
+                    editor.putString("name", infos.split(" ")[1]);
+                    editor.putString("school", infos.split(" ")[0]);
                     editor.apply();
 
                     return "";
