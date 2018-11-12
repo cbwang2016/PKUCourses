@@ -14,8 +14,7 @@ public class SplashActivity extends AppCompatActivity {
         setContentView(R.layout.activity_splash);
 
         SharedPreferences sharedPreferences = getSharedPreferences("login_info", Context.MODE_PRIVATE);
-        String flag = null;
-        String session_id = sharedPreferences.getString("session_id", flag);
+        String session_id = sharedPreferences.getString("session_id", null);
         if (session_id != null) {
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
