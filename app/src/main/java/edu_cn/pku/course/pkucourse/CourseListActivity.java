@@ -39,12 +39,6 @@ public class CourseListActivity extends MainActivity {
         mLoadingTask.execute((Void) null);
     }
 
-//    @Override
-//    public void setContentView(int layoutResID) {
-//        View fullView = getLayoutInflater().inflate(layoutResID, null);
-//        super.setContentView(fullView);
-//    }
-
     @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
     private void showProgress(final boolean show) {
         // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
