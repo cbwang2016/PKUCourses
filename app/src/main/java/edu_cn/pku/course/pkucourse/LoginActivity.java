@@ -1,5 +1,7 @@
 package edu_cn.pku.course.pkucourse;
 
+import edu_cn.pku.course.Utils;
+
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
@@ -241,7 +243,7 @@ public class LoginActivity extends AppCompatActivity {
                 conn.disconnect();
 
                 if (str.contains("\"success\":true")) {
-                    String token = str.substring(str.indexOf("\"token\":\"") + "\"token\":\"".length(), str.indexOf("\"}"));
+                    String token = Utils.betweenStrings(str, "\"token\":\"", "\"}");
                     request = "http://course.pku.edu.cn/webapps/bb-sso-bb_bb60/execute/authValidate/campusLogin?rand=0.5&token=" + token;
                     url = new URL(request);
                     conn = (HttpURLConnection) url.openConnection();
@@ -253,8 +255,7 @@ public class LoginActivity extends AppCompatActivity {
                     if (cookiesHeader != null)
                         for (String cookie : cookiesHeader)
                             if (cookie.contains("session_id="))
-                                session_id = cookie.substring(cookie.indexOf("session_id=") + "session_id=".length(), cookie.indexOf("; Path=/;"));
-
+                                session_id = Utils.betweenStrings(cookie, "session_id=", "; Path=/;");
 
                     if (session_id == null)
                         throw new Exception("session_id not found");
