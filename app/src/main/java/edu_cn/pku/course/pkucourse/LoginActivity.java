@@ -266,7 +266,7 @@ public class LoginActivity extends AppCompatActivity {
                     editor.putString("session_id", session_id);
                     editor.putString("student_id", mstudentid);
                     editor.putString("password", mPassword);
-                    editor.commit();
+                    editor.apply();
 
                     return "";
                 } else if (str.contains("\"success\":false")) {
@@ -289,11 +289,11 @@ public class LoginActivity extends AppCompatActivity {
             mAuthTask = null;
             showProgress(false);
 
-            if (str == "") {
+            if (str.equals("")) {
                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                 startActivity(intent);
                 finish();
-            } else if (str == "Password Incorrect") {
+            } else if (str.equals("Password Incorrect")) {
                 mPasswordView.setError(getString(R.string.error_incorrect_password));
                 mPasswordView.requestFocus();
             } else {
