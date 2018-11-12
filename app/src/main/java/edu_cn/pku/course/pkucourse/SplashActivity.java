@@ -24,7 +24,7 @@ public class SplashActivity extends AppCompatActivity {
         SharedPreferences sharedPreferences = getSharedPreferences("login_info", Context.MODE_PRIVATE);
         String session_id = sharedPreferences.getString("session_id", null);
         if (session_id != null) {
-            Intent intent = new Intent(this, MainActivity.class);
+            Intent intent = new Intent(this, CourseListActivity.class);
             startActivity(intent);
             finish();
         } else {

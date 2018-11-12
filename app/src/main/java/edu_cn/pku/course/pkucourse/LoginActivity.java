@@ -286,7 +286,7 @@ public class LoginActivity extends AppCompatActivity {
 
             switch (str) {
                 case "":
-                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                    Intent intent = new Intent(LoginActivity.this, CourseListActivity.class);
                     startActivity(intent);
                     finish();
                     break;
