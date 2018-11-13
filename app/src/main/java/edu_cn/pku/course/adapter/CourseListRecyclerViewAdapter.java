@@ -62,10 +62,6 @@ public class CourseListRecyclerViewAdapter extends RecyclerView.Adapter<CourseLi
         holder.mView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-//                ClipboardManager cmb = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
-//                if (cmb != null) {
-//                    cmb.setText(colorValues[holder.getAdapterPosition()]);
-//                }
 
                 if (holder.getAdapterPosition() < pinnedCoursesStrs.size()) {
                     String tmp = courseStringGet(holder.getAdapterPosition());
