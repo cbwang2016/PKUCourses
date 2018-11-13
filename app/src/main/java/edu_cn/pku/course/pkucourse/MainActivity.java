@@ -8,7 +8,9 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
@@ -16,24 +18,25 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.FrameLayout;
 import android.widget.TextView;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import edu_cn.pku.course.adapter.FragmentAdapter;
+import edu_cn.pku.course.fragments.AnnouncementsFragment;
+import edu_cn.pku.course.fragments.CourseListFragment;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+    private ViewPager view_pager_main;
+    NavigationView navigationView;
 
     @SuppressLint("CutPasteId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-    }
-
-    @Override
-    public void setContentView(int layoutResID) {
-        @SuppressLint("InflateParams") final DrawerLayout fullView = (DrawerLayout) getLayoutInflater().inflate(R.layout.activity_main, null);
-        FrameLayout activityContainer = fullView.findViewById(R.id.activity_content);
-        getLayoutInflater().inflate(layoutResID, activityContainer, true);
-        super.setContentView(fullView);
+        setContentView(R.layout.activity_main);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -44,7 +47,7 @@ public class MainActivity extends AppCompatActivity
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = findViewById(R.id.nav_view);
+        navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
         View parentView = navigationView.getHeaderView(0);
@@ -53,7 +56,42 @@ public class MainActivity extends AppCompatActivity
         SharedPreferences sharedPreferences = getSharedPreferences("login_info", Context.MODE_PRIVATE);
         nameView.setText(sharedPreferences.getString("name", null));
         schoolView.setText(sharedPreferences.getString("school", null));
+
+        List<Fragment> fragments = new ArrayList<>();
+        fragments.add(CourseListFragment.newInstance());
+        fragments.add(AnnouncementsFragment.newInstance("", ""));
+
+        FragmentAdapter mFragmentAdapter = new FragmentAdapter(getSupportFragmentManager(), fragments);
+        view_pager_main = findViewById(R.id.view_pager_main);
+        view_pager_main.setAdapter(mFragmentAdapter);
+        view_pager_main.addOnPageChangeListener(pageChangeListener);
+
+        setTitle(navigationView.getMenu().getItem(0).getTitle());
     }
+
+    private ViewPager.OnPageChangeListener pageChangeListener = new ViewPager.OnPageChangeListener() {
+        @Override
+        public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+        }
+
+        @Override
+        public void onPageSelected(int position) {
+//            if (colorListColors[position].equals("White")) {
+//                img_main_toggle.setImageTintList(ColorStateList.valueOf(Color.WHITE));
+//            } else {
+//                img_main_toggle.setImageTintList(ColorStateList.valueOf(Color.BLACK));
+//            }
+            setTitle(navigationView.getMenu().getItem(position).getTitle());
+
+            navigationView.getMenu().getItem(position).setChecked(true);
+        }
+
+        @Override
+        public void onPageScrollStateChanged(int state) {
+
+        }
+    };
 
     @Override
     public void onBackPressed() {
@@ -93,18 +131,27 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_courselist) {
-            // Handle the camera action
-        } else if (id == R.id.nav_signout) {
-            new AlertDialog.Builder(this)
-                    .setMessage("Do you really want to sign out?")
-                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+        switch (id) {
+            case R.id.nav_courselist:
+                // Handle the camera action
 
-                        public void onClick(DialogInterface dialog, int whichButton) {
-                            signOut();
-                        }
-                    })
-                    .setNegativeButton(android.R.string.no, null).show();
+                view_pager_main.setCurrentItem(0);
+                break;
+            case R.id.nav_announcements:
+
+                view_pager_main.setCurrentItem(1);
+                break;
+            case R.id.nav_signout:
+                new AlertDialog.Builder(this)
+                        .setMessage("Do you really want to sign out?")
+                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                                signOut();
+                            }
+                        })
+                        .setNegativeButton(android.R.string.no, null).show();
+                break;
         }
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);

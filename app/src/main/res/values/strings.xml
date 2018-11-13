@@ -17,4 +17,6 @@
         completions."
     </string>
     <string name="network_error">Network Error!</string>
+
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
