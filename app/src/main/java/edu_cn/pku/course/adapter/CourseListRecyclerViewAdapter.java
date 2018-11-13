@@ -1,8 +1,8 @@
 package edu_cn.pku.course.adapter;
 
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
-import android.support.design.widget.Snackbar;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +11,8 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 import edu_cn.pku.course.Utils;
 import edu_cn.pku.course.pkucourse.R;
@@ -22,11 +24,13 @@ public class CourseListRecyclerViewAdapter extends RecyclerView.Adapter<CourseLi
 
     private ArrayList<String> coursesStrs;
     private ArrayList<String> pinnedCoursesStrs;
+    private SharedPreferences sharedPreferences;
 
-    public CourseListRecyclerViewAdapter(ArrayList<String> coursesStrs, ArrayList<String> pinnedCoursesStrs) {
+    public CourseListRecyclerViewAdapter(ArrayList<String> coursesStrs, ArrayList<String> pinnedCoursesStrs, SharedPreferences sharedPreferences) {
         this.coursesStrs = coursesStrs;
         Collections.sort(this.coursesStrs);
         this.pinnedCoursesStrs = pinnedCoursesStrs;
+        this.sharedPreferences = sharedPreferences;
     }
 
     @NonNull
@@ -71,7 +75,11 @@ public class CourseListRecyclerViewAdapter extends RecyclerView.Adapter<CourseLi
                     coursesStrs.remove(holder.getAdapterPosition() - pinnedCoursesStrs.size() + 1);
                 }
                 notifyDataSetChanged();
-                Snackbar.make(holder.mView, "TODO: 置顶【" + holder.recycler_str.getText() + "】", Snackbar.LENGTH_SHORT).show();
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                Set<String> set = new HashSet<>(pinnedCoursesStrs);
+                editor.putStringSet("key", set);
+                editor.apply();
+
                 return true;
             }
         });

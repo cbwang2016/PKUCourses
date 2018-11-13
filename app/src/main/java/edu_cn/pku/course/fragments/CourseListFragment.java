@@ -22,6 +22,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 import edu_cn.pku.course.Utils;
 import edu_cn.pku.course.adapter.CourseListRecyclerViewAdapter;
@@ -132,12 +133,25 @@ public class CourseListFragment extends Fragment {
             } else {
                 String[] rawSplit = str.split("</li>");
                 ArrayList<String> courses_list = new ArrayList<>();
-                courses_list.add("Test1(21-22学年第7学期)");
-                courses_list.add("Test2(21-22学年第7学期)");
-                for (int i = 0; i < rawSplit.length - 1; i++) {
-                    courses_list.add(Utils.betweenStrings(rawSplit[i], "target=\"_top\">", "</a>").split(": ")[1]);
+
+                FragmentActivity fa = getActivity();
+                if (fa == null) {
+                    Snackbar.make(mRecyclerView, "null getActivity!", Snackbar.LENGTH_SHORT).show();
+                    return;
                 }
-                CourseListRecyclerViewAdapter adapter = new CourseListRecyclerViewAdapter(courses_list, new ArrayList<String>());
+                SharedPreferences sharedPreferences = fa.getSharedPreferences("pinnedCourseList", Context.MODE_PRIVATE);
+                HashSet<String> hset = (HashSet<String>) sharedPreferences.getStringSet("key", null);
+                ArrayList<String> pinned_courses_list = new ArrayList<>();
+                if (hset != null)
+                    pinned_courses_list.addAll(hset);
+
+                for (int i = 0; i < rawSplit.length - 1; i++) {
+                    String tmp = Utils.betweenStrings(rawSplit[i], "target=\"_top\">", "</a>").split(": ")[1];
+                    if (!pinned_courses_list.contains(tmp))
+                        courses_list.add(tmp);
+                }
+
+                CourseListRecyclerViewAdapter adapter = new CourseListRecyclerViewAdapter(courses_list, pinned_courses_list, sharedPreferences);
                 mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
                 mRecyclerView.setAdapter(adapter);
             }
