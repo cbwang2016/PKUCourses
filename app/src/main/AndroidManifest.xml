@@ -2,8 +2,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="edu_cn.pku.course.pkucourse"
-    android:versionCode="2"
-    android:versionName="alpha v0.1.0"
     tools:ignore="GradleOverrides">
 
     <uses-permission android:name="android.permission.INTERNET" />

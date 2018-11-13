@@ -1,5 +1,6 @@
 package edu_cn.pku.course.adapter;
 
+import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.RecyclerView;
@@ -33,6 +34,7 @@ public class CourseListRecyclerViewAdapter extends RecyclerView.Adapter<CourseLi
         holder.setIsRecyclable(false);
 
         holder.recycler_str.setText(str[holder.getAdapterPosition()]);
+        holder.recycler_str.setBackgroundColor(holder.getAdapterPosition() % 2 == 0 ? Color.WHITE : Color.parseColor("#F5F5F5"));
 
         holder.mView.setLongClickable(true);
         holder.mView.setOnLongClickListener(new View.OnLongClickListener() {

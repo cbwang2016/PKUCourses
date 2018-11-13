@@ -9,13 +9,14 @@
 
     <TextView
         android:id="@+id/recycler_str"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingLeft="@dimen/activity_horizontal_margin"
         android:paddingTop="@dimen/activity_vertical_margin"
         android:paddingRight="@dimen/activity_horizontal_margin"
         android:paddingBottom="@dimen/activity_vertical_margin"
-        android:textSize="20sp"
+        android:textColor="@android:color/black"
+        android:textSize="18sp"
         android:textStyle="bold" />
 
 </RelativeLayout>
