@@ -27,6 +27,10 @@ public class Utils {
         return str.substring(str.indexOf(leftStr) + leftStr.length(), str.indexOf(rightStr));
     }
 
+    public static String lastBetweenStrings(String str, String leftStr, String rightStr) {
+        return str.substring(str.lastIndexOf(leftStr) + leftStr.length(), str.lastIndexOf(rightStr));
+    }
+
     private static boolean isNetworkAvailable() {
         ConnectivityManager connectivityManager
                 = (ConnectivityManager) applicationContext.getSystemService(Context.CONNECTIVITY_SERVICE);

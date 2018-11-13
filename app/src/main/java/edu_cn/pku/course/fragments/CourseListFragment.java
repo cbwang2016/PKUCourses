@@ -21,6 +21,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
+import java.util.ArrayList;
+
 import edu_cn.pku.course.Utils;
 import edu_cn.pku.course.adapter.CourseListRecyclerViewAdapter;
 import edu_cn.pku.course.pkucourse.LoginActivity;
@@ -129,11 +131,13 @@ public class CourseListFragment extends Fragment {
                 }
             } else {
                 String[] rawSplit = str.split("</li>");
-                String[] courses_list = new String[rawSplit.length - 1];
+                ArrayList<String> courses_list = new ArrayList<>();
+                courses_list.add("Test1(21-22学年第7学期)");
+                courses_list.add("Test2(21-22学年第7学期)");
                 for (int i = 0; i < rawSplit.length - 1; i++) {
-                    courses_list[i] = Utils.betweenStrings(rawSplit[i], "target=\"_top\">", "</a>").split(": ")[1];
+                    courses_list.add(Utils.betweenStrings(rawSplit[i], "target=\"_top\">", "</a>").split(": ")[1]);
                 }
-                CourseListRecyclerViewAdapter adapter = new CourseListRecyclerViewAdapter(courses_list);
+                CourseListRecyclerViewAdapter adapter = new CourseListRecyclerViewAdapter(courses_list, new ArrayList<String>());
                 mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
                 mRecyclerView.setAdapter(adapter);
             }

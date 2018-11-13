@@ -9,6 +9,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+import java.util.Collections;
+
+import edu_cn.pku.course.Utils;
 import edu_cn.pku.course.pkucourse.R;
 
 /**
@@ -16,10 +20,13 @@ import edu_cn.pku.course.pkucourse.R;
  */
 public class CourseListRecyclerViewAdapter extends RecyclerView.Adapter<CourseListRecyclerViewAdapter.RecyclerViewHolder> {
 
-    private String[] str;
+    private ArrayList<String> coursesStrs;
+    private ArrayList<String> pinnedCoursesStrs;
 
-    public CourseListRecyclerViewAdapter(String[] str) {
-        this.str = str;
+    public CourseListRecyclerViewAdapter(ArrayList<String> coursesStrs, ArrayList<String> pinnedCoursesStrs) {
+        this.coursesStrs = coursesStrs;
+        Collections.sort(this.coursesStrs);
+        this.pinnedCoursesStrs = pinnedCoursesStrs;
     }
 
     @NonNull
@@ -29,12 +36,27 @@ public class CourseListRecyclerViewAdapter extends RecyclerView.Adapter<CourseLi
         return new RecyclerViewHolder(view);
     }
 
+    private String courseStringGet(int index) {
+        return index < pinnedCoursesStrs.size() ? pinnedCoursesStrs.get(index) : coursesStrs.get(index - pinnedCoursesStrs.size());
+    }
+
+    private int courseColorGet(int index) {
+        if (index < pinnedCoursesStrs.size()) {
+            return Color.parseColor("#EEEEEE");
+//            return index % 2 == 0 ? Color.parseColor("#B3E5FC") : Color.parseColor("#81D4FA");
+        } else {
+//            return index % 2 == 0 ? Color.WHITE : Color.parseColor("#F5F5F5");
+            return Color.WHITE;
+        }
+    }
+
     @Override
     public void onBindViewHolder(@NonNull final RecyclerViewHolder holder, final int position) {
         holder.setIsRecyclable(false);
 
-        holder.recycler_str.setText(str[holder.getAdapterPosition()]);
-        holder.recycler_str.setBackgroundColor(holder.getAdapterPosition() % 2 == 0 ? Color.WHITE : Color.parseColor("#F5F5F5"));
+        holder.mView.setBackgroundColor(courseColorGet(holder.getAdapterPosition()));
+        holder.recycler_str.setText(courseStringGet(holder.getAdapterPosition()).split("\\([0-9]")[0]);
+        holder.recycler_sub_str.setText(Utils.lastBetweenStrings(courseStringGet(holder.getAdapterPosition()), "(", ")"));
 
         holder.mView.setLongClickable(true);
         holder.mView.setOnLongClickListener(new View.OnLongClickListener() {
@@ -44,28 +66,39 @@ public class CourseListRecyclerViewAdapter extends RecyclerView.Adapter<CourseLi
 //                if (cmb != null) {
 //                    cmb.setText(colorValues[holder.getAdapterPosition()]);
 //                }
-                Snackbar.make(holder.mView, "Test", Snackbar.LENGTH_SHORT).show();
+
+                if (holder.getAdapterPosition() < pinnedCoursesStrs.size()) {
+                    String tmp = courseStringGet(holder.getAdapterPosition());
+                    coursesStrs.add(tmp);
+                    Collections.sort(coursesStrs);
+                    pinnedCoursesStrs.remove(holder.getAdapterPosition());
+                } else {
+                    pinnedCoursesStrs.add(0, courseStringGet(holder.getAdapterPosition()));
+                    coursesStrs.remove(holder.getAdapterPosition() - pinnedCoursesStrs.size() + 1);
+                }
+                notifyDataSetChanged();
+                Snackbar.make(holder.mView, "TODO: 置顶【" + holder.recycler_str.getText() + "】", Snackbar.LENGTH_SHORT).show();
                 return true;
             }
         });
-
     }
 
     @Override
     public int getItemCount() {
-        return str.length;
+        return coursesStrs.size() + pinnedCoursesStrs.size();
     }
 
 
     class RecyclerViewHolder extends RecyclerView.ViewHolder {
 
         private View mView;
-        private TextView recycler_str;
+        private TextView recycler_str, recycler_sub_str;
 
         private RecyclerViewHolder(View itemView) {
             super(itemView);
             mView = itemView;
             recycler_str = itemView.findViewById(R.id.recycler_str);
+            recycler_sub_str = itemView.findViewById(R.id.recycler_sub_str);
         }
     }
 }
