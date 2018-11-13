@@ -43,9 +43,7 @@ public class CourseListRecyclerViewAdapter extends RecyclerView.Adapter<CourseLi
     private int courseColorGet(int index) {
         if (index < pinnedCoursesStrs.size()) {
             return Color.parseColor("#EEEEEE");
-//            return index % 2 == 0 ? Color.parseColor("#B3E5FC") : Color.parseColor("#81D4FA");
         } else {
-//            return index % 2 == 0 ? Color.WHITE : Color.parseColor("#F5F5F5");
             return Color.WHITE;
         }
     }
