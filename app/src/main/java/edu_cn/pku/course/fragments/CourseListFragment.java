@@ -37,6 +37,7 @@ public class CourseListFragment extends Fragment implements SwipeRefreshLayout.O
     private CoursesLoadingTask mLoadingTask = null;
     private RecyclerView mRecyclerView;
     private SwipeRefreshLayout mCourseListSwipeContainer;
+    CourseListRecyclerViewAdapter adapter;
 
 //    private OnFragmentInteractionListener mListener;
 
@@ -75,6 +76,16 @@ public class CourseListFragment extends Fragment implements SwipeRefreshLayout.O
         mCourseListSwipeContainer = linearLayout.findViewById(R.id.course_list_swipe_container);
         mCourseListSwipeContainer.setOnRefreshListener(this);
 
+        FragmentActivity fa = getActivity();
+        if (fa == null) {
+            Snackbar.make(mRecyclerView, "null getActivity!", Snackbar.LENGTH_SHORT).show();
+            return linearLayout;
+        }
+        SharedPreferences sharedPreferences = fa.getSharedPreferences("pinnedCourseList", Context.MODE_PRIVATE);
+        adapter = new CourseListRecyclerViewAdapter(new ArrayList<CourseInfo>(), sharedPreferences);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        mRecyclerView.setAdapter(adapter);
+
         showLoading(true);
         mLoadingTask = new CoursesLoadingTask();
         mLoadingTask.execute((Void) null);
@@ -84,10 +95,10 @@ public class CourseListFragment extends Fragment implements SwipeRefreshLayout.O
 
     @Override
     public void onRefresh() {
-        mLoadingTask = null;
-        mCourseListSwipeContainer.setRefreshing(false);
-        mLoadingTask = new CoursesLoadingTask();
-        mLoadingTask.execute((Void) null);
+        if (mLoadingTask == null) {
+            mLoadingTask = new CoursesLoadingTask();
+            mLoadingTask.execute((Void) null);
+        }
     }
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
@@ -168,9 +179,7 @@ public class CourseListFragment extends Fragment implements SwipeRefreshLayout.O
                     ci.setPinned(1);
                 courses_list.add(ci);
 
-                CourseListRecyclerViewAdapter adapter = new CourseListRecyclerViewAdapter(courses_list, sharedPreferences);
-                mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-                mRecyclerView.setAdapter(adapter);
+                adapter.updateList(courses_list);
             }
         }
 
