@@ -38,6 +38,7 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // 模板自动生成
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -47,9 +48,12 @@ public class MainActivity extends AppCompatActivity
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
+        // 查找xml文件中的对象并保存进Java变量
         navigationView = findViewById(R.id.nav_view);
+        // 设置navigationView的事件监听类为这个类，监听函数为onNavigationItemSelected
         navigationView.setNavigationItemSelectedListener(this);
 
+        // 将姓名和学校显示到navigationView的Header中的两个位置
         View parentView = navigationView.getHeaderView(0);
         TextView nameView = parentView.findViewById(R.id.nav_header_title);
         TextView schoolView = parentView.findViewById(R.id.nav_header_subtitle);
@@ -57,16 +61,18 @@ public class MainActivity extends AppCompatActivity
         nameView.setText(sharedPreferences.getString("name", null));
         schoolView.setText(sharedPreferences.getString("school", null));
 
+        // 将CourseListFragment和AnnouncementsFragment两个fragment加入到view_pager_main内
         List<Fragment> fragments = new ArrayList<>();
         fragments.add(CourseListFragment.newInstance());
         fragments.add(AnnouncementsFragment.newInstance("", ""));
-
         FragmentAdapter mFragmentAdapter = new FragmentAdapter(getSupportFragmentManager(), fragments);
         view_pager_main = findViewById(R.id.view_pager_main);
         view_pager_main.setAdapter(mFragmentAdapter);
         view_pager_main.addOnPageChangeListener(pageChangeListener);
 
+        // 设置屏幕左上角的标题、以及左侧抽屉栏中被选中的对象
         setTitle(navigationView.getMenu().getItem(0).getTitle());
+        navigationView.getMenu().getItem(0).setChecked(true);
     }
 
     private ViewPager.OnPageChangeListener pageChangeListener = new ViewPager.OnPageChangeListener() {
@@ -77,13 +83,9 @@ public class MainActivity extends AppCompatActivity
 
         @Override
         public void onPageSelected(int position) {
-//            if (colorListColors[position].equals("White")) {
-//                img_main_toggle.setImageTintList(ColorStateList.valueOf(Color.WHITE));
-//            } else {
-//                img_main_toggle.setImageTintList(ColorStateList.valueOf(Color.BLACK));
-//            }
-            setTitle(navigationView.getMenu().getItem(position).getTitle());
 
+            // 设置屏幕左上角的标题、以及左侧抽屉栏中被选中的对象
+            setTitle(navigationView.getMenu().getItem(position).getTitle());
             navigationView.getMenu().getItem(position).setChecked(true);
         }
 
@@ -95,6 +97,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
+        // 模板自动生成的，大概是说如果左侧抽屉栏被打开，按返回键的时候关闭抽屉栏而不是退出程序
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
@@ -154,17 +157,20 @@ public class MainActivity extends AppCompatActivity
                 break;
         }
 
+        // 关闭抽屉栏
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
 
     private void signOut() {
+        // 清除存储的登陆信息
         SharedPreferences sharedPreferences = getSharedPreferences("login_info", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.clear();
         editor.apply();
 
+        // 回到LoginActivity
         Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
         finish();

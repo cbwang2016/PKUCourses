@@ -53,8 +53,8 @@ public class CourseListRecyclerViewAdapter extends RecyclerView.Adapter<CourseLi
         holder.setIsRecyclable(false);
 
         holder.mView.setBackgroundColor(courseColorGet(coursesList.get(holder.getAdapterPosition()).isPinned()));
-        holder.recycler_str.setText(coursesList.get(holder.getAdapterPosition()).getCourseName());
-        holder.recycler_sub_str.setText(coursesList.get(holder.getAdapterPosition()).getSemesterString());
+        holder.recycler_course_name_str.setText(coursesList.get(holder.getAdapterPosition()).getCourseName());
+        holder.recycler_course_semester_str.setText(coursesList.get(holder.getAdapterPosition()).getSemesterString());
 
         holder.mView.setLongClickable(true);
         holder.mView.setOnLongClickListener(new View.OnLongClickListener() {
@@ -86,13 +86,13 @@ public class CourseListRecyclerViewAdapter extends RecyclerView.Adapter<CourseLi
     class RecyclerViewHolder extends RecyclerView.ViewHolder {
 
         private View mView;
-        private TextView recycler_str, recycler_sub_str;
+        private TextView recycler_course_name_str, recycler_course_semester_str;
 
         private RecyclerViewHolder(View itemView) {
             super(itemView);
             mView = itemView;
-            recycler_str = itemView.findViewById(R.id.recycler_str);
-            recycler_sub_str = itemView.findViewById(R.id.recycler_sub_str);
+            recycler_course_name_str = itemView.findViewById(R.id.recycler_str);
+            recycler_course_semester_str = itemView.findViewById(R.id.recycler_sub_str);
         }
     }
 }

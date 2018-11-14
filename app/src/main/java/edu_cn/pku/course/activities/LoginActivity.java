@@ -1,7 +1,5 @@
 package edu_cn.pku.course.activities;
 
-import edu_cn.pku.course.Utils;
-
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.SuppressLint;
@@ -12,12 +10,11 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
 import android.os.AsyncTask;
-
 import android.os.Build;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
+import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
@@ -35,6 +32,8 @@ import java.nio.charset.Charset;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+
+import edu_cn.pku.course.Utils;
 
 /**
  * A login screen that offers login via studentid/password.
@@ -57,10 +56,14 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         setupActionBar();
-        // Set up the login form.
-        mStudentidView = (EditText) findViewById(R.id.studentid);
 
+        // 查找xml文件中的对象并保存进Java变量
+        mStudentidView = (EditText) findViewById(R.id.studentid);
+        mLoginFormView = findViewById(R.id.login_form);
+        mProgressView = findViewById(R.id.login_progress);
         mPasswordView = findViewById(R.id.password);
+
+        // 模板自动生成的
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
@@ -72,6 +75,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
+        // 给按钮studentid_sign_in_button增加事件监听函数，onClick事件发生时就执行attemptLogin。
         Button mstudentidSignInButton = findViewById(R.id.studentid_sign_in_button);
         mstudentidSignInButton.setOnClickListener(new OnClickListener() {
             @Override
@@ -80,8 +84,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        mLoginFormView = findViewById(R.id.login_form);
-        mProgressView = findViewById(R.id.login_progress);
+
     }
 
     /**
@@ -207,6 +210,7 @@ public class LoginActivity extends AppCompatActivity {
 
             HttpURLConnection conn = null;
             try {
+                // 通过iaaa登陆
                 String urlParameters = "appid=blackboard&userName=" + URLEncoder.encode(mstudentid, "UTF-8") + "&password=" + URLEncoder.encode(mPassword, "UTF-8") + "&randCode=&smsCode=&otpCode=&redirUrl=http%3A%2F%2Fcourse.pku.edu.cn%2Fwebapps%2Fbb-sso-bb_bb60%2Fexecute%2FauthValidate%2FcampusLogin";
                 byte[] postData = urlParameters.getBytes(Charset.forName("UTF-8"));
                 String request = "https://iaaa.pku.edu.cn/iaaa/oauthlogin.do";
@@ -225,6 +229,7 @@ public class LoginActivity extends AppCompatActivity {
                 conn.disconnect();
 
                 if (str.contains("\"success\":true")) {
+                    // 将iaaa返回的token提交给course来获取session_id
                     String token = Utils.betweenStrings(str, "\"token\":\"", "\"}");
                     request = "http://course.pku.edu.cn/webapps/bb-sso-bb_bb60/execute/authValidate/campusLogin?rand=0.5&token=" + token;
                     url = new URL(request);
@@ -244,7 +249,7 @@ public class LoginActivity extends AppCompatActivity {
 
                     conn.disconnect();
 
-                    //get Basic info
+                    // get Basic info
                     request = "http://course.pku.edu.cn/webapps/portal/execute/topframe?tab_tab_group_id=_3_1&frameSize=LARGE";
                     url = new URL(request);
                     conn = (HttpURLConnection) url.openConnection();
@@ -254,6 +259,7 @@ public class LoginActivity extends AppCompatActivity {
                     str = convertStreamToString(in);
                     String infos = Utils.betweenStrings(str, "<span id=\"loggedInUserName\">", "</span>");
 
+                    // 存储进SharedPreferences
                     SharedPreferences sharedPreferences = getSharedPreferences("login_info", Context.MODE_PRIVATE);
                     SharedPreferences.Editor editor = sharedPreferences.edit();
                     editor.putString("session_id", session_id);

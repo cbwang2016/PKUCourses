@@ -34,22 +34,19 @@ import edu_cn.pku.course.activities.R;
 import edu_cn.pku.course.adapter.CourseListRecyclerViewAdapter;
 
 public class CourseListFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 
     private CoursesLoadingTask mLoadingTask = null;
     private RecyclerView mRecyclerView;
     private SwipeRefreshLayout mCourseListSwipeContainer;
     private CourseListRecyclerViewAdapter adapter;
 
-//    private OnFragmentInteractionListener mListener;
 
     public CourseListFragment() {
         // Required empty public constructor
     }
 
     /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
+     * 传递参数用的，这里没用到。
      *
      * @return A new instance of fragment CourseListFragment.
      */
@@ -71,25 +68,30 @@ public class CourseListFragment extends Fragment implements SwipeRefreshLayout.O
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-
         LinearLayout linearLayout = (LinearLayout) inflater.inflate(R.layout.fragment_course_list, container, false);
+        // 查找xml文件中的对象并保存进Java变量
         mRecyclerView = linearLayout.findViewById(R.id.recycler_courses);
         mCourseListSwipeContainer = linearLayout.findViewById(R.id.course_list_swipe_container);
 
+        // 设置动画
         LayoutAnimationController animation = AnimationUtils.loadLayoutAnimation(getContext(), R.anim.layout_animation_fall_down);
         mCourseListSwipeContainer.setLayoutAnimation(animation);
+        // 设置刷新的监听类为此类（监听函数onRefresh）
         mCourseListSwipeContainer.setOnRefreshListener(this);
 
         FragmentActivity fa = getActivity();
+        // 为了消除编译器Warning，需要判断一下是不是null，其实这基本上不可能出现null
         if (fa == null) {
             Snackbar.make(mRecyclerView, "null getActivity!", Snackbar.LENGTH_SHORT).show();
             return linearLayout;
         }
+        // 将读取已置顶课程列表的SharedPreferences传递给CourseListRecyclerViewAdapter
         SharedPreferences sharedPreferences = fa.getSharedPreferences("pinnedCourseList", Context.MODE_PRIVATE);
         adapter = new CourseListRecyclerViewAdapter(new ArrayList<CourseInfo>(), sharedPreferences);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mRecyclerView.setAdapter(adapter);
 
+        // 显示Loading的小动画，并在后台读取课程列表
         showLoading(true);
         mLoadingTask = new CoursesLoadingTask();
         mLoadingTask.execute((Void) null);
@@ -107,9 +109,7 @@ public class CourseListFragment extends Fragment implements SwipeRefreshLayout.O
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
     private void showLoading(final boolean show) {
-        // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
-        // for very easy animations. If available, use these APIs to fade-in
-        // the progress spinner.
+        // 逐渐显示mRecyclerView的小动画
         int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
 
         mRecyclerView.setVisibility(show ? View.GONE : View.VISIBLE);
@@ -140,17 +140,21 @@ public class CourseListFragment extends Fragment implements SwipeRefreshLayout.O
             mLoadingTask = null;
             showLoading(false);
 
+            // 出现了错误
             if (str.startsWith(Utils.errorPrefix)) {
                 if (str.equals(Utils.errorPrefix + Utils.errorPasswordIncorrect)) {
+                    // 密码错误
                     try {
                         signOut();
                     } catch (Exception e) {
                         Snackbar.make(mRecyclerView, e.getMessage(), Snackbar.LENGTH_SHORT).show();
                     }
                 } else {
+                    // 其他网络错误
                     Snackbar.make(mRecyclerView, str, Snackbar.LENGTH_SHORT).show();
                 }
             } else {
+                // 解析返回的HTML
                 String[] rawSplit = str.split("</li>");
                 ArrayList<CourseInfo> courses_list = new ArrayList<>();
 
@@ -184,10 +188,12 @@ public class CourseListFragment extends Fragment implements SwipeRefreshLayout.O
                 courses_list.add(ci);
 
                 adapter.updateList(courses_list);
+                // 显示课程列表的fancy的动画
                 mRecyclerView.scheduleLayoutAnimation();
             }
         }
 
+        // 没什么用的函数
         @Override
         protected void onCancelled() {
             mLoadingTask = null;
@@ -195,8 +201,11 @@ public class CourseListFragment extends Fragment implements SwipeRefreshLayout.O
         }
     }
 
+    /**
+     * 为了方便管理课程列表，将每个课程的各种信息组成一个类。
+     */
     public class CourseInfo implements Comparable<CourseInfo> {
-        private String rawStr;//格式： 004-00432108-0006156320-1: 数学物理方法 (上)(18-19学年第1学期)
+        private String rawStr; // 格式： 004-00432108-0006156320-1: 数学物理方法 (上)(18-19学年第1学期)
         private int isPinned;
 
         CourseInfo(String str) {

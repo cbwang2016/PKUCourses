@@ -22,10 +22,16 @@ public class Utils {
 
     private static final Context applicationContext = SplashActivity.getContextOfApplication();
 
+    /**
+     * 将字符串str中第一个出现的leftStr和第一个出现的rightStr之间的字符串提取出来
+     */
     public static String betweenStrings(String str, String leftStr, String rightStr) {
         return str.substring(str.indexOf(leftStr) + leftStr.length(), str.indexOf(rightStr));
     }
 
+    /**
+     * 将字符串str中最后出现的leftStr和最后出现的rightStr之间的字符串提取出来
+     */
     public static String lastBetweenStrings(String str, String leftStr, String rightStr) {
         return str.substring(str.lastIndexOf(leftStr) + leftStr.length(), str.lastIndexOf(rightStr));
     }
