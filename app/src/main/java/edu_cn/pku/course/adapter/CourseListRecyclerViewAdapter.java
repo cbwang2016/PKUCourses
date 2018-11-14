@@ -31,6 +31,12 @@ public class CourseListRecyclerViewAdapter extends RecyclerView.Adapter<CourseLi
         this.sharedPreferences = sharedPreferences;
     }
 
+    public void updateList(ArrayList<CourseListFragment.CourseInfo> coursesList) {
+        this.coursesList = coursesList;
+        Collections.sort(this.coursesList);
+        notifyDataSetChanged();
+    }
+
     @NonNull
     @Override
     public RecyclerViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
