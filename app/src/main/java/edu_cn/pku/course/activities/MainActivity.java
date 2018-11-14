@@ -1,4 +1,4 @@
-package edu_cn.pku.course.pkucourse;
+package edu_cn.pku.course.activities;
 
 import android.annotation.SuppressLint;
 import android.content.Context;

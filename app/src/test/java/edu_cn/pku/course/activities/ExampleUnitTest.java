@@ -1,4 +1,4 @@
-package edu_cn.pku.course.pkucourse;
+package edu_cn.pku.course.activities;
 
 import org.junit.Test;
 

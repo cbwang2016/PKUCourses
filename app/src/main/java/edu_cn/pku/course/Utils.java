@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.content.SharedPreferences;
 
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -14,8 +13,8 @@ import java.nio.charset.Charset;
 import java.util.List;
 import java.util.Map;
 
-import edu_cn.pku.course.pkucourse.R;
-import edu_cn.pku.course.pkucourse.SplashActivity;
+import edu_cn.pku.course.activities.R;
+import edu_cn.pku.course.activities.SplashActivity;
 
 public class Utils {
     public static final String errorPrefix = "Error: ";

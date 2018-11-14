@@ -15,7 +15,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import edu_cn.pku.course.Utils;
-import edu_cn.pku.course.pkucourse.R;
+import edu_cn.pku.course.activities.R;
 
 /**
  * Created by zhang on 2016.08.07.

@@ -26,8 +26,8 @@ import java.util.HashSet;
 
 import edu_cn.pku.course.Utils;
 import edu_cn.pku.course.adapter.CourseListRecyclerViewAdapter;
-import edu_cn.pku.course.pkucourse.LoginActivity;
-import edu_cn.pku.course.pkucourse.R;
+import edu_cn.pku.course.activities.LoginActivity;
+import edu_cn.pku.course.activities.R;
 
 public class CourseListFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER

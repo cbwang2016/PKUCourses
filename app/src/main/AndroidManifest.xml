@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="edu_cn.pku.course.pkucourse"
+    package="edu_cn.pku.course.activities"
     tools:ignore="GradleOverrides">
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -16,7 +16,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="AllowBackup,GoogleAppIndexingWarning,UnusedAttribute">
-        <activity android:name=".SplashActivity">
+        <activity android:name="edu_cn.pku.course.activities.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -24,16 +24,16 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".MainActivity"
+            android:name="edu_cn.pku.course.activities.MainActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".LoginActivity"
+            android:name="edu_cn.pku.course.activities.LoginActivity"
             android:label="@string/title_activity_login"
-            android:parentActivityName=".MainActivity"
+            android:parentActivityName="edu_cn.pku.course.activities.MainActivity"
             tools:targetApi="jelly_bean">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="edu_cn.pku.course.pkucourse.MainActivity" />
+                android:value="edu_cn.pku.course.activities.MainActivity" />
         </activity>
     </application>
 
