@@ -23,6 +23,7 @@ import android.widget.LinearLayout;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Set;
 
 import edu_cn.pku.course.Utils;
 import edu_cn.pku.course.adapter.CourseListRecyclerViewAdapter;
@@ -132,7 +133,7 @@ public class CourseListFragment extends Fragment {
                 }
             } else {
                 String[] rawSplit = str.split("</li>");
-                ArrayList<String> courses_list = new ArrayList<>();
+                ArrayList<CourseInfo> courses_list = new ArrayList<>();
 
                 FragmentActivity fa = getActivity();
                 if (fa == null) {
@@ -140,18 +141,30 @@ public class CourseListFragment extends Fragment {
                     return;
                 }
                 SharedPreferences sharedPreferences = fa.getSharedPreferences("pinnedCourseList", Context.MODE_PRIVATE);
-                HashSet<String> hset = (HashSet<String>) sharedPreferences.getStringSet("key", null);
-                ArrayList<String> pinned_courses_list = new ArrayList<>();
-                if (hset != null)
-                    pinned_courses_list.addAll(hset);
+                Set<String> hset = sharedPreferences.getStringSet("key", null);
+                if (hset == null)
+                    hset = new HashSet<>();
 
                 for (int i = 0; i < rawSplit.length - 1; i++) {
                     String tmp = Utils.betweenStrings(rawSplit[i], "target=\"_top\">", "</a>").split(": ")[1];
-                    if (!pinned_courses_list.contains(tmp))
-                        courses_list.add(tmp);
+                    CourseInfo ci = new CourseInfo(tmp);
+                    if (hset.contains(tmp))
+                        ci.setPinned(1);
+                    courses_list.add(ci);
                 }
 
-                CourseListRecyclerViewAdapter adapter = new CourseListRecyclerViewAdapter(courses_list, pinned_courses_list, sharedPreferences);
+                String tmp = "课程1 (上)(28-29学年第7学期)";
+                CourseInfo ci = new CourseInfo(tmp);
+                if (hset.contains(tmp))
+                    ci.setPinned(1);
+                courses_list.add(ci);
+                tmp = "课程2 (上)(28-29学年第6学期)";
+                ci = new CourseInfo(tmp);
+                if (hset.contains(tmp))
+                    ci.setPinned(1);
+                courses_list.add(ci);
+
+                CourseListRecyclerViewAdapter adapter = new CourseListRecyclerViewAdapter(courses_list, sharedPreferences);
                 mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
                 mRecyclerView.setAdapter(adapter);
             }
@@ -161,6 +174,55 @@ public class CourseListFragment extends Fragment {
         protected void onCancelled() {
             mLoadingTask = null;
             showProgress(false);
+        }
+    }
+
+    public class CourseInfo implements Comparable<CourseInfo> {
+        private String rawStr;//格式： 004-00432108-0006156320-1: 数学物理方法 (上)(18-19学年第1学期)
+        private int isPinned;
+
+        CourseInfo(String str) {
+            rawStr = str;
+            isPinned = 0;
+        }
+
+        public void setPinned(int i) {
+            isPinned = i;
+        }
+
+        public int isPinned() {
+            return isPinned;
+        }
+
+        public String getRawStr() {
+            return rawStr;
+        }
+
+        public String getCourseName() {
+            return rawStr.split("\\([0-9]")[0];
+        }
+
+        public String getSemesterString() {
+            return Utils.lastBetweenStrings(rawStr, "(", ")");
+        }
+
+        private int getSemesterYear() {
+            return Integer.parseInt(getSemesterString().split("-")[0]);
+        }
+
+        private int getSemesterNumber() {
+            return Integer.parseInt(Utils.betweenStrings(rawStr, "学年第", "学期"));
+        }
+
+        @Override
+        public int compareTo(CourseInfo comp) {
+            if (this.isPinned != comp.isPinned)
+                return comp.isPinned - this.isPinned;
+            if (this.getSemesterYear() != comp.getSemesterYear())
+                return comp.getSemesterYear() - this.getSemesterYear();
+            if (this.getSemesterNumber() != comp.getSemesterNumber())
+                return comp.getSemesterNumber() - this.getSemesterNumber();
+            return this.getCourseName().compareTo(comp.getCourseName());
         }
     }
 

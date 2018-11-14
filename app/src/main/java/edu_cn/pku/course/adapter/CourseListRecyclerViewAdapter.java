@@ -14,22 +14,20 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-import edu_cn.pku.course.Utils;
 import edu_cn.pku.course.activities.R;
+import edu_cn.pku.course.fragments.CourseListFragment;
 
 /**
  * Created by zhang on 2016.08.07.
  */
 public class CourseListRecyclerViewAdapter extends RecyclerView.Adapter<CourseListRecyclerViewAdapter.RecyclerViewHolder> {
 
-    private ArrayList<String> coursesStrs;
-    private ArrayList<String> pinnedCoursesStrs;
+    private ArrayList<CourseListFragment.CourseInfo> coursesList;
     private SharedPreferences sharedPreferences;
 
-    public CourseListRecyclerViewAdapter(ArrayList<String> coursesStrs, ArrayList<String> pinnedCoursesStrs, SharedPreferences sharedPreferences) {
-        this.coursesStrs = coursesStrs;
-        Collections.sort(this.coursesStrs);
-        this.pinnedCoursesStrs = pinnedCoursesStrs;
+    public CourseListRecyclerViewAdapter(ArrayList<CourseListFragment.CourseInfo> coursesList, SharedPreferences sharedPreferences) {
+        this.coursesList = coursesList;
+        Collections.sort(this.coursesList);
         this.sharedPreferences = sharedPreferences;
     }
 
@@ -40,43 +38,31 @@ public class CourseListRecyclerViewAdapter extends RecyclerView.Adapter<CourseLi
         return new RecyclerViewHolder(view);
     }
 
-    private String courseStringGet(int index) {
-        return index < pinnedCoursesStrs.size() ? pinnedCoursesStrs.get(index) : coursesStrs.get(index - pinnedCoursesStrs.size());
-    }
-
-    private int courseColorGet(int index) {
-        if (index < pinnedCoursesStrs.size()) {
-            return Color.parseColor("#EEEEEE");
-        } else {
-            return Color.WHITE;
-        }
+    private int courseColorGet(int isPinned) {
+        return isPinned == 1 ? Color.parseColor("#EEEEEE") : Color.WHITE;
     }
 
     @Override
     public void onBindViewHolder(@NonNull final RecyclerViewHolder holder, final int position) {
         holder.setIsRecyclable(false);
 
-        holder.mView.setBackgroundColor(courseColorGet(holder.getAdapterPosition()));
-        holder.recycler_str.setText(courseStringGet(holder.getAdapterPosition()).split("\\([0-9]")[0]);
-        holder.recycler_sub_str.setText(Utils.lastBetweenStrings(courseStringGet(holder.getAdapterPosition()), "(", ")"));
+        holder.mView.setBackgroundColor(courseColorGet(coursesList.get(holder.getAdapterPosition()).isPinned()));
+        holder.recycler_str.setText(coursesList.get(holder.getAdapterPosition()).getCourseName());
+        holder.recycler_sub_str.setText(coursesList.get(holder.getAdapterPosition()).getSemesterString());
 
         holder.mView.setLongClickable(true);
         holder.mView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
 
-                if (holder.getAdapterPosition() < pinnedCoursesStrs.size()) {
-                    String tmp = courseStringGet(holder.getAdapterPosition());
-                    coursesStrs.add(tmp);
-                    Collections.sort(coursesStrs);
-                    pinnedCoursesStrs.remove(holder.getAdapterPosition());
-                } else {
-                    pinnedCoursesStrs.add(0, courseStringGet(holder.getAdapterPosition()));
-                    coursesStrs.remove(holder.getAdapterPosition() - pinnedCoursesStrs.size() + 1);
-                }
+                coursesList.get(holder.getAdapterPosition()).setPinned(coursesList.get(holder.getAdapterPosition()).isPinned() == 1 ? 0 : 1);
+                Collections.sort(coursesList);
                 notifyDataSetChanged();
                 SharedPreferences.Editor editor = sharedPreferences.edit();
-                Set<String> set = new HashSet<>(pinnedCoursesStrs);
+                Set<String> set = new HashSet<>();
+                for (CourseListFragment.CourseInfo k : coursesList)
+                    if (k.isPinned() == 1)
+                        set.add(k.getRawStr());
                 editor.putStringSet("key", set);
                 editor.apply();
 
@@ -87,7 +73,7 @@ public class CourseListRecyclerViewAdapter extends RecyclerView.Adapter<CourseLi
 
     @Override
     public int getItemCount() {
-        return coursesStrs.size() + pinnedCoursesStrs.size();
+        return coursesList.size();
     }
 
 
