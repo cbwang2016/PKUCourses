@@ -20,6 +20,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LayoutAnimationController;
 import android.widget.LinearLayout;
 
 import java.util.ArrayList;
@@ -27,9 +29,9 @@ import java.util.HashSet;
 import java.util.Set;
 
 import edu_cn.pku.course.Utils;
-import edu_cn.pku.course.adapter.CourseListRecyclerViewAdapter;
 import edu_cn.pku.course.activities.LoginActivity;
 import edu_cn.pku.course.activities.R;
+import edu_cn.pku.course.adapter.CourseListRecyclerViewAdapter;
 
 public class CourseListFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -37,7 +39,7 @@ public class CourseListFragment extends Fragment implements SwipeRefreshLayout.O
     private CoursesLoadingTask mLoadingTask = null;
     private RecyclerView mRecyclerView;
     private SwipeRefreshLayout mCourseListSwipeContainer;
-    CourseListRecyclerViewAdapter adapter;
+    private CourseListRecyclerViewAdapter adapter;
 
 //    private OnFragmentInteractionListener mListener;
 
@@ -72,8 +74,10 @@ public class CourseListFragment extends Fragment implements SwipeRefreshLayout.O
 
         LinearLayout linearLayout = (LinearLayout) inflater.inflate(R.layout.fragment_course_list, container, false);
         mRecyclerView = linearLayout.findViewById(R.id.recycler_courses);
-
         mCourseListSwipeContainer = linearLayout.findViewById(R.id.course_list_swipe_container);
+
+        LayoutAnimationController animation = AnimationUtils.loadLayoutAnimation(getContext(), R.anim.layout_animation_fall_down);
+        mCourseListSwipeContainer.setLayoutAnimation(animation);
         mCourseListSwipeContainer.setOnRefreshListener(this);
 
         FragmentActivity fa = getActivity();
@@ -180,6 +184,7 @@ public class CourseListFragment extends Fragment implements SwipeRefreshLayout.O
                 courses_list.add(ci);
 
                 adapter.updateList(courses_list);
+                mRecyclerView.scheduleLayoutAnimation();
             }
         }
 
