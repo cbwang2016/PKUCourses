@@ -176,17 +176,6 @@ public class CourseListFragment extends Fragment implements SwipeRefreshLayout.O
                     courses_list.add(ci);
                 }
 
-                String tmp = "课程1 (上)(28-29学年第7学期)";
-                CourseInfo ci = new CourseInfo(tmp);
-                if (hset.contains(tmp))
-                    ci.setPinned(1);
-                courses_list.add(ci);
-                tmp = "课程2 (上)(28-29学年第6学期)";
-                ci = new CourseInfo(tmp);
-                if (hset.contains(tmp))
-                    ci.setPinned(1);
-                courses_list.add(ci);
-
                 adapter.updateList(courses_list);
                 // 显示课程列表的fancy的动画
                 mRecyclerView.scheduleLayoutAnimation();
