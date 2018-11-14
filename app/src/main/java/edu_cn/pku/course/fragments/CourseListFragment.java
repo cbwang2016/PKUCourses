@@ -14,6 +14,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -30,12 +31,12 @@ import edu_cn.pku.course.adapter.CourseListRecyclerViewAdapter;
 import edu_cn.pku.course.activities.LoginActivity;
 import edu_cn.pku.course.activities.R;
 
-public class CourseListFragment extends Fragment {
+public class CourseListFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 
     private CoursesLoadingTask mLoadingTask = null;
-    private View mProgressView;
     private RecyclerView mRecyclerView;
+    private SwipeRefreshLayout mCourseListSwipeContainer;
 
 //    private OnFragmentInteractionListener mListener;
 
@@ -70,16 +71,27 @@ public class CourseListFragment extends Fragment {
 
         LinearLayout linearLayout = (LinearLayout) inflater.inflate(R.layout.fragment_course_list, container, false);
         mRecyclerView = linearLayout.findViewById(R.id.recycler_courses);
-        mProgressView = linearLayout.findViewById(R.id.loading_courses_progress);
 
-        showProgress(true);
+        mCourseListSwipeContainer = linearLayout.findViewById(R.id.course_list_swipe_container);
+        mCourseListSwipeContainer.setOnRefreshListener(this);
+
+        showLoading(true);
         mLoadingTask = new CoursesLoadingTask();
         mLoadingTask.execute((Void) null);
+
         return linearLayout;
     }
 
+    @Override
+    public void onRefresh() {
+        mLoadingTask = null;
+        mCourseListSwipeContainer.setRefreshing(false);
+        mLoadingTask = new CoursesLoadingTask();
+        mLoadingTask.execute((Void) null);
+    }
+
     @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
-    private void showProgress(final boolean show) {
+    private void showLoading(final boolean show) {
         // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
         // for very easy animations. If available, use these APIs to fade-in
         // the progress spinner.
@@ -94,15 +106,7 @@ public class CourseListFragment extends Fragment {
             }
         });
 
-        mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-        mProgressView.animate().setDuration(shortAnimTime).alpha(
-                show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-            }
-        });
-
+        mCourseListSwipeContainer.setRefreshing(show);
     }
 
     @SuppressLint("StaticFieldLeak")
@@ -119,7 +123,7 @@ public class CourseListFragment extends Fragment {
         @Override
         protected void onPostExecute(final String str) {
             mLoadingTask = null;
-            showProgress(false);
+            showLoading(false);
 
             if (str.startsWith(Utils.errorPrefix)) {
                 if (str.equals(Utils.errorPrefix + Utils.errorPasswordIncorrect)) {
@@ -173,7 +177,7 @@ public class CourseListFragment extends Fragment {
         @Override
         protected void onCancelled() {
             mLoadingTask = null;
-            showProgress(false);
+            showLoading(false);
         }
     }
 
