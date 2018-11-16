@@ -5,17 +5,17 @@
   * [x] 课程可置顶
     * [ ] 第一次进入应用提示可置顶
   * [ ] 点进去之后显示啥
-    * [ ] 新增内容
-    * [ ] 公告/通知
-    * [ ] 信息
-    * [ ] 内容
-      * [ ] PDF阅读器
+    * [ ] 新增内容 -- HJX
+    * [ ] 公告/通知 -- SJY
+    * [ ] 信息 -- ZRB
+    * [ ] 内容 -- ZRB
+      * [ ] PDF阅读器 -- ZRB
     * [ ] 我的成绩
     * [ ] 其他
-* [ ] 公告 AnnouncementsFragment
+* [ ] 公告 MainAnnouncementsFragment
   * [ ] 未读内容标记
   * [ ] 未读内容提醒
-  * [ ] 三个Tabs
+  * [ ] 三个Tabs - AnnouncementsFragment -- SJY
     * [ ] 机构
     * [ ] 课程和组织
     * [ ] 所有
