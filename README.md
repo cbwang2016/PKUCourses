@@ -4,13 +4,13 @@
 * [x] 课程列表 CourseListFragment
   * [x] 课程可置顶
     * [ ] 第一次进入应用提示可置顶
-  * [ ] 点进去之后显示啥
+  * [ ] 点进去之后显示啥 -- HJX
     * [ ] 新增内容 -- HJX
     * [ ] 公告/通知 -- SJY
     * [ ] 信息 -- ZRB
     * [ ] 内容 -- ZRB
       * [ ] PDF阅读器 -- ZRB
-    * [ ] 我的成绩
+    * [ ] 我的成绩 -- SJY
     * [ ] 其他
 * [ ] 公告 MainAnnouncementsFragment
   * [ ] 未读内容标记
