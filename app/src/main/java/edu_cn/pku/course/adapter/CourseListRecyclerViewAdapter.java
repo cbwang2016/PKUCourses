@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -58,12 +59,21 @@ import edu_cn.pku.course.fragments.CourseListFragment;
         holder.recycler_course_name_str.setText(coursesList.get(holder.getAdapterPosition()).getCourseName());
         holder.recycler_course_semester_str.setText(coursesList.get(holder.getAdapterPosition()).getSemesterString());
 
+<<<<<<< HEAD
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent=new Intent(mContext.getActivity(),CourseActionsActivity.class);
                 mContext.startActivity(intent);
+=======
+        holder.mView.setClickable(true);
+        holder.mView.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                Snackbar.make(holder.mView, "黄俊翔，改这里。courseId=" + coursesList.get(holder.getAdapterPosition()).getCourseId(), Snackbar.LENGTH_SHORT).show();
+>>>>>>> b9400b762b4488462ae08ff8f22a80d299706472
             }
         });
 
