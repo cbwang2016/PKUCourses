@@ -170,7 +170,8 @@ public class CourseListFragment extends Fragment implements SwipeRefreshLayout.O
 
                 for (int i = 0; i < rawSplit.length - 1; i++) {
                     String tmp = Utils.betweenStrings(rawSplit[i], "target=\"_top\">", "</a>").split(": ")[1];
-                    CourseInfo ci = new CourseInfo(tmp);
+                    String course_id = Utils.betweenStrings(rawSplit[i], "Course%26id%3D", "%26url%3D");
+                    CourseInfo ci = new CourseInfo(tmp, course_id);
                     if (hset.contains(tmp))
                         ci.setPinned(1);
                     courses_list.add(ci);
@@ -195,10 +196,12 @@ public class CourseListFragment extends Fragment implements SwipeRefreshLayout.O
      */
     public class CourseInfo implements Comparable<CourseInfo> {
         private String rawStr; // 格式： 004-00432108-0006156320-1: 数学物理方法 (上)(18-19学年第1学期)
+        private String courseId; // 格式： 004-00432108-0006156320-1: 数学物理方法 (上)(18-19学年第1学期)
         private int isPinned;
 
-        CourseInfo(String str) {
+        CourseInfo(String str, String course_id) {
             rawStr = str;
+            courseId = course_id;
             isPinned = 0;
         }
 
@@ -212,6 +215,10 @@ public class CourseListFragment extends Fragment implements SwipeRefreshLayout.O
 
         public String getRawStr() {
             return rawStr;
+        }
+
+        public String getCourseId() {
+            return courseId;
         }
 
         public String getCourseName() {

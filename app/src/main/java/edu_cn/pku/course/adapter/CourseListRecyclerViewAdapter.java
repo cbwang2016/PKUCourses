@@ -3,6 +3,7 @@ package edu_cn.pku.course.adapter;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -55,6 +56,15 @@ public class CourseListRecyclerViewAdapter extends RecyclerView.Adapter<CourseLi
         holder.mView.setBackgroundColor(courseColorGet(coursesList.get(holder.getAdapterPosition()).isPinned()));
         holder.recycler_course_name_str.setText(coursesList.get(holder.getAdapterPosition()).getCourseName());
         holder.recycler_course_semester_str.setText(coursesList.get(holder.getAdapterPosition()).getSemesterString());
+
+        holder.mView.setClickable(true);
+        holder.mView.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                Snackbar.make(holder.mView, "黄俊翔，改这里。courseId=" + coursesList.get(holder.getAdapterPosition()).getCourseId(), Snackbar.LENGTH_SHORT).show();
+            }
+        });
 
         holder.mView.setLongClickable(true);
         holder.mView.setOnLongClickListener(new View.OnLongClickListener() {
