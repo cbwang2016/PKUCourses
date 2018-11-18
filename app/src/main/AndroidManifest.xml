@@ -16,7 +16,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="AllowBackup,GoogleAppIndexingWarning,UnusedAttribute">
-        <activity android:name="edu_cn.pku.course.activities.SplashActivity">
+        <activity android:name=".SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -24,17 +24,19 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="edu_cn.pku.course.activities.MainActivity"
+            android:name=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name="edu_cn.pku.course.activities.LoginActivity"
+            android:name=".LoginActivity"
             android:label="@string/title_activity_login"
-            android:parentActivityName="edu_cn.pku.course.activities.MainActivity"
+            android:parentActivityName=".MainActivity"
             tools:targetApi="jelly_bean">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="edu_cn.pku.course.activities.MainActivity" />
         </activity>
+        <activity android:name=".CourseContentActivity" />
+        <activity android:name=".CourseActionsActivity"></activity>
     </application>
 
 </manifest>

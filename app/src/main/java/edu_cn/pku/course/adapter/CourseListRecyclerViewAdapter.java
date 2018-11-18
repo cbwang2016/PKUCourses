@@ -1,5 +1,6 @@
 package edu_cn.pku.course.adapter;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
@@ -14,21 +15,22 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
+import edu_cn.pku.course.activities.CourseActionsActivity;
 import edu_cn.pku.course.activities.R;
 import edu_cn.pku.course.fragments.CourseListFragment;
 
-/**
- * Created by zhang on 2016.08.07.
- */
-public class CourseListRecyclerViewAdapter extends RecyclerView.Adapter<CourseListRecyclerViewAdapter.RecyclerViewHolder> {
+// * Created by zhang on 2016.08.07.
+ public class CourseListRecyclerViewAdapter extends RecyclerView.Adapter<CourseListRecyclerViewAdapter.RecyclerViewHolder> {
 
     private ArrayList<CourseListFragment.CourseInfo> coursesList;
     private SharedPreferences sharedPreferences;
+    private CourseListFragment mContext;
 
-    public CourseListRecyclerViewAdapter(ArrayList<CourseListFragment.CourseInfo> coursesList, SharedPreferences sharedPreferences) {
+    public CourseListRecyclerViewAdapter(ArrayList<CourseListFragment.CourseInfo> coursesList, SharedPreferences sharedPreferences,CourseListFragment context) {
         this.coursesList = coursesList;
         Collections.sort(this.coursesList);
         this.sharedPreferences = sharedPreferences;
+        this.mContext=context;
     }
 
     public void updateList(ArrayList<CourseListFragment.CourseInfo> coursesList) {
@@ -40,7 +42,7 @@ public class CourseListRecyclerViewAdapter extends RecyclerView.Adapter<CourseLi
     @NonNull
     @Override
     public RecyclerViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_courses_recycler_view, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_courses_recycler_view,parent,false);
         return new RecyclerViewHolder(view);
     }
 
@@ -55,6 +57,15 @@ public class CourseListRecyclerViewAdapter extends RecyclerView.Adapter<CourseLi
         holder.mView.setBackgroundColor(courseColorGet(coursesList.get(holder.getAdapterPosition()).isPinned()));
         holder.recycler_course_name_str.setText(coursesList.get(holder.getAdapterPosition()).getCourseName());
         holder.recycler_course_semester_str.setText(coursesList.get(holder.getAdapterPosition()).getSemesterString());
+
+
+        holder.mView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(mContext.getActivity(),CourseActionsActivity.class);
+                mContext.startActivity(intent);
+            }
+        });
 
         holder.mView.setLongClickable(true);
         holder.mView.setOnLongClickListener(new View.OnLongClickListener() {

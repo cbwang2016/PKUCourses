@@ -39,6 +39,7 @@ public class CourseListFragment extends Fragment implements SwipeRefreshLayout.O
     private RecyclerView mRecyclerView;
     private SwipeRefreshLayout mCourseListSwipeContainer;
     private CourseListRecyclerViewAdapter adapter;
+    private Object CourseListFragment;
 
 
     public CourseListFragment() {
@@ -87,7 +88,7 @@ public class CourseListFragment extends Fragment implements SwipeRefreshLayout.O
         }
         // 将读取已置顶课程列表的SharedPreferences传递给CourseListRecyclerViewAdapter
         SharedPreferences sharedPreferences = fa.getSharedPreferences("pinnedCourseList", Context.MODE_PRIVATE);
-        adapter = new CourseListRecyclerViewAdapter(new ArrayList<CourseInfo>(), sharedPreferences);
+        adapter = new CourseListRecyclerViewAdapter(new ArrayList<CourseInfo>(), sharedPreferences, this);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mRecyclerView.setAdapter(adapter);
 
@@ -171,6 +172,7 @@ public class CourseListFragment extends Fragment implements SwipeRefreshLayout.O
                 for (int i = 0; i < rawSplit.length - 1; i++) {
                     String tmp = Utils.betweenStrings(rawSplit[i], "target=\"_top\">", "</a>").split(": ")[1];
                     CourseInfo ci = new CourseInfo(tmp);
+                    ci.getCourseId(i+2+"");
                     if (hset.contains(tmp))
                         ci.setPinned(1);
                     courses_list.add(ci);
@@ -180,11 +182,13 @@ public class CourseListFragment extends Fragment implements SwipeRefreshLayout.O
                 CourseInfo ci = new CourseInfo(tmp);
                 if (hset.contains(tmp))
                     ci.setPinned(1);
+                ci.getCourseId("0");
                 courses_list.add(ci);
                 tmp = "课程2 (上)(28-29学年第6学期)";
                 ci = new CourseInfo(tmp);
                 if (hset.contains(tmp))
                     ci.setPinned(1);
+                ci.getCourseId("1");
                 courses_list.add(ci);
 
                 adapter.updateList(courses_list);
@@ -207,6 +211,7 @@ public class CourseListFragment extends Fragment implements SwipeRefreshLayout.O
     public class CourseInfo implements Comparable<CourseInfo> {
         private String rawStr; // 格式： 004-00432108-0006156320-1: 数学物理方法 (上)(18-19学年第1学期)
         private int isPinned;
+        private String courseId;
 
         CourseInfo(String str) {
             rawStr = str;
@@ -224,6 +229,8 @@ public class CourseListFragment extends Fragment implements SwipeRefreshLayout.O
         public String getRawStr() {
             return rawStr;
         }
+
+        public String getCourseId(String id){return courseId;}
 
         public String getCourseName() {
             return rawStr.split("\\([0-9]")[0];
