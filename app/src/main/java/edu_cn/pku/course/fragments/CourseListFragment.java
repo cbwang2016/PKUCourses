@@ -39,8 +39,6 @@ public class CourseListFragment extends Fragment implements SwipeRefreshLayout.O
     private RecyclerView mRecyclerView;
     private SwipeRefreshLayout mCourseListSwipeContainer;
     private CourseListRecyclerViewAdapter adapter;
-    private Object CourseListFragment;
-
 
     public CourseListFragment() {
         // Required empty public constructor
@@ -171,34 +169,13 @@ public class CourseListFragment extends Fragment implements SwipeRefreshLayout.O
 
                 for (int i = 0; i < rawSplit.length - 1; i++) {
                     String tmp = Utils.betweenStrings(rawSplit[i], "target=\"_top\">", "</a>").split(": ")[1];
-<<<<<<< HEAD
-                    CourseInfo ci = new CourseInfo(tmp);
-                    ci.getCourseId(i+2+"");
-=======
                     String course_id = Utils.betweenStrings(rawSplit[i], "Course%26id%3D", "%26url%3D");
                     CourseInfo ci = new CourseInfo(tmp, course_id);
->>>>>>> b9400b762b4488462ae08ff8f22a80d299706472
                     if (hset.contains(tmp))
                         ci.setPinned(1);
                     courses_list.add(ci);
                 }
 
-<<<<<<< HEAD
-                String tmp = "课程1 (上)(28-29学年第7学期)";
-                CourseInfo ci = new CourseInfo(tmp);
-                if (hset.contains(tmp))
-                    ci.setPinned(1);
-                ci.getCourseId("0");
-                courses_list.add(ci);
-                tmp = "课程2 (上)(28-29学年第6学期)";
-                ci = new CourseInfo(tmp);
-                if (hset.contains(tmp))
-                    ci.setPinned(1);
-                ci.getCourseId("1");
-                courses_list.add(ci);
-
-=======
->>>>>>> b9400b762b4488462ae08ff8f22a80d299706472
                 adapter.updateList(courses_list);
                 // 显示课程列表的fancy的动画
                 mRecyclerView.scheduleLayoutAnimation();
@@ -218,7 +195,6 @@ public class CourseListFragment extends Fragment implements SwipeRefreshLayout.O
      */
     public class CourseInfo implements Comparable<CourseInfo> {
         private String rawStr; // 格式： 004-00432108-0006156320-1: 数学物理方法 (上)(18-19学年第1学期)
-        private String courseId; // 格式： 004-00432108-0006156320-1: 数学物理方法 (上)(18-19学年第1学期)
         private int isPinned;
         private String courseId;
 
@@ -240,13 +216,9 @@ public class CourseListFragment extends Fragment implements SwipeRefreshLayout.O
             return rawStr;
         }
 
-<<<<<<< HEAD
-        public String getCourseId(String id){return courseId;}
-=======
         public String getCourseId() {
             return courseId;
         }
->>>>>>> b9400b762b4488462ae08ff8f22a80d299706472
 
         public String getCourseName() {
             return rawStr.split("\\([0-9]")[0];

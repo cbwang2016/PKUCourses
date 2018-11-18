@@ -35,8 +35,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="edu_cn.pku.course.activities.MainActivity" />
         </activity>
-        <activity android:name=".CourseContentActivity" />
-        <activity android:name=".CourseActionsActivity"></activity>
+        <activity android:name=".CourseActionsActivity" />
     </application>
 
 </manifest>

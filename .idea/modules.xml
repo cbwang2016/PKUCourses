@@ -2,13 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-<<<<<<< HEAD
-      <module fileurl="file://$PROJECT_DIR$/PKUCourses.iml" filepath="$PROJECT_DIR$/PKUCourses.iml" />
-      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-=======
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/PKUCourses.iml" filepath="$PROJECT_DIR$/PKUCourses.iml" />
->>>>>>> b9400b762b4488462ae08ff8f22a80d299706472
     </modules>
   </component>
 </project>
