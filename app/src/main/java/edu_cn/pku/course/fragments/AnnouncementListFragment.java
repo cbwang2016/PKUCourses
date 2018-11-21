@@ -24,7 +24,7 @@ import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
 import android.widget.LinearLayout;
 
-import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
@@ -41,6 +41,7 @@ public class AnnouncementListFragment extends Fragment implements SwipeRefreshLa
 
     private AnnouncementLoadingTask mLoadingTask = null;
     private RecyclerView mRecyclerView;
+    private SwipeRefreshLayout mAnnouncementListSwipeContainer;
     private AnnouncementListRecyclerViewAdapter adapter;
 
     public AnnouncementListFragment() {
@@ -71,7 +72,7 @@ public class AnnouncementListFragment extends Fragment implements SwipeRefreshLa
         LinearLayout linearLayout = (LinearLayout) inflater.inflate(R.layout.fragment_announcement_list, container, false);
         // 查找xml文件中的对象并保存进Java变量
         mRecyclerView = linearLayout.findViewById(R.id.recycler_announcement_list);
-        SwipeRefreshLayout mAnnouncementListSwipeContainer = linearLayout.findViewById(R.id.announcement_swipe_container);
+        mAnnouncementListSwipeContainer = linearLayout.findViewById(R.id.announcement_swipe_container);
 
         // 设置动画
         LayoutAnimationController animation = AnimationUtils.loadLayoutAnimation(getContext(), R.anim.layout_animation_fall_down);
@@ -121,10 +122,12 @@ public class AnnouncementListFragment extends Fragment implements SwipeRefreshLa
                 mRecyclerView.setVisibility(show ? View.GONE : View.VISIBLE);
             }
         });
+
+        mAnnouncementListSwipeContainer.setRefreshing(show);
     }
 
     @SuppressLint("StaticFieldLeak")
-    private class AnnouncementLoadingTask extends AsyncTask<Void, Void, String>  {
+    private class AnnouncementLoadingTask extends AsyncTask<Void, Void, String> {
 
         AnnouncementLoadingTask() {
         }
@@ -170,7 +173,7 @@ public class AnnouncementListFragment extends Fragment implements SwipeRefreshLa
 //这里是提取关键的原始字符串！！！不用分割？为什么wcb哪里把他分割了啊....还有我应该【0】元素是没有我要的东西的，从1开始？
                 for (int i = 1; i < rawSplit.length; i++) {
                     String tmp = Utils.betweenStrings(rawSplit[i], "transparent", " <p><div class=");
-                    AnnouncementInfo ai = null;
+                    AnnouncementInfo ai;
                     ai = new AnnouncementInfo(tmp);
                     //     if (hset.contains(tmp))
                     //         ai.setPinned(1);
@@ -237,17 +240,17 @@ public class AnnouncementListFragment extends Fragment implements SwipeRefreshLa
 
         //给出可以比较的Date类型
         private Date changeToDate() throws ParseException {
-            DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.FULL, Locale.CHINA);//中国的标准时间格式，年月日 星期几
-            return dateFormat.parse(rawAnnouncementDate);
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy年M月d日", Locale.CHINA);
+            return dateFormat.parse(rawAnnouncementDate.split(" ")[0]);
         }
 
         @Override
         public int compareTo(AnnouncementListFragment.AnnouncementInfo comp) {
             try {
-                if (this.changeToDate() == comp.changeToDate())
-                    return comp.changeToDate().compareTo(this.changeToDate());
+//                if (this.changeToDate() == comp.changeToDate())
+                return comp.changeToDate().compareTo(this.changeToDate());
             } catch (ParseException e) {
-                e.printStackTrace();//这个是字符串不符合定义的格式的错误
+//                e.printStackTrace();//这个是字符串不符合定义的格式的错误
             }
             return this.getAnnouncementTitle().compareTo(comp.getAnnouncementTitle());
         }

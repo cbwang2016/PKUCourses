@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import edu_cn.pku.course.activities.R;
@@ -51,7 +50,7 @@ public class CourseActionsAdapter extends RecyclerView.Adapter<CourseActionsAdap
 
         private TextView textView;
 
-        public ActionViewHolder(@NonNull View itemView) {
+        ActionViewHolder(@NonNull View itemView) {
             super(itemView);
             textView = itemView.findViewById(R.id.action_recycler_str);
         }
