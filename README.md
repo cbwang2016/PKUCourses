@@ -4,21 +4,16 @@
 * [x] 课程列表 CourseListFragment
   * [x] 课程可置顶
     * [ ] 第一次进入应用提示可置顶
-  * [ ] 点进去之后显示啥 -- HJX
+  * [x] 点进去之后显示啥 -- HJX
     * [ ] 新增内容 -- HJX
     * [ ] 公告/通知 -- SJY
-    * [ ] 信息 -- ZRB
-    * [ ] 内容 -- ZRB
-      * [ ] PDF阅读器 -- ZRB
+    * [ ] 信息/内容 -- ZRB
+      * [ ] PDF/zip/MP3等文件的应用外打开-- ZRB
     * [ ] 我的成绩 -- SJY
     * [ ] 其他
-* [ ] 公告 MainAnnouncementsFragment
+* [x] 公告 AnnouncementListFragment -- SJY
   * [ ] 未读内容标记
   * [ ] 未读内容提醒
-  * [ ] 三个Tabs - AnnouncementsFragment -- SJY
-    * [ ] 机构
-    * [ ] 课程和组织
-    * [ ] 所有
 * [ ] 通知板 NotificationsFragment
   * [ ] 新增内容
   * [ ] 未读内容标记
