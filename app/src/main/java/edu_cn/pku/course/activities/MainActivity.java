@@ -24,8 +24,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import edu_cn.pku.course.adapter.FragmentAdapter;
-import edu_cn.pku.course.fragments.AnnouncementsFragment;
 import edu_cn.pku.course.fragments.CourseListFragment;
+import edu_cn.pku.course.fragments.AnnouncementListFragment;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -61,10 +61,10 @@ public class MainActivity extends AppCompatActivity
         nameView.setText(sharedPreferences.getString("name", null));
         schoolView.setText(sharedPreferences.getString("school", null));
 
-        // 将CourseListFragment和AnnouncementsFragment两个fragment加入到view_pager_main内
+        // 将CourseListFragment和AnnouncementListFragment两个fragment加入到view_pager_main内
         List<Fragment> fragments = new ArrayList<>();
         fragments.add(CourseListFragment.newInstance());
-        fragments.add(AnnouncementsFragment.newInstance("", ""));
+        fragments.add(AnnouncementListFragment.newInstance());
         FragmentAdapter mFragmentAdapter = new FragmentAdapter(getSupportFragmentManager(), fragments);
         view_pager_main = findViewById(R.id.view_pager_main);
         view_pager_main.setAdapter(mFragmentAdapter);

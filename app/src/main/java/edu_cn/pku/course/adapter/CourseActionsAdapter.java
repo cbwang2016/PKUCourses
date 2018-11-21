@@ -16,7 +16,7 @@ import edu_cn.pku.course.activities.R;
 
 public class CourseActionsAdapter extends RecyclerView.Adapter<CourseActionsAdapter.ActionViewHolder> {
     private Context mContext;
-    private List<String> action_list = new ArrayList<String>(){{
+    private List<String> action_list = new ArrayList<String>() {{
         add("新增内容");
         add("公告/通知");
         add("信息");
@@ -25,20 +25,19 @@ public class CourseActionsAdapter extends RecyclerView.Adapter<CourseActionsAdap
         add("其他");
     }};
 
-    public CourseActionsAdapter(Context context){
-        this.mContext=context;
+    public CourseActionsAdapter(Context context) {
+        this.mContext = context;
     }
 
 
     @NonNull
     @Override
     public CourseActionsAdapter.ActionViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new ActionViewHolder(LayoutInflater.from(mContext).inflate(R.layout.item_actions_recycler_view,parent,false));
+        return new ActionViewHolder(LayoutInflater.from(mContext).inflate(R.layout.item_actions_recycler_view, parent, false));
     }
 
     @Override
     public void onBindViewHolder(@NonNull CourseActionsAdapter.ActionViewHolder holder, int position) {
-
         holder.textView.setText(action_list.get(position));
     }
 
@@ -48,7 +47,7 @@ public class CourseActionsAdapter extends RecyclerView.Adapter<CourseActionsAdap
     }
 
 
-    class ActionViewHolder extends RecyclerView.ViewHolder{
+    class ActionViewHolder extends RecyclerView.ViewHolder {
 
         private TextView textView;
 

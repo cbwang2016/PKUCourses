@@ -5,15 +5,15 @@
     android:layout_height="match_parent"
     android:gravity="center_horizontal"
     android:orientation="vertical"
-    tools:context="edu_cn.pku.course.fragments.CourseListFragment">
+    tools:context="edu_cn.pku.course.fragments.AnnouncementListFragment">
 
     <android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/course_list_swipe_container"
+        android:id="@+id/announcement_swipe_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <android.support.v7.widget.RecyclerView
-            android:id="@+id/recycler_courses"
+            android:id="@+id/recycler_announcement_list"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layoutAnimation="@anim/layout_animation_fall_down" />
