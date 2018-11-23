@@ -86,7 +86,6 @@ public class MainActivity extends AppCompatActivity
 
         @Override
         public void onPageSelected(int position) {
-
             // 设置屏幕左上角的标题、以及左侧抽屉栏中被选中的对象
             setTitle(navigationView.getMenu().getItem(position).getTitle());
             navigationView.getMenu().getItem(position).setChecked(true);

@@ -26,14 +26,22 @@ public class Utils {
      * 将字符串str中第一个出现的leftStr和第一个出现的rightStr之间的字符串提取出来
      */
     public static String betweenStrings(String str, String leftStr, String rightStr) {
-        return str.substring(str.indexOf(leftStr) + leftStr.length(), str.indexOf(rightStr));
+        int l = str.indexOf(leftStr) + leftStr.length();
+        int r = str.indexOf(rightStr);
+        if (l < 0 || r < 0 || l > r)
+            return errorPrefix + "error when extracting substrings";
+        return str.substring(l, r);
     }
 
     /**
      * 将字符串str中最后出现的leftStr和最后出现的rightStr之间的字符串提取出来
      */
     public static String lastBetweenStrings(String str, String leftStr, String rightStr) {
-        return str.substring(str.lastIndexOf(leftStr) + leftStr.length(), str.lastIndexOf(rightStr));
+        int l = str.lastIndexOf(leftStr) + leftStr.length();
+        int r = str.lastIndexOf(rightStr);
+        if (l < 0 || r < 0 || l > r)
+            return errorPrefix + "error when extracting substrings";
+        return str.substring(l, r);
     }
 
     private static boolean isNetworkAvailable() {

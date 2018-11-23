@@ -175,11 +175,16 @@ public class AnnouncementListOfEachCourseFragment extends Fragment implements Sw
                 //     hset = new HashSet<>();
 //这里是提取关键的原始字符串！！！不用分割？为什么wcb哪里把他分割了啊....还有我应该【0】元素是没有我要的东西的，从1开始？
                 for (int i = 1; i < rawSplit.length; i++) {
-                    String tmp = Utils.betweenStrings(rawSplit[i], "transparent", " <p><div class=");
+                    String basicInfo = Utils.betweenStrings(rawSplit[i], "transparent", " <p><div class=");
+                    String contents = Utils.betweenStrings(rawSplit[i], "<p><div class=\"vtbegenerated\">", "<div class=\"announcementInfo\">").split("</div></p>\n" +
+                            "\t\t\t\t\t\t {4}</div>\n")[0];
+                    String authorInfo = Utils.lastBetweenStrings(rawSplit[i], "<div class=\"announcementInfo\">", "</div>")
+                            .replaceAll("<p>", "")
+                            .replaceFirst("</p>", "<br>")
+                            .replaceAll("</p>", "")
+                            .replaceAll("\t", "");
                     AnnouncementInfo ai;
-                    ai = new AnnouncementInfo(tmp);
-                    //     if (hset.contains(tmp))
-                    //         ai.setPinned(1);
+                    ai = new AnnouncementInfo(basicInfo, contents, authorInfo);
                     announcement_list.add(ai);
                 }
 
