@@ -2,8 +2,10 @@ package edu_cn.pku.course.adapter;
 
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,40 +46,20 @@ public class AnnouncementListRecyclerViewAdapter extends RecyclerView.Adapter<An
         return new RecyclerViewHolder(view);
     }
 
-    /**private int courseColorGet(int isPinned) {
-        return isPinned == 1 ? Color.parseColor("#EEEEEE") : Color.WHITE;
-    }*/
-
     @Override
     public void onBindViewHolder(@NonNull final RecyclerViewHolder holder, final int position) {
         holder.setIsRecyclable(false);
 
-       // holder.mView.setBackgroundColor(courseColorGet(announcementList.get(holder.getAdapterPosition()).isPinned()));
+        // holder.mView.setBackgroundColor(courseColorGet(announcementList.get(holder.getAdapterPosition()).isPinned()));
         holder.recycler_announcement_title_str.setText(announcementList.get(holder.getAdapterPosition()).getAnnouncementTitle());
         holder.recycler_announcement_date_str.setText(announcementList.get(holder.getAdapterPosition()).getAnnouncementDate());
-
-/**
- * 这一段设置长按置顶功能我不知道怎么回事实现不了，那就先算了
-        holder.mView.setLongClickable(true);
-        holder.mView.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-
-                announcementList.get(holder.getAdapterPosition()).setPinned(announcementList.get(holder.getAdapterPosition()).isPinned() == 1 ? 0 : 1);
-                Collections.sort(announcementList);
-                notifyDataSetChanged();
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                Set<String> set = new HashSet<>();
-                for (AnnouncementListFragment.AnnouncementInfo k : announcementList)
-                    if (k.isPinned() == 1)
-                        set.add(k.getRawStr());
-                editor.putStringSet("key", set);
-                editor.apply();
-
-                return true;
-            }
-        });
- **/
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            holder.recycler_announcement_contents.setText(Html.fromHtml(announcementList.get(holder.getAdapterPosition()).getContents(), Html.FROM_HTML_MODE_COMPACT));
+            holder.recycler_announcement_author.setText(Html.fromHtml(announcementList.get(holder.getAdapterPosition()).getAuthorInfo(), Html.FROM_HTML_MODE_COMPACT));
+        } else {
+            holder.recycler_announcement_contents.setText(Html.fromHtml(announcementList.get(holder.getAdapterPosition()).getContents()));
+            holder.recycler_announcement_author.setText(Html.fromHtml(announcementList.get(holder.getAdapterPosition()).getAuthorInfo()));
+        }
     }
 
     @Override
@@ -89,13 +71,15 @@ public class AnnouncementListRecyclerViewAdapter extends RecyclerView.Adapter<An
     class RecyclerViewHolder extends RecyclerView.ViewHolder {
 
         private View mView;
-        private TextView recycler_announcement_title_str, recycler_announcement_date_str;
+        private TextView recycler_announcement_title_str, recycler_announcement_date_str, recycler_announcement_contents, recycler_announcement_author;
 
         private RecyclerViewHolder(View itemView) {
             super(itemView);
             mView = itemView;
             recycler_announcement_title_str = itemView.findViewById(R.id.recycler_announcement_title_str);
             recycler_announcement_date_str = itemView.findViewById(R.id.recycler_announcement_date_str);
+            recycler_announcement_contents = itemView.findViewById(R.id.recycler_announcement_contents);
+            recycler_announcement_author = itemView.findViewById(R.id.recycler_announcement_author);
         }
     }
 }

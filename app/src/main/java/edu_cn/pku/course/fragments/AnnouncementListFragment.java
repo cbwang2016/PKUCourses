@@ -158,7 +158,7 @@ public class AnnouncementListFragment extends Fragment implements SwipeRefreshLa
                 }
             } else {
                 // 解析返回的HTML
-                String[] rawSplit = str.split("<h3 class");
+                String[] rawSplit = str.split("<li class=\"clearfix\"");
                 ArrayList<AnnouncementInfo> announcement_list = new ArrayList<>();
 
                 FragmentActivity fa = getActivity();
@@ -172,9 +172,12 @@ public class AnnouncementListFragment extends Fragment implements SwipeRefreshLa
                 //     hset = new HashSet<>();
 //这里是提取关键的原始字符串！！！不用分割？为什么wcb哪里把他分割了啊....还有我应该【0】元素是没有我要的东西的，从1开始？
                 for (int i = 1; i < rawSplit.length; i++) {
-                    String tmp = Utils.betweenStrings(rawSplit[i], "transparent", " <p><div class=");
+                    String basicInfo = Utils.betweenStrings(rawSplit[i], "transparent", " <p><div class=");
+                    String contents = Utils.betweenStrings(rawSplit[i], "<p><div class=\"vtbegenerated\">", "<div class=\"announcementInfo\">").split("</div></p>\n" +
+                            "\t\t\t\t\t\t {4}</div>\n")[0];
+                    String authorInfo = Utils.lastBetweenStrings(rawSplit[i], "<div class=\"announcementInfo\">", "</div>").replace("<p>", "").replace("</p>", "");
                     AnnouncementInfo ai;
-                    ai = new AnnouncementInfo(tmp);
+                    ai = new AnnouncementInfo(basicInfo, contents, authorInfo);
                     //     if (hset.contains(tmp))
                     //         ai.setPinned(1);
                     announcement_list.add(ai);
@@ -200,7 +203,8 @@ public class AnnouncementListFragment extends Fragment implements SwipeRefreshLa
      * 为了方便管理课程列表，将每个课程的各种信息组成一个类。
      */
     public class AnnouncementInfo implements Comparable<AnnouncementInfo> {
-        private String rawStr;
+        private String basicInfo;
+        private String contents, authorInfo;
         private String rawAnnouncementDate;
 
         /**
@@ -211,8 +215,10 @@ public class AnnouncementListFragment extends Fragment implements SwipeRefreshLa
          */
         // private int isPinned;
 
-        AnnouncementInfo(String str) {
-            rawStr = str;
+        AnnouncementInfo(String str, String contents, String authorInfo) {
+            this.basicInfo = str;
+            this.contents = contents;
+            this.authorInfo = authorInfo;
             rawAnnouncementDate = getAnnouncementDate();
             //     isPinned = 0;
         }
@@ -225,17 +231,25 @@ public class AnnouncementListFragment extends Fragment implements SwipeRefreshLa
          * public int isPinned() { return isPinned; }
          */
 
-        public String getRawStr() {
-            return rawStr;
+        public String getBasicInfo() {
+            return basicInfo;
+        }
+
+        public String getAuthorInfo() {
+            return authorInfo;
+        }
+
+        public String getContents() {
+            return contents;
         }
 
         public String getAnnouncementTitle() {
-            return Utils.betweenStrings(rawStr, "\n" +
+            return Utils.betweenStrings(basicInfo, "\n" +
                     "\t\t\t\t        ", "</h3>");
         }
 
         public String getAnnouncementDate() {
-            return Utils.lastBetweenStrings(rawStr, "</span> ", "</p>");
+            return Utils.lastBetweenStrings(basicInfo, "</span> ", "</p>");
         }
 
         //给出可以比较的Date类型
