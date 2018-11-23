@@ -57,6 +57,11 @@
             android:textSize="15sp"
             tools:layout_editor_absoluteY="41dp" />
 
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="1dp"
+            android:background="#F5F5F5" />
+
     </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>

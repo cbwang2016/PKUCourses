@@ -166,20 +166,18 @@ public class AnnouncementListFragment extends Fragment implements SwipeRefreshLa
                     Snackbar.make(mRecyclerView, "null getActivity!", Snackbar.LENGTH_SHORT).show();
                     return;
                 }
-                // SharedPreferences sharedPreferences = fa.getSharedPreferences("pinnedAnnouncementList", Context.MODE_PRIVATE);
-                // Set<String> hset = sharedPreferences.getStringSet("key", null);
-                // if (hset == null)
-                //     hset = new HashSet<>();
 //这里是提取关键的原始字符串！！！不用分割？为什么wcb哪里把他分割了啊....还有我应该【0】元素是没有我要的东西的，从1开始？
                 for (int i = 1; i < rawSplit.length; i++) {
                     String basicInfo = Utils.betweenStrings(rawSplit[i], "transparent", " <p><div class=");
                     String contents = Utils.betweenStrings(rawSplit[i], "<p><div class=\"vtbegenerated\">", "<div class=\"announcementInfo\">").split("</div></p>\n" +
                             "\t\t\t\t\t\t {4}</div>\n")[0];
-                    String authorInfo = Utils.lastBetweenStrings(rawSplit[i], "<div class=\"announcementInfo\">", "</div>").replace("<p>", "").replace("</p>", "");
+                    String authorInfo = Utils.lastBetweenStrings(rawSplit[i], "<div class=\"announcementInfo\">", "</div>")
+                            .replaceAll("<p>", "")
+                            .replaceFirst("</p>", "<br>")
+                            .replaceAll("</p>", "")
+                            .replaceAll("\t", "");
                     AnnouncementInfo ai;
                     ai = new AnnouncementInfo(basicInfo, contents, authorInfo);
-                    //     if (hset.contains(tmp))
-                    //         ai.setPinned(1);
                     announcement_list.add(ai);
                 }
 
@@ -223,18 +221,9 @@ public class AnnouncementListFragment extends Fragment implements SwipeRefreshLa
             //     isPinned = 0;
         }
 
-        /**
-         * public void setPinned(int i) {
-         * isPinned = i;
-         * }
-         * <p>
-         * public int isPinned() { return isPinned; }
-         */
-
-        public String getBasicInfo() {
-            return basicInfo;
-        }
-
+        //        public String getBasicInfo() {
+//            return basicInfo;
+//        }
         public String getAuthorInfo() {
             return authorInfo;
         }
