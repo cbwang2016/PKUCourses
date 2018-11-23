@@ -8,6 +8,7 @@ import java.util.List;
 
 /**
  * 别人写的程序，其实用处不大。
+ * 这个好像是用来换页需要的？
  * Created by zhang on 2016.08.07.
  */
 public class FragmentAdapter extends FragmentStatePagerAdapter {

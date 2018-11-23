@@ -199,7 +199,7 @@ public class AnnouncementListFragment extends Fragment implements SwipeRefreshLa
     /**
      * 为了方便管理课程列表，将每个课程的各种信息组成一个类。
      */
-    public class AnnouncementInfo implements Comparable<AnnouncementInfo> {
+    public static class AnnouncementInfo implements Comparable<AnnouncementInfo> {
         private String rawStr;
         private String rawAnnouncementDate;
 
