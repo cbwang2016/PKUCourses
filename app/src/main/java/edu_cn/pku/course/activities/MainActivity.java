@@ -144,6 +144,10 @@ public class MainActivity extends AppCompatActivity
 
                 view_pager_main.setCurrentItem(1);
                 break;
+            case R.id.nav_settings:
+                Intent intent = new Intent(this, SettingsActivity.class);
+                startActivity(intent);
+                break;
             case R.id.nav_signout:
                 new AlertDialog.Builder(this)
                         .setMessage("Do you really want to sign out?")
