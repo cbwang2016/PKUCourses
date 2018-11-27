@@ -26,6 +26,7 @@ import java.util.List;
 import edu_cn.pku.course.adapter.FragmentAdapter;
 import edu_cn.pku.course.fragments.CourseListFragment;
 import edu_cn.pku.course.fragments.AnnouncementListFragment;
+import edu_cn.pku.course.fragments.SpareClassroomsFragment;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -64,6 +65,7 @@ public class MainActivity extends AppCompatActivity
         // 将CourseListFragment和AnnouncementListFragment两个fragment加入到view_pager_main内
         List<Fragment> fragments = new ArrayList<>();
         fragments.add(CourseListFragment.newInstance());
+        fragments.add(SpareClassroomsFragment.newInstance());
         fragments.add(AnnouncementListFragment.newInstance());
         FragmentAdapter mFragmentAdapter = new FragmentAdapter(getSupportFragmentManager(), fragments);
         view_pager_main = findViewById(R.id.view_pager_main);
@@ -140,9 +142,13 @@ public class MainActivity extends AppCompatActivity
 
                 view_pager_main.setCurrentItem(0);
                 break;
-            case R.id.nav_announcements:
+            case R.id.nav_spare_classrooms:
 
                 view_pager_main.setCurrentItem(1);
+                break;
+            case R.id.nav_announcements:
+
+                view_pager_main.setCurrentItem(2);
                 break;
             case R.id.nav_settings:
                 Intent intent = new Intent(this, SettingsActivity.class);
