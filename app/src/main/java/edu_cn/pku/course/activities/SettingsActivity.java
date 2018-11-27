@@ -1,5 +1,6 @@
 package edu_cn.pku.course.activities;
 
+import android.graphics.Color;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
@@ -13,6 +14,8 @@ import android.support.v7.app.ActionBar;
 import android.text.TextUtils;
 import android.view.MenuItem;
 import android.widget.Toast;
+
+import com.r0adkll.slidr.Slidr;
 
 public class SettingsActivity extends AppCompatPreferenceActivity {
 
@@ -98,6 +101,8 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             }
         });
 
+        getListView().setBackgroundColor(Color.WHITE);
+        Slidr.attach(this);
     }
 
     @Override
