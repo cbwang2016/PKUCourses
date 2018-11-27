@@ -119,6 +119,7 @@ public class SpareClassroomsFragment extends Fragment implements SwipeRefreshLay
                 mWebView.setWebViewClient(new WebViewClient() {
                     boolean loadingFinished = true;
                     boolean redirect = false;
+                    boolean buttonClicked = false;
 
                     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
                     @Override
@@ -139,13 +140,14 @@ public class SpareClassroomsFragment extends Fragment implements SwipeRefreshLay
                     }
 
                     @Override
-                    public void onPageFinished(WebView view, String url) {
+                    public void onPageFinished(final WebView view, String url) {
                         if (!redirect) {
                             loadingFinished = true;
                         }
 
-                        if (loadingFinished && !redirect) {
-                            view.loadUrl("javascript:document.getElementById('fav_freeclassroom').click();"); // bug is here.
+                        if (loadingFinished && !redirect && !buttonClicked) {
+                            mWebView.loadUrl("javascript:var tid = setInterval(function(){if(document.getElementById('fav_freeclassroom')){document.getElementById('fav_freeclassroom').click();clearInterval(tid);}},30);");
+                            buttonClicked = true;
                             mLoadingTask = null;
                             showLoading(false);
                         } else {
