@@ -187,4 +187,62 @@ public class Utils {
             }
         }
     }
+
+    public static String getPortalSession() {
+        HttpURLConnection conn = null;
+
+        SharedPreferences sharedPreferences = applicationContext.getSharedPreferences("login_info", Context.MODE_PRIVATE);
+        String mStudentId = sharedPreferences.getString("student_id", null);
+        String mPassword = sharedPreferences.getString("password", null);
+        try {
+            String urlParameters = "appid=webvpn&userName=" + URLEncoder.encode(mStudentId, "UTF-8") + "&password=" + URLEncoder.encode(mPassword, "UTF-8") + "&randCode=&smsCode=&otpCode=&redirUrl=https%3A%2F%2Fw.pku.edu.cn%2Fusers%2Fauth%2Fpkuauth%2Fcallback";
+            byte[] postData = urlParameters.getBytes(Charset.forName("UTF-8"));
+            String request = "https://iaaa.pku.edu.cn/iaaa/oauthlogin.do";
+            URL url = new URL(request);
+            conn = (HttpURLConnection) url.openConnection();
+            conn.setDoOutput(true);
+            conn.setInstanceFollowRedirects(false);
+            conn.setRequestMethod("POST");
+            conn.setUseCaches(false);
+            conn.getOutputStream().write(postData);
+//                int status = conn.getResponseCode();
+            InputStream in = conn.getInputStream();
+
+            String str = convertStreamToString(in);
+
+            conn.disconnect();
+
+            if (str.contains("\"success\":true")) {
+                String token = Utils.betweenStrings(str, "\"token\":\"", "\"}");
+                request = "https://w.pku.edu.cn/users/auth/pkuauth/callback?rand=0.5&token=" + token;
+                url = new URL(request);
+                conn = (HttpURLConnection) url.openConnection();
+                conn.setInstanceFollowRedirects(false);
+                Map<String, List<String>> headerFields = conn.getHeaderFields();
+                List<String> cookiesHeader = headerFields.get("Set-Cookie");
+
+                String _astraeus_session = null;
+                if (cookiesHeader != null)
+                    for (String cookie : cookiesHeader)
+                        if (cookie.contains("_astraeus_session="))
+                            _astraeus_session = Utils.betweenStrings(cookie, "_astraeus_session=", "; domain=");
+
+                if (_astraeus_session == null)
+                    throw new Exception("_astraeus_session not found");
+
+                return _astraeus_session;
+            } else if (str.contains("\"success\":false")) {
+                return errorPrefix + errorPasswordIncorrect;
+            } else {
+                return errorPrefix + "iaaa connect failed";
+            }
+        } catch (Exception e) {
+//                e.printStackTrace();
+            return errorPrefix + e.getMessage();
+        } finally {
+            if (conn != null) {
+                conn.disconnect();
+            }
+        }
+    }
 }
