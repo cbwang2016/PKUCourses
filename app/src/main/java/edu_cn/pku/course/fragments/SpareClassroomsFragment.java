@@ -145,7 +145,7 @@ public class SpareClassroomsFragment extends Fragment implements SwipeRefreshLay
                         }
 
                         if (loadingFinished && !redirect) {
-                            view.loadUrl("javascript:document.getElementById('fav_freeclassroom').click();");
+                            view.loadUrl("javascript:document.getElementById('fav_freeclassroom').click();"); // bug is here.
                             mLoadingTask = null;
                             showLoading(false);
                         } else {
