@@ -70,7 +70,7 @@ public class CourseListRecyclerViewAdapter extends RecyclerView.Adapter<CourseLi
                 selected_course = coursesList.get(holder.getAdapterPosition());
                 Intent intent = new Intent(mContext.getActivity(), CourseActionsActivity.class);
                 intent.putExtra("CourseId", selected_course.getCourseId());
-                intent.putExtra("CourseName", selected_course.getCourseName());
+                intent.putExtra("Title", selected_course.getCourseName());
                 mContext.startActivity(intent);
             }
         });

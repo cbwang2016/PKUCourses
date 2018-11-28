@@ -44,6 +44,7 @@ public class Utils {
     private static final Context applicationContext = SplashActivity.getContextOfApplication();
 
     public static Node stringToNode(String str) {
+        str = str.replaceAll("\n", "");
         try {
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();

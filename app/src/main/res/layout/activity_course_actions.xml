@@ -3,12 +3,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@android:color/white"
     android:orientation="vertical"
     tools:context=".CourseActionsActivity">
 
-    <fragment android:name="edu_cn.pku.course.fragments.CourseActionFragment"
+    <fragment
         android:id="@+id/fragment_actions"
+        android:name="edu_cn.pku.course.fragments.CourseActionFragment"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        />
+        android:layout_height="match_parent" />
 </LinearLayout>

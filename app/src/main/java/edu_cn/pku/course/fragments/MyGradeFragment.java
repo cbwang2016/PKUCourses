@@ -109,7 +109,7 @@ public class MyGradeFragment extends Fragment implements SwipeRefreshLayout.OnRe
     @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
     private void showLoading(final boolean show) {
         // 逐渐显示mRecyclerView的小动画
-        int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
+        int shortAnimTime = 200;
 
         mRecyclerView.setVisibility(show ? View.GONE : View.VISIBLE);
         mRecyclerView.animate().setDuration(shortAnimTime).alpha(

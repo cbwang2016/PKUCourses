@@ -7,6 +7,7 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -68,12 +69,6 @@ public class CourseActionFragment extends Fragment implements SwipeRefreshLayout
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        FragmentActivity fa = getActivity();
-        if (fa == null) {
-            courseId = "";
-        } else {
-            courseId = getActivity().getIntent().getStringExtra("CourseId");
-        }
         // Inflate the layout for this fragment
         LinearLayout linearLayout = (LinearLayout) inflater.inflate(R.layout.fragment_course_action, container, false);
         // 查找xml文件中的对象并保存进Java变量
@@ -86,14 +81,31 @@ public class CourseActionFragment extends Fragment implements SwipeRefreshLayout
         // 设置刷新的监听类为此类（监听函数onRefresh）
         mCourseActionSwipeContainer.setOnRefreshListener(this);
 
-        adapter = new CourseActionsAdapter(new ArrayList<String>(), this.getActivity());
+        adapter = new CourseActionsAdapter(new ArrayList<String>(), this);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mRecyclerView.setAdapter(adapter);
 
-        // 显示Loading的小动画，并在后台读取课程列表
-        showLoading(true);
-        mLoadingTask = new CourseActionFragment.ActionsLoadingTask();
-        mLoadingTask.execute((Void) null);
+        FragmentActivity fa = getActivity();
+        if (fa == null) {
+            courseId = "";
+        } else {
+            String xmlStr = getActivity().getIntent().getStringExtra("CourseActionsXML");
+            if (xmlStr == null) {
+                courseId = getActivity().getIntent().getStringExtra("CourseId");
+                // 显示Loading的小动画，并在后台读取课程列表
+                showLoading(true);
+                mLoadingTask = new CourseActionFragment.ActionsLoadingTask();
+                mLoadingTask.execute((Void) null);
+            } else {
+                mCourseActionSwipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+                    @Override
+                    public void onRefresh() {
+                        mCourseActionSwipeContainer.setRefreshing(false);
+                    }
+                });
+                attachXmlToView(Utils.stringToNode(xmlStr));
+            }
+        }
 
         return linearLayout;
     }
@@ -109,7 +121,7 @@ public class CourseActionFragment extends Fragment implements SwipeRefreshLayout
     @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
     private void showLoading(final boolean show) {
         // 逐渐显示mRecyclerView的小动画
-        int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
+        int shortAnimTime = 200;
 
         mRecyclerView.setVisibility(show ? View.GONE : View.VISIBLE);
         mRecyclerView.animate().setDuration(shortAnimTime).alpha(
@@ -121,6 +133,21 @@ public class CourseActionFragment extends Fragment implements SwipeRefreshLayout
         });
 
         mCourseActionSwipeContainer.setRefreshing(show);
+    }
+
+    private void attachXmlToView(Node nNode) {
+        ArrayList<String> actions_list = new ArrayList<>();
+        if (nNode != null) {
+            NodeList nList = nNode.getChildNodes();
+            for (int temp = 0; temp < nList.getLength(); temp++) {
+                Node n = nList.item(temp);
+                actions_list.add(Utils.nodeToString(n));
+            }
+        }
+
+        adapter.updateList(actions_list);
+        // 显示课程列表的fancy的动画
+        mRecyclerView.scheduleLayoutAnimation();
     }
 
     @SuppressLint("StaticFieldLeak")
@@ -153,31 +180,16 @@ public class CourseActionFragment extends Fragment implements SwipeRefreshLayout
                     Snackbar.make(mRecyclerView, str, Snackbar.LENGTH_SHORT).show();
                 }
             } else {
-                // 解析返回的HTML
-//                String[] rawSplit = str.split("</li>");
-                ArrayList<String> actions_list = new ArrayList<>();
 
                 FragmentActivity fa = getActivity();
                 if (fa == null) {
                     Snackbar.make(mRecyclerView, "null getActivity!", Snackbar.LENGTH_SHORT).show();
                     return;
                 }
-
                 Node rootNode = Utils.stringToNode(str);
                 if (rootNode != null) {
-                    Node nNode = rootNode.getFirstChild();
-                    if (nNode != null) {
-                        NodeList nList = nNode.getChildNodes();
-                        for (int temp = 0; temp < nList.getLength(); temp++) {
-                            Node n = nList.item(temp);
-                            actions_list.add(Utils.nodeToString(n));
-                        }
-                    }
+                    attachXmlToView(rootNode.getFirstChild());
                 }
-
-                adapter.updateList(actions_list);
-                // 显示课程列表的fancy的动画
-                mRecyclerView.scheduleLayoutAnimation();
             }
         }
 
