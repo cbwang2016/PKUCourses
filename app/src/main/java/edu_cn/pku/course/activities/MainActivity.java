@@ -29,6 +29,7 @@ import edu_cn.pku.course.fragments.CourseListFragment;
 import edu_cn.pku.course.fragments.AnnouncementListFragment;
 
 import edu_cn.pku.course.fragments.GradeBookOfEachCourseFragment;
+import edu_cn.pku.course.fragments.MyGradeFragment;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -68,6 +69,7 @@ public class MainActivity extends AppCompatActivity
         List<Fragment> fragments = new ArrayList<>();
         fragments.add(CourseListFragment.newInstance());
         fragments.add(AnnouncementListFragment.newInstance());
+        fragments.add(MyGradeFragment.newInstance());
         FragmentAdapter mFragmentAdapter = new FragmentAdapter(getSupportFragmentManager(), fragments);
         view_pager_main = findViewById(R.id.view_pager_main);
         view_pager_main.setAdapter(mFragmentAdapter);
