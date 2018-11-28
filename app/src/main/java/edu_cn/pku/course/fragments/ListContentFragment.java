@@ -24,26 +24,22 @@ import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
 import android.widget.LinearLayout;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.Locale;
-import java.text.ParseException;
 
 import edu_cn.pku.course.Utils;
 import edu_cn.pku.course.activities.LoginActivity;
 import edu_cn.pku.course.activities.R;
-import edu_cn.pku.course.adapter.CourseMessageListRecyclerViewAdapter;
+import edu_cn.pku.course.adapter.ListContentRecyclerViewAdapter;
 
 
-public class CourseMessageListFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener{
+public class ListContentFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
 
     private CourseMessageLoadingTask mLoadingTask = null;
     private RecyclerView mRecyclerView;
     private SwipeRefreshLayout mCourseMessageListSwipeContainer;
-    private CourseMessageListRecyclerViewAdapter adapter;
+    private ListContentRecyclerViewAdapter adapter;
 
-    public CourseMessageListFragment() {
+    public ListContentFragment() {
         // Required empty public constructor
     }
 
@@ -52,8 +48,8 @@ public class CourseMessageListFragment extends Fragment implements SwipeRefreshL
      *
      * @return A new instance of fragment CoursesListFragment.
      */
-    public static CourseMessageListFragment newInstance() {
-        CourseMessageListFragment fragment = new CourseMessageListFragment();
+    public static ListContentFragment newInstance() {
+        ListContentFragment fragment = new ListContentFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
@@ -68,7 +64,7 @@ public class CourseMessageListFragment extends Fragment implements SwipeRefreshL
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        LinearLayout linearLayout = (LinearLayout) inflater.inflate(R.layout.fragment_coursemessage_list, container, false);
+        LinearLayout linearLayout = (LinearLayout) inflater.inflate(R.layout.fragment_list_content, container, false);
         // 查找xml文件中的对象并保存进Java变量
         mRecyclerView = linearLayout.findViewById(R.id.recycler_coursemessage_list);
         mCourseMessageListSwipeContainer = linearLayout.findViewById(R.id.coursemessage_swipe_container);
@@ -87,7 +83,7 @@ public class CourseMessageListFragment extends Fragment implements SwipeRefreshL
         }
         // 将读取已置顶课程列表的SharedPreferences传递给CourseListRecyclerViewAdapter
         // SharedPreferences sharedPreferences = fa.getSharedPreferences("pinnedCourseMessageList", Context.MODE_PRIVATE);
-        adapter = new CourseMessageListRecyclerViewAdapter(new ArrayList<CourseMessageInfo>());
+        adapter = new ListContentRecyclerViewAdapter(new ArrayList<ContentInfo>());
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mRecyclerView.setAdapter(adapter);
 
@@ -136,6 +132,7 @@ public class CourseMessageListFragment extends Fragment implements SwipeRefreshL
         protected String doInBackground(Void... params) {
             return Utils.courseHttpGetRequest("http://course.pku.edu.cn/webapps/blackboard/content/listContent.jsp?course_id=_44949_1&content_id=_476828_1&mode=reset");
         }
+
         @Override
         protected void onPostExecute(final String str) {
             mLoadingTask = null;
@@ -157,7 +154,7 @@ public class CourseMessageListFragment extends Fragment implements SwipeRefreshL
             } else {
                 // 解析返回的HTML
                 String[] rawSplit = str.split("<div class=\"item clearfix\"");
-                ArrayList<CourseMessageInfo> coursemessage_list = new ArrayList<>();
+                ArrayList<ContentInfo> coursemessage_list = new ArrayList<>();
 
                 FragmentActivity fa = getActivity();
                 if (fa == null) {
@@ -166,10 +163,10 @@ public class CourseMessageListFragment extends Fragment implements SwipeRefreshL
                 }
 //这里是提取关键的原始字符串！！！不用分割？为什么wcb哪里把他分割了啊....还有我应该【0】元素是没有我要的东西的，从1开始？
                 for (int i = 1; i < rawSplit.length; i++) {
-                    String basicInfo = Utils.betweenStrings(rawSplit[i], "<div class=\"item clearfix\"", "<div class=\"details\" >");
-                    String details = Utils.betweenStrings(rawSplit[i],"<div class=\"details\" >","<div class=\"alignPanel\">");
-                    CourseMessageInfo cmi;
-                    cmi = new CourseMessageInfo(basicInfo, details);
+//                    String basicInfo = Utils.betweenStrings(rawSplit[i], "<div class=\"item clearfix\"", "<div class=\"details\" >");
+//                    String details = Utils.betweenStrings(rawSplit[i], "<div class=\"details\" >", "<div class=\"alignPanel\">");
+                    ContentInfo cmi;
+                    cmi = new ContentInfo();
                     coursemessage_list.add(cmi);
                 }
 
@@ -192,68 +189,7 @@ public class CourseMessageListFragment extends Fragment implements SwipeRefreshL
     /**
      * 为了方便管理课程信息列表，将每个课程的各种信息组成一个类。
      */
-    public class CourseMessageInfo implements Comparable<CourseMessageInfo> {
-        private String basicInfo;
-        private String details;
-        private String rawCourseMessageLink; // 用来存储本条信息的Link，因为有些信息可以点开链接进下一层
-        private String rawCourseMessageTitle;
-        private String rawCourseMessageIsAdd;
-        private String rawCourseMessageAddFiles; // 有问题！！目前只会截出一个文件
-        private String rawCourseMessageAddFilesLink; // 用来存储附件的id
-        private String rawCourseMessageContents;
-
-        CourseMessageInfo(String basicInfo, String details) {
-            this.basicInfo = basicInfo;
-            this.details = details;
-            this.rawCourseMessageLink = getCourseMessageLink();
-            this.rawCourseMessageTitle = getCourseMessageTitle();
-            this.rawCourseMessageIsAdd = getCourseMessageIsAdd();
-            this.rawCourseMessageAddFiles = getCourseMessageAddFiles();
-            this.rawCourseMessageAddFilesLink = getCourseMessageAddFilesLink();
-            this.rawCourseMessageContents = getCourseMessageContents();
-        }
-
-        // 各类get函数的定义
-        public String getCourseMessageLink() {
-            return Utils.betweenStrings(basicInfo,"      <a href=","><span style=\"color:#000000;\">");
-        }
-
-        public String getCourseMessageTitle() {
-            return Utils.betweenStrings(basicInfo,"<span style=\"color:#000000;\">", "</span></a>");
-        }
-
-        public String getCourseMessageIsAdd() {
-            return Utils.lastBetweenStrings(basicInfo, "<th scope=\"row\">", "</th>");
-        }
-
-        public String getCourseMessageAddFiles() {
-            return Utils.betweenStrings(basicInfo, "alt=\"文件\">&nbsp;", " </a>")+Utils.betweenStrings(basicInfo,"</a> "," </li><li>");
-        }
-
-        public String getCourseMessageAddFilesLink() {
-            return Utils.lastBetweenStrings(basicInfo, "<a href=", " target=\"_blank\">");
-        }
-
-        public String getCourseMessageContents() {
-            return Utils.betweenStrings(basicInfo, "<div class=\"vtbegenerated\">", "       <div class=\"alignPanel\"> ");//.split("</div></p>\n" +"\t\t\t\t\t\t {4}</div>\n")[0];
-        }
-
-        @Override
-        public int compareTo(CourseMessageInfo o) {
-            return 0;
-        }
-
-        /**@Override
-        public int compareTo(CourseMessageListFragment.CourseMessageInfo comp) {
-            try {
-//                if (this.changeToDate() == comp.changeToDate())
-                return comp.changeToDate().compareTo(this.changeToDate());
-            } catch (ParseException e) {
-//                e.printStackTrace();//这个是字符串不符合定义的格式的错误
-            }
-            return this.getCourseMessageTitle().compareTo(comp.getCourseMessageTitle());
-        }
-        */
+    public class ContentInfo {
     }
 
     public void signOut() throws Exception {

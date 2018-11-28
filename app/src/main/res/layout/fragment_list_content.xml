@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:gravity="center_horizontal"
     android:orientation="vertical"
-    tools:context="edu_cn.pku.course.fragments.CourseMessageListFragment">
+    tools:context="edu_cn.pku.course.fragments.ListContentFragment">
 
     <android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/coursemessage_swipe_container"
