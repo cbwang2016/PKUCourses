@@ -5,7 +5,7 @@
     * [ ] 第一次进入应用提示可置顶
   * [x] 点进去之后显示啥 CourseActionActivity -- HJX
     * [x] 公告/通知 -- SJY
-    * [ ] 某个content的查看 -- WCB
+    * [x] 某个content的查看 -- WCB
       * [ ] PDF/zip/MP3等文件的应用外打开-- WCB
       * [ ] 下载进度管理 -- WCB
     * [ ] 我的成绩 -- SJY
@@ -25,6 +25,6 @@
   * [ ] 自动更新
   * [x] 启动页面位置
   * [ ] 意见反馈 -- ZRB
-  * [ ] About --ZRB
-  * [ ] Github Page
+  * [ ] About -- ZRB
+  * [ ] Github Page(一个GitHub图标，点进去之后浏览器打开咱们的GitHub项目) -- ZRB
 
