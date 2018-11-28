@@ -42,6 +42,11 @@
             android:title="设置"
             tools:ignore="HardcodedText" />
         <item
+            android:id="@+id/nav_about"
+            android:icon="@drawable/ic_about"
+            android:title="About"
+            tools:ignore="HardcodedText" />
+        <item
             android:id="@+id/nav_signout"
             android:icon="@drawable/ic_signout"
             android:title="注销"

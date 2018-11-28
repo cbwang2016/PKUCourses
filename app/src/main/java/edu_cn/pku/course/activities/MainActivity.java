@@ -25,8 +25,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import edu_cn.pku.course.adapter.FragmentAdapter;
-import edu_cn.pku.course.fragments.CourseListFragment;
 import edu_cn.pku.course.fragments.AnnouncementListFragment;
+import edu_cn.pku.course.fragments.CourseListFragment;
 import edu_cn.pku.course.fragments.MyGradeFragment;
 import edu_cn.pku.course.fragments.SpareClassroomsFragment;
 
@@ -164,6 +164,11 @@ public class MainActivity extends AppCompatActivity
             case R.id.nav_settings:
                 Intent intent = new Intent(this, SettingsActivity.class);
                 startActivity(intent);
+                break;
+            case R.id.nav_about:
+                new AlertDialog.Builder(this)
+                        .setMessage("ZhaoRuiBo, look here.")
+                        .setPositiveButton(android.R.string.yes, null).show();
                 break;
             case R.id.nav_signout:
                 new AlertDialog.Builder(this)
