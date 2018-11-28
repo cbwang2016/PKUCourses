@@ -180,7 +180,7 @@ public class GradeBookOfEachCourseFragment extends Fragment implements SwipeRefr
                     } else if (!Utils.betweenStrings(rawSplit[i], "<td headers=\"grade", "             <a href=\"/webapps").equals(errorPrefix + errorSubstrings)) {
                         String rawGrade = Utils.betweenStrings(rawSplit[i], "<td headers=\"grade", "/span>");
                         rawGrade = rawGrade + "EndEndEnd";
-                        rawGrade.replaceAll(" ", "").replaceAll("\t", "").replaceAll("\n", "");
+                        rawGrade = rawGrade.replaceAll(" ", "").replaceAll("\t", "").replaceAll("\n", "");
                         String title = Utils.betweenStrings(rawSplit[i], "'TH')\">", "</a>");
                         String description = "";
                         if (!Utils.betweenStrings(rawSplit[i], "\"vtbegenerated\"> ", "</div></div>").equals(errorPrefix + errorSubstrings))

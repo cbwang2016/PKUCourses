@@ -6,7 +6,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.ListPreference;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -29,6 +28,7 @@ import edu_cn.pku.course.adapter.FragmentAdapter;
 import edu_cn.pku.course.fragments.CourseListFragment;
 import edu_cn.pku.course.fragments.AnnouncementListFragment;
 import edu_cn.pku.course.fragments.CourseMessageListFragment;
+import edu_cn.pku.course.fragments.MyGradeFragment;
 import edu_cn.pku.course.fragments.SpareClassroomsFragment;
 
 public class MainActivity extends AppCompatActivity
@@ -70,6 +70,7 @@ public class MainActivity extends AppCompatActivity
         fragments.add(CourseListFragment.newInstance());
         fragments.add(SpareClassroomsFragment.newInstance());
         fragments.add(AnnouncementListFragment.newInstance());
+        fragments.add(MyGradeFragment.newInstance());
         fragments.add(CourseMessageListFragment.newInstance());
         FragmentAdapter mFragmentAdapter = new FragmentAdapter(getSupportFragmentManager(), fragments);
         view_pager_main = findViewById(R.id.view_pager_main);
