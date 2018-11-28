@@ -6,11 +6,9 @@
     android:orientation="vertical"
     tools:context=".CourseActionsActivity">
 
-    <android.support.v7.widget.RecyclerView
+    <fragment android:name="edu_cn.pku.course.fragments.CourseActionFragment"
+        android:id="@+id/fragment_actions"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/recycler_actions"
-        android:layoutAnimation="@anim/layout_animation_fall_down">
-
-    </android.support.v7.widget.RecyclerView>
+        />
 </LinearLayout>

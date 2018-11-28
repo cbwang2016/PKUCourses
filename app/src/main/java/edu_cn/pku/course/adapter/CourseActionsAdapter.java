@@ -12,21 +12,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 import edu_cn.pku.course.activities.R;
+import edu_cn.pku.course.fragments.CourseActionFragment;
 
 public class CourseActionsAdapter extends RecyclerView.Adapter<CourseActionsAdapter.ActionViewHolder> {
     private Context mContext;
-    private List<String> action_list = new ArrayList<String>() {{
-        add("新增内容");
-        add("公告/通知");
-        add("信息");
-        add("内容");
-        add("我的成绩");
-        add("其他");
-    }};
+    private ArrayList<String> action_list;
 
-    public CourseActionsAdapter(Context context) {
+    public CourseActionsAdapter(ArrayList<String> action_list,Context context) {
+        this.action_list = action_list;
         this.mContext = context;
     }
+
 
 
     @NonNull
@@ -43,6 +39,10 @@ public class CourseActionsAdapter extends RecyclerView.Adapter<CourseActionsAdap
     @Override
     public int getItemCount() {
         return action_list.size();
+    }
+
+    public void updateList(ArrayList<String> actions_list) {
+        this.action_list = actions_list;
     }
 
 
