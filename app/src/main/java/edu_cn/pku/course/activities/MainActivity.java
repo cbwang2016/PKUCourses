@@ -6,6 +6,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.ListPreference;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -73,8 +75,12 @@ public class MainActivity extends AppCompatActivity
         view_pager_main.addOnPageChangeListener(pageChangeListener);
 
         // 设置屏幕左上角的标题、以及左侧抽屉栏中被选中的对象
-        setTitle(navigationView.getMenu().getItem(0).getTitle());
-        navigationView.getMenu().getItem(0).setChecked(true);
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
+        String indexStr = sp.getString("launch_page", "0");
+        int launch_page_index = indexStr == null ? 0 : Integer.parseInt(indexStr);
+        setTitle(navigationView.getMenu().getItem(launch_page_index).getTitle());
+        navigationView.getMenu().getItem(launch_page_index).setChecked(true);
+        view_pager_main.setCurrentItem(launch_page_index);
     }
 
     private ViewPager.OnPageChangeListener pageChangeListener = new ViewPager.OnPageChangeListener() {
