@@ -32,6 +32,9 @@ import edu_cn.pku.course.activities.LoginActivity;
 import edu_cn.pku.course.activities.R;
 import edu_cn.pku.course.adapter.GradeBookListRecyclerViewAdapter;
 
+import static edu_cn.pku.course.Utils.errorPrefix;
+import static edu_cn.pku.course.Utils.errorSubstrings;
+
 
 public class GradeBookOfEachCourseFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
 
@@ -141,8 +144,8 @@ public class GradeBookOfEachCourseFragment extends Fragment implements SwipeRefr
             showLoading(false);
 
             // 出现了错误
-            if (str.startsWith(Utils.errorPrefix)) {
-                if (str.equals(Utils.errorPrefix + Utils.errorPasswordIncorrect)) {
+            if (str.startsWith(errorPrefix)) {
+                if (str.equals(errorPrefix + Utils.errorPasswordIncorrect)) {
                     // 密码错误
                     try {
                         signOut();
@@ -163,14 +166,43 @@ public class GradeBookOfEachCourseFragment extends Fragment implements SwipeRefr
                     Snackbar.make(mRecyclerView, "null getActivity!", Snackbar.LENGTH_SHORT).show();
                     return;
                 }
-//这里是提取关键的原始字符串！！
                 for (int i = 1; i < rawSplit.length; i++) {
-                    String rawGrade = Utils.betweenStrings(rawSplit[i], "<td headers=\"grade", "/span>");//希望可以啊...这个函数万一有空的？
-                    String title = Utils.betweenStrings(rawSplit[i], "'TH')\">", "</a>");
-                    String description = Utils.betweenStrings(rawSplit[i], "\"vtbegenerated\"> ", "</div>");
-                    GradeInfo ai;
-                    ai = new GradeInfo(rawGrade, title, description);
-                    grade_list.add(ai);
+                    if (Utils.betweenStrings(rawSplit[i], "<td headers=\"grade ", "<span class").equals(errorPrefix + errorSubstrings) || !Utils.betweenStrings(rawSplit[i], "<td headers=\"grade ", "<strong><img src='/images/").equals(errorPrefix + errorSubstrings)) {
+                        //没有评分的情况和没有总分的情况，就直接静态搞掉算了...
+                        String rawGrade = "<strong>-</strong></a><span class=\"out-of\">" + "<" + "EndEndEnd";
+                        String title = Utils.betweenStrings(rawSplit[i], "'TH')\">", "</a>");
+                        String description = "";
+                        if (!Utils.betweenStrings(rawSplit[i], "\"vtbegenerated\"> ", "</div></div>").equals(errorPrefix + errorSubstrings))
+                            description = Utils.betweenStrings(rawSplit[i], "\"vtbegenerated\"> ", "</div></div>");
+                        GradeInfo ai;
+                        ai = new GradeInfo(rawGrade, title, description);
+                        grade_list.add(ai);
+                    } else if (!Utils.betweenStrings(rawSplit[i], "<td headers=\"grade", "             <a href=\"/webapps").equals(errorPrefix + errorSubstrings)) {
+                        String rawGrade = Utils.betweenStrings(rawSplit[i], "<td headers=\"grade", "/span>");
+                        rawGrade = rawGrade + "EndEndEnd";
+                        rawGrade.replaceAll(" ", "").replaceAll("\t", "").replaceAll("\n", "");
+                        String title = Utils.betweenStrings(rawSplit[i], "'TH')\">", "</a>");
+                        String description = "";
+                        if (!Utils.betweenStrings(rawSplit[i], "\"vtbegenerated\"> ", "</div></div>").equals(errorPrefix + errorSubstrings))
+                            description = Utils.betweenStrings(rawSplit[i], "\"vtbegenerated\"> ", "</div></div>");
+                        GradeInfo ai;
+                        ai = new GradeInfo(rawGrade, title, description);
+                        grade_list.add(ai);
+                    } else {
+                        //字体是黑色的，没有链接，手动加上截取识别符，手动修改使它可以识别
+                        String rawGrade = Utils.betweenStrings(rawSplit[i], "<td headers=\"grade ", "<span class") + "</strong></a> <span class=\"out-of\">" + Utils.betweenStrings(rawSplit[i], "<span class=\"out-of\">", "</span") + "<" + "EndEndEnd";
+                        String withoutHead = rawGrade.substring(5, rawGrade.length());
+                        withoutHead = "<strong>" + withoutHead;
+                        String noSpace = withoutHead.replaceAll(" ", "").replaceAll("\t", "").replaceAll("\n", "");
+                        String title = Utils.betweenStrings(rawSplit[i], "'TH')\">", "</a>");
+                        String description = "";
+                        if (!Utils.betweenStrings(rawSplit[i], "\"vtbegenerated\"> ", "</div></div>").equals(errorPrefix + errorSubstrings))
+                            description = Utils.betweenStrings(rawSplit[i], "\"vtbegenerated\"> ", "</div></div>");
+                        GradeInfo ai;
+                        ai = new GradeInfo(noSpace, title, description);
+                        grade_list.add(ai);
+                    }
+
                 }
 
                 adapter.updateList(grade_list);
@@ -199,17 +231,20 @@ public class GradeBookOfEachCourseFragment extends Fragment implements SwipeRefr
 
         GradeInfo(String str1, String str2, String str3) {
             rawGrade = str1; //格式： 2">
-            // <a href="/webapps/blackboard/execute/showGroupSubmissionHistory?course_id=_42720_1&outcome_definition_id=_126690_1&outcome_id=_1960565_1"><strong>10.00</strong></a><span class="out-of">/10
             title = str2;
             description = str3;
         }
 
         public String getGrade() {
-            return Utils.betweenStrings(rawGrade, "><strong>", "</strong></a>");
+            if (Utils.betweenStrings(rawGrade, "\"out-of\">", "<EndEndEnd").equals(errorPrefix + errorSubstrings))
+                return "-";
+            return Utils.betweenStrings(rawGrade, "<strong>", "</strong></a>");
         }
 
         public String getDetailedGrade() {
-            return Utils.betweenStrings(rawGrade, "><strong>", "</strong></a>") + Utils.betweenStrings(rawGrade, "\"out-of\">", "<");
+            if (Utils.betweenStrings(rawGrade, "\"out-of\">", "<EndEndEnd").equals(errorPrefix + errorSubstrings) || Utils.betweenStrings(rawGrade, "<strong>", "</strong></a>").equals(errorPrefix + errorSubstrings))
+                return "-/-";
+            return Utils.betweenStrings(rawGrade, "<strong>", "</strong></a>") + Utils.betweenStrings(rawGrade, "\"out-of\">", "<EndEndEnd");
         }
 
         public String getGradeTitle() {

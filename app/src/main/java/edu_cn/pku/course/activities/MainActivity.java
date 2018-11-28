@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import edu_cn.pku.course.adapter.FragmentAdapter;
+import edu_cn.pku.course.fragments.AnnouncementListOfEachCourseFragment;
 import edu_cn.pku.course.fragments.CourseListFragment;
 import edu_cn.pku.course.fragments.AnnouncementListFragment;
 
@@ -67,7 +68,6 @@ public class MainActivity extends AppCompatActivity
         List<Fragment> fragments = new ArrayList<>();
         fragments.add(CourseListFragment.newInstance());
         fragments.add(AnnouncementListFragment.newInstance());
-        fragments.add(GradeBookOfEachCourseFragment.newInstance("_41607_1"));//调试用！！！
         FragmentAdapter mFragmentAdapter = new FragmentAdapter(getSupportFragmentManager(), fragments);
         view_pager_main = findViewById(R.id.view_pager_main);
         view_pager_main.setAdapter(mFragmentAdapter);
