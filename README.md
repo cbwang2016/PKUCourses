@@ -19,7 +19,7 @@
 * [x] 公告 AnnouncementListFragment -- SJY
   * [ ] 未读内容标记
   * [ ] 未读内容提醒
-* [ ] 通知板 NotificationsFragment -- HJX
+* [ ] Dashboard DashboardFragment -- HJX
   * [ ] 新增内容
   * [ ] 未读内容标记
   * [ ] 未读内容提醒
