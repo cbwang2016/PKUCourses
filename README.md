@@ -11,8 +11,8 @@
     * [ ] 新增内容 -- HJX
     * [ ] 公告/通知 -- SJY
     * [ ] 信息/内容 -- ZRB
-      * [ ] PDF/zip/MP3等文件的应用外打开-- ZRB
-      * [ ] 遇到文件夹可以点进去 -- ZRB
+      * [ ] PDF/zip/MP3等文件的应用外打开-- WCB
+      * [ ] 遇到文件夹可以点进去 -- WCB
       * [ ] 下载进度管理-- WCB
     * [ ] 我的成绩 -- SJY
     * [ ] 其他（咱们还没做的功能通过webview网页查看。注意要把session_id传递到Webview里） -- SJY
@@ -30,7 +30,7 @@
 * [x] 设置 SettingsActivity -- WCB
   * [ ] 自动更新
   * [x] 启动页面位置
-  * [ ] 意见反馈
-  * [ ] About
+  * [ ] 意见反馈 -- ZRB
+  * [ ] About --ZRB
   * [ ] Github Page
 
