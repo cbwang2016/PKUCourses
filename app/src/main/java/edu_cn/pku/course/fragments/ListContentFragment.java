@@ -153,8 +153,8 @@ public class ListContentFragment extends Fragment implements SwipeRefreshLayout.
                 }
             } else {
                 // 解析返回的HTML
-                String[] rawSplit = str.split("<div class=\"item clearfix\"");
-                ArrayList<ContentInfo> coursemessage_list = new ArrayList<>();
+                String[] rawSplit = str.split("<li id=\"contentListItem");
+                ArrayList<ContentInfo> list_content_array = new ArrayList<>();
 
                 FragmentActivity fa = getActivity();
                 if (fa == null) {
@@ -163,14 +163,14 @@ public class ListContentFragment extends Fragment implements SwipeRefreshLayout.
                 }
 //这里是提取关键的原始字符串！！！不用分割？为什么wcb哪里把他分割了啊....还有我应该【0】元素是没有我要的东西的，从1开始？
                 for (int i = 1; i < rawSplit.length; i++) {
-//                    String basicInfo = Utils.betweenStrings(rawSplit[i], "<div class=\"item clearfix\"", "<div class=\"details\" >");
-//                    String details = Utils.betweenStrings(rawSplit[i], "<div class=\"details\" >", "<div class=\"alignPanel\">");
                     ContentInfo cmi;
-                    cmi = new ContentInfo();
-                    coursemessage_list.add(cmi);
+                    cmi = new ContentInfo(
+                            rawSplit[i].split("class=\"clearfix read\">")[1].replace("</li>\n\n\n\n\n", "")
+                    );
+                    list_content_array.add(cmi);
                 }
 
-                adapter.updateList(coursemessage_list);
+                adapter.updateList(list_content_array);
                 // 显示课程列表的fancy的动画
                 mRecyclerView.scheduleLayoutAnimation();
             }
@@ -184,12 +184,16 @@ public class ListContentFragment extends Fragment implements SwipeRefreshLayout.
         }
     }
 
-    //复制wcb的courselist代码
-
-    /**
-     * 为了方便管理课程信息列表，将每个课程的各种信息组成一个类。
-     */
     public class ContentInfo {
+        private String rawHTML;
+
+        ContentInfo(String rawHTML) {
+            this.rawHTML = rawHTML;
+        }
+
+        public String getRawHTML() {
+            return rawHTML;
+        }
     }
 
     public void signOut() throws Exception {
