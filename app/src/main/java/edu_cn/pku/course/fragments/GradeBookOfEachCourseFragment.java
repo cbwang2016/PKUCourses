@@ -26,7 +26,6 @@ import android.widget.LinearLayout;
 
 import java.util.ArrayList;
 
-
 import edu_cn.pku.course.Utils;
 import edu_cn.pku.course.activities.LoginActivity;
 import edu_cn.pku.course.activities.R;
@@ -84,7 +83,6 @@ public class GradeBookOfEachCourseFragment extends Fragment implements SwipeRefr
         FragmentActivity fa = getActivity();
         // 为了消除编译器Warning，需要判断一下是不是null，其实这基本上不可能出现null
         if (fa == null) {
-            Snackbar.make(mRecyclerView, "null getActivity!", Snackbar.LENGTH_SHORT).show();
             return linearLayout;
         }
         adapter = new GradeBookListRecyclerViewAdapter(new ArrayList<GradeInfo>());
@@ -163,7 +161,6 @@ public class GradeBookOfEachCourseFragment extends Fragment implements SwipeRefr
 
                 FragmentActivity fa = getActivity();
                 if (fa == null) {
-                    Snackbar.make(mRecyclerView, "null getActivity!", Snackbar.LENGTH_SHORT).show();
                     return;
                 }
                 for (int i = 1; i < rawSplit.length; i++) {

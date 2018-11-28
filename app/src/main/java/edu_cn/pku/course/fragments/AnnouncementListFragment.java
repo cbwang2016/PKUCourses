@@ -80,7 +80,6 @@ public class AnnouncementListFragment extends Fragment implements SwipeRefreshLa
         FragmentActivity fa = getActivity();
         // 为了消除编译器Warning，需要判断一下是不是null，其实这基本上不可能出现null
         if (fa == null) {
-            Snackbar.make(mRecyclerView, "null getActivity!", Snackbar.LENGTH_SHORT).show();
             return linearLayout;
         }
         // 将读取已置顶课程列表的SharedPreferences传递给CourseListRecyclerViewAdapter
@@ -160,7 +159,6 @@ public class AnnouncementListFragment extends Fragment implements SwipeRefreshLa
 
                 FragmentActivity fa = getActivity();
                 if (fa == null) {
-                    Snackbar.make(mRecyclerView, "null getActivity!", Snackbar.LENGTH_SHORT).show();
                     return;
                 }
 //这里是提取关键的原始字符串！！！不用分割？为什么wcb哪里把他分割了啊....还有我应该【0】元素是没有我要的东西的，从1开始？

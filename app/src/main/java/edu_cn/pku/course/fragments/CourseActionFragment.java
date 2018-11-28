@@ -182,7 +182,6 @@ public class CourseActionFragment extends Fragment implements SwipeRefreshLayout
 
                 FragmentActivity fa = getActivity();
                 if (fa == null) {
-                    Snackbar.make(mRecyclerView, "null getActivity!", Snackbar.LENGTH_SHORT).show();
                     return;
                 }
                 Node rootNode = Utils.stringToNode(str);

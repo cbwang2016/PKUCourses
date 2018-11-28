@@ -85,7 +85,6 @@ public class AnnouncementListOfEachCourseFragment extends Fragment implements Sw
         FragmentActivity fa = getActivity();
         // 为了消除编译器Warning，需要判断一下是不是null，其实这基本上不可能出现null
         if (fa == null) {
-            Snackbar.make(mRecyclerView, "null getActivity!", Snackbar.LENGTH_SHORT).show();
             return linearLayout;
         }
 
@@ -165,7 +164,6 @@ public class AnnouncementListOfEachCourseFragment extends Fragment implements Sw
 
                 FragmentActivity fa = getActivity();
                 if (fa == null) {
-                    Snackbar.make(mRecyclerView, "null getActivity!", Snackbar.LENGTH_SHORT).show();
                     return;
                 }
                 // SharedPreferences sharedPreferences = fa.getSharedPreferences("pinnedAnnouncementList", Context.MODE_PRIVATE);

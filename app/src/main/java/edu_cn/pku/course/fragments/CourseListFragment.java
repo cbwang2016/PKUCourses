@@ -81,7 +81,6 @@ public class CourseListFragment extends Fragment implements SwipeRefreshLayout.O
         FragmentActivity fa = getActivity();
         // 为了消除编译器Warning，需要判断一下是不是null，其实这基本上不可能出现null
         if (fa == null) {
-            Snackbar.make(mRecyclerView, "null getActivity!", Snackbar.LENGTH_SHORT).show();
             return linearLayout;
         }
         // 将读取已置顶课程列表的SharedPreferences传递给CourseListRecyclerViewAdapter
@@ -159,7 +158,6 @@ public class CourseListFragment extends Fragment implements SwipeRefreshLayout.O
 
                 FragmentActivity fa = getActivity();
                 if (fa == null) {
-                    Snackbar.make(mRecyclerView, "null getActivity!", Snackbar.LENGTH_SHORT).show();
                     return;
                 }
                 SharedPreferences sharedPreferences = fa.getSharedPreferences("pinnedCourseList", Context.MODE_PRIVATE);
