@@ -90,7 +90,7 @@ public class GradeBookOfEachCourseFragment extends Fragment implements SwipeRefr
         adapter = new GradeBookListRecyclerViewAdapter(new ArrayList<GradeInfo>());
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mRecyclerView.setAdapter(adapter);
-        courseId = getActivity().getIntent().getStringExtra("courseId");
+        courseId = getActivity().getIntent().getStringExtra("CourseId");
 
         // 显示Loading的小动画，并在后台读取课程列表
         showLoading(true);

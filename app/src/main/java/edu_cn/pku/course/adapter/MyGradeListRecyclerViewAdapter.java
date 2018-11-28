@@ -65,7 +65,7 @@ public class MyGradeListRecyclerViewAdapter extends RecyclerView.Adapter<MyGrade
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(mContext.getActivity(), GradeBookOfEachCourseActivity.class);
-                intent.putExtra("courseId", coursesList.get(holder.getAdapterPosition()).getCourseId());
+                intent.putExtra("CourseId", coursesList.get(holder.getAdapterPosition()).getCourseId());
                 mContext.startActivity(intent);
             }
         });

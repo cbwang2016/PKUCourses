@@ -18,6 +18,7 @@ import java.util.ArrayList;
 
 import edu_cn.pku.course.Utils;
 import edu_cn.pku.course.activities.CourseActionsActivity;
+import edu_cn.pku.course.activities.GradeBookOfEachCourseActivity;
 import edu_cn.pku.course.activities.R;
 import edu_cn.pku.course.fragments.CourseActionFragment;
 import edu_cn.pku.course.fragments.CourseListFragment;
@@ -51,7 +52,6 @@ public class CourseActionsAdapter extends RecyclerView.Adapter<CourseActionsAdap
                         @Override
                         public void onClick(View v) {
                             Intent intent = new Intent(mContext.getActivity(), CourseActionsActivity.class);
-//                        intent.putExtra("CourseId", );
                             Activity activity = mContext.getActivity();
                             if (activity != null) {
                                 intent.putExtra("CourseId", activity.getIntent().getStringExtra("CourseId"));
@@ -62,6 +62,18 @@ public class CourseActionsAdapter extends RecyclerView.Adapter<CourseActionsAdap
                         }
                     });
                     holder.textView.setClickable(true);
+                } else if ("student_gradebook".equals(eElement.getAttribute("linktype"))) {
+                    holder.textView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent intent = new Intent(mContext.getActivity(), GradeBookOfEachCourseActivity.class);
+                            Activity activity = mContext.getActivity();
+                            if (activity != null) {
+                                intent.putExtra("CourseId", activity.getIntent().getStringExtra("CourseId"));
+                            }
+                            mContext.startActivity(intent);
+                        }
+                    });
                 }
             } else {
                 holder.textView.setText(Utils.errorPrefix + "nNode.getNodeType() != Node.ELEMENT_NODE");
