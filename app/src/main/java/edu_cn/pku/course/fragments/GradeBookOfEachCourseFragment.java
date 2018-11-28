@@ -42,7 +42,7 @@ public class GradeBookOfEachCourseFragment extends Fragment implements SwipeRefr
     private RecyclerView mRecyclerView;
     private SwipeRefreshLayout mGradeBookSwipeContainer;
     private GradeBookListRecyclerViewAdapter adapter;
-    private static String CourseId = null;
+    private static String courseId = null;
 
     public GradeBookOfEachCourseFragment() {
         // Required empty public constructor
@@ -54,11 +54,10 @@ public class GradeBookOfEachCourseFragment extends Fragment implements SwipeRefr
      *
      * @return A new instance of fragment CoursesListFragment.
      */
-    public static GradeBookOfEachCourseFragment newInstance(String courseId) {
+    public static GradeBookOfEachCourseFragment newInstance() {
         GradeBookOfEachCourseFragment fragment = new GradeBookOfEachCourseFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
-        CourseId = courseId;
         return fragment;
     }
 
@@ -91,6 +90,7 @@ public class GradeBookOfEachCourseFragment extends Fragment implements SwipeRefr
         adapter = new GradeBookListRecyclerViewAdapter(new ArrayList<GradeInfo>());
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mRecyclerView.setAdapter(adapter);
+        courseId = getActivity().getIntent().getStringExtra("courseId");
 
         // 显示Loading的小动画，并在后台读取课程列表
         showLoading(true);
@@ -135,7 +135,7 @@ public class GradeBookOfEachCourseFragment extends Fragment implements SwipeRefr
         //主要是有个course id一串数字是不一样的
         @Override
         protected String doInBackground(Void... params) {
-            return Utils.courseHttpGetRequest("http://course.pku.edu.cn/webapps/gradebook/do/student/viewGrades?course_id=" + CourseId);
+            return Utils.courseHttpGetRequest("http://course.pku.edu.cn/webapps/gradebook/do/student/viewGrades?course_id=" + courseId);
         }
 
         @Override

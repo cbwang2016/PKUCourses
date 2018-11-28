@@ -16,7 +16,9 @@ import java.util.HashSet;
 import java.util.Set;
 
 import edu_cn.pku.course.activities.CourseActionsActivity;
+import edu_cn.pku.course.activities.GradeBookOfEachCourseActivity;
 import edu_cn.pku.course.activities.R;
+import edu_cn.pku.course.fragments.GradeBookOfEachCourseFragment;
 import edu_cn.pku.course.fragments.MyGradeFragment;
 
 // * Created by zhang on 2016.08.07.
@@ -62,7 +64,8 @@ public class MyGradeListRecyclerViewAdapter extends RecyclerView.Adapter<MyGrade
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(mContext.getActivity(), CourseActionsActivity.class);
+                Intent intent = new Intent(mContext.getActivity(), GradeBookOfEachCourseActivity.class);
+                intent.putExtra("courseId", coursesList.get(holder.getAdapterPosition()).getCourseId());
                 mContext.startActivity(intent);
             }
         });

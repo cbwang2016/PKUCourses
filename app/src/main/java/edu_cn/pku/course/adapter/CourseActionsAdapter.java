@@ -1,6 +1,7 @@
 package edu_cn.pku.course.adapter;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
@@ -51,7 +52,11 @@ public class CourseActionsAdapter extends RecyclerView.Adapter<CourseActionsAdap
                         public void onClick(View v) {
                             Intent intent = new Intent(mContext.getActivity(), CourseActionsActivity.class);
 //                        intent.putExtra("CourseId", );
-                            intent.putExtra("Title", eElement.getAttribute("name"));
+                            Activity activity = mContext.getActivity();
+                            if (activity != null) {
+                                intent.putExtra("CourseId", activity.getIntent().getStringExtra("CourseId"));
+                                intent.putExtra("Title", activity.getIntent().getStringExtra("Title") + " - " + eElement.getAttribute("name"));
+                            }
                             intent.putExtra("CourseActionsXML", Utils.nodeToString(nNode.getFirstChild()));
                             mContext.startActivity(intent);
                         }

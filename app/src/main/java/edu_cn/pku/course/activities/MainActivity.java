@@ -157,6 +157,10 @@ public class MainActivity extends AppCompatActivity
 
                 view_pager_main.setCurrentItem(2);
                 break;
+            case R.id.nav_mygrade:
+
+                view_pager_main.setCurrentItem(3);
+                break;
             case R.id.nav_settings:
                 Intent intent = new Intent(this, SettingsActivity.class);
                 startActivity(intent);

@@ -7,13 +7,13 @@ import android.view.MenuItem;
 
 import com.r0adkll.slidr.Slidr;
 
-public class CourseActionsActivity extends AppCompatActivity {
+public class GradeBookOfEachCourseActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_course_actions);
-        setTitle(getIntent().getStringExtra("Title"));
+        setContentView(R.layout.activity_grade_book_of_each_course);
+        setTitle("我的成绩");
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
