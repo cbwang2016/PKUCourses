@@ -3,11 +3,15 @@ package edu_cn.pku.course.adapter;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -62,7 +66,10 @@ public class CourseListRecyclerViewAdapter extends RecyclerView.Adapter<CourseLi
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                CourseListFragment.CourseInfo selected_course;
+                selected_course= coursesList.get(holder.getAdapterPosition());
                 Intent intent = new Intent(mContext.getActivity(), CourseActionsActivity.class);
+                intent.putExtra("CourseId",selected_course.getCourseId());
                 mContext.startActivity(intent);
             }
         });
@@ -86,6 +93,17 @@ public class CourseListRecyclerViewAdapter extends RecyclerView.Adapter<CourseLi
                 return true;
             }
         });
+    }
+
+
+    @Override
+    public void onAttachedToRecyclerView(RecyclerView recyclerView){
+        super.onAttachedToRecyclerView(recyclerView);
+    }
+
+    @Override
+    public void onDetachedFromRecyclerView(RecyclerView recyclerView){
+        super.onDetachedFromRecyclerView(recyclerView);
     }
 
     @Override
