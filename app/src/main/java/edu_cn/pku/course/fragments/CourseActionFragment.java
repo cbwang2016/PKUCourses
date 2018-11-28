@@ -24,19 +24,27 @@ import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
 import android.widget.LinearLayout;
 
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+
+import java.io.IOException;
+import java.io.StringReader;
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 
 import edu_cn.pku.course.Utils;
 import edu_cn.pku.course.activities.LoginActivity;
 import edu_cn.pku.course.activities.R;
 import edu_cn.pku.course.adapter.CourseActionsAdapter;
-import edu_cn.pku.course.adapter.CourseListRecyclerViewAdapter;
 
-public class CourseActionFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener{
-    private View view;
-    private RecyclerView course_actions_recycler;
+public class CourseActionFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
     private String courseId;
 
     private CourseActionFragment.ActionsLoadingTask mLoadingTask = null;
@@ -70,7 +78,12 @@ public class CourseActionFragment extends Fragment implements SwipeRefreshLayout
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        courseId = getActivity().getIntent().getStringExtra("CourseId");
+        FragmentActivity fa = getActivity();
+        if (fa == null) {
+            courseId = "";
+        } else {
+            courseId = getActivity().getIntent().getStringExtra("CourseId");
+        }
         // Inflate the layout for this fragment
         LinearLayout linearLayout = (LinearLayout) inflater.inflate(R.layout.fragment_course_action, container, false);
         // 查找xml文件中的对象并保存进Java变量
@@ -83,14 +96,6 @@ public class CourseActionFragment extends Fragment implements SwipeRefreshLayout
         // 设置刷新的监听类为此类（监听函数onRefresh）
         mCourseActionSwipeContainer.setOnRefreshListener(this);
 
-        FragmentActivity fa = getActivity();
-        // 为了消除编译器Warning，需要判断一下是不是null，其实这基本上不可能出现null
-        if (fa == null) {
-            Snackbar.make(mRecyclerView, "null getActivity!", Snackbar.LENGTH_SHORT).show();
-            return linearLayout;
-        }
-        // 将读取已置顶课程列表的SharedPreferences传递给CourseActionsAdapter
-        SharedPreferences sharedPreferences = fa.getSharedPreferences("pinnedCourseAction", Context.MODE_PRIVATE);
         adapter = new CourseActionsAdapter(new ArrayList<String>(), this.getActivity());
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mRecyclerView.setAdapter(adapter);
@@ -136,7 +141,7 @@ public class CourseActionFragment extends Fragment implements SwipeRefreshLayout
 
         @Override
         protected String doInBackground(Void... params) {
-            return Utils.courseHttpGetRequest("http://course.pku.edu.cn/webapps/blackboard/content/courseMenu.jsp?course_id="+courseId);//
+            return Utils.courseHttpGetRequest("http://course.pku.edu.cn/webapps/Bb-mobile-bb_bb60/courseMap?course_id=" + courseId);
         }
 
         @Override
@@ -159,7 +164,7 @@ public class CourseActionFragment extends Fragment implements SwipeRefreshLayout
                 }
             } else {
                 // 解析返回的HTML
-                String[] rawSplit = str.split("</li>");
+//                String[] rawSplit = str.split("</li>");
                 ArrayList<String> actions_list = new ArrayList<>();
 
                 FragmentActivity fa = getActivity();
@@ -168,9 +173,28 @@ public class CourseActionFragment extends Fragment implements SwipeRefreshLayout
                     return;
                 }
 
-                for (int i = 0; i < rawSplit.length - 1; i++) {
-                    String actions = Utils.lastBetweenStrings(rawSplit[i], "<span title=\"", "</span></a>").split("\">")[0];
-                    actions_list.add(actions);
+                try {
+                    DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+                    DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+                    InputSource is = new InputSource(new StringReader(str));
+                    Document doc = dBuilder.parse(is);
+                    NodeList nList = doc.getElementsByTagName("map").item(0).getChildNodes();
+                    for (int temp = 0; temp < nList.getLength(); temp++) {
+                        Node nNode = nList.item(temp);
+                        if (nNode.getNodeType() == Node.ELEMENT_NODE) {
+                            Element eElement = (Element) nNode;
+                            actions_list.add(eElement.getAttribute("name"));
+                        }
+                    }
+                } catch (ParserConfigurationException e) {
+                    Snackbar.make(mRecyclerView, e.getMessage(), Snackbar.LENGTH_SHORT).show();
+                    return;
+                } catch (SAXException e) {
+                    Snackbar.make(mRecyclerView, e.getMessage(), Snackbar.LENGTH_SHORT).show();
+                    return;
+                } catch (IOException e) {
+                    Snackbar.make(mRecyclerView, e.getMessage(), Snackbar.LENGTH_SHORT).show();
+                    return;
                 }
 
                 adapter.updateList(actions_list);
@@ -188,7 +212,6 @@ public class CourseActionFragment extends Fragment implements SwipeRefreshLayout
     }
 
 
-
     public void signOut() throws Exception {
         FragmentActivity fa = getActivity();
         if (fa == null) {
@@ -203,16 +226,4 @@ public class CourseActionFragment extends Fragment implements SwipeRefreshLayout
         startActivity(intent);
         getActivity().finish();
     }
-
-//    @Override
-//    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-//                             Bundle savedInstanceState) {
-//        view = inflater.inflate(R.layout.fragment_course_action, container, false);
-//        String CourseId = getActivity().getIntent().getStringExtra("CourseId");
-//        course_actions_recycler = view.findViewById(R.id.recycler_actions);
-//        course_actions_recycler.setLayoutManager(new LinearLayoutManager(view.getContext()));
-//        course_actions_recycler.setAdapter(new CourseActionsAdapter(view.getContext(),CourseId));
-//        return view;
-//    }
-
 }

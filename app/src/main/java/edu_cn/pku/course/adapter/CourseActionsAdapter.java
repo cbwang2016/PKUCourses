@@ -9,20 +9,17 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import edu_cn.pku.course.activities.R;
-import edu_cn.pku.course.fragments.CourseActionFragment;
 
 public class CourseActionsAdapter extends RecyclerView.Adapter<CourseActionsAdapter.ActionViewHolder> {
     private Context mContext;
     private ArrayList<String> action_list;
 
-    public CourseActionsAdapter(ArrayList<String> action_list,Context context) {
+    public CourseActionsAdapter(ArrayList<String> action_list, Context context) {
         this.action_list = action_list;
         this.mContext = context;
     }
-
 
 
     @NonNull
