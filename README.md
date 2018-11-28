@@ -9,7 +9,7 @@
       * [ ] PDF/zip/MP3等文件的应用外打开-- WCB
       * [ ] 下载进度管理 -- WCB
     * [x] 我的成绩 -- SJY
-    * [ ] 其他（咱们还没做的功能通过webview网页查看。注意要把session_id传递到Webview里） -- SJY
+    * [ ] 其他（咱们还没做的功能通过webview网页查看。注意要把session_id传递到Webview里） -- WCB
 * [x] 公告 AnnouncementListFragment -- SJY
   * [ ] 未读内容标记
   * [ ] 未读内容提醒
