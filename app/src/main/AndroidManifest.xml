@@ -50,6 +50,9 @@
         <activity
             android:name=".GradeBookOfEachCourseActivity"
             android:theme="@style/AppTheme.Slidr" />
+        <activity
+            android:name=".WebViewActivity"
+            android:theme="@style/AppTheme.Slidr" />
     </application>
 
 </manifest>

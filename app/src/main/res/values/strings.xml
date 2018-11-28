@@ -27,4 +27,5 @@
     <string name="settings_list_preference_dialog_title">启动页面</string>
     <string name="settings_list_preference_title">启动页面</string>
     <string name="title_activity_grade_book_of_each_course">" "</string>
+    <string name="title_activity_web_view">WebViewActivity</string>
 </resources>

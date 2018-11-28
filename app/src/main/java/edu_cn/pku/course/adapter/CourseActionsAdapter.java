@@ -20,6 +20,7 @@ import edu_cn.pku.course.Utils;
 import edu_cn.pku.course.activities.CourseActionsActivity;
 import edu_cn.pku.course.activities.GradeBookOfEachCourseActivity;
 import edu_cn.pku.course.activities.R;
+import edu_cn.pku.course.activities.WebViewActivity;
 import edu_cn.pku.course.fragments.CourseActionFragment;
 import edu_cn.pku.course.fragments.CourseListFragment;
 
@@ -70,6 +71,19 @@ public class CourseActionsAdapter extends RecyclerView.Adapter<CourseActionsAdap
                             Activity activity = mContext.getActivity();
                             if (activity != null) {
                                 intent.putExtra("CourseId", activity.getIntent().getStringExtra("CourseId"));
+                            }
+                            mContext.startActivity(intent);
+                        }
+                    });
+                } else {
+                    holder.textView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent intent = new Intent(mContext.getActivity(), WebViewActivity.class);
+                            Activity activity = mContext.getActivity();
+                            if (activity != null) {
+                                intent.putExtra("Title", activity.getIntent().getStringExtra("Title") + " - " + eElement.getAttribute("name"));
+                                intent.putExtra("WebViewUrl", eElement.getAttribute("viewurl"));
                             }
                             mContext.startActivity(intent);
                         }
