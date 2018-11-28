@@ -24,27 +24,26 @@ import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
 import android.widget.LinearLayout;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.Locale;
-import java.text.ParseException;
-
 
 import edu_cn.pku.course.Utils;
 import edu_cn.pku.course.activities.LoginActivity;
 import edu_cn.pku.course.activities.R;
 import edu_cn.pku.course.adapter.AnnouncementListRecyclerViewAdapter;
+import edu_cn.pku.course.fragments.AnnouncementListFragment.AnnouncementInfo;
 
 
-public class AnnouncementListFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
+public class AnnouncementListOfEachCourseFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
 
     private AnnouncementLoadingTask mLoadingTask = null;
     private RecyclerView mRecyclerView;
-    private SwipeRefreshLayout mAnnouncementListSwipeContainer;
     private AnnouncementListRecyclerViewAdapter adapter;
+    private SwipeRefreshLayout mAnnouncementListSwipeContainer;
+    private static final String CourseId = "param1";
 
-    public AnnouncementListFragment() {
+    private String courseId;
+
+    public AnnouncementListOfEachCourseFragment() {
         // Required empty public constructor
     }
 
@@ -53,16 +52,21 @@ public class AnnouncementListFragment extends Fragment implements SwipeRefreshLa
      *
      * @return A new instance of fragment CoursesListFragment.
      */
-    public static AnnouncementListFragment newInstance() {
-        AnnouncementListFragment fragment = new AnnouncementListFragment();
+    public static AnnouncementListOfEachCourseFragment newInstance(String courseId) {
+        AnnouncementListOfEachCourseFragment fragment = new AnnouncementListOfEachCourseFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
+        args.putString(CourseId, courseId);
         return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            courseId = getArguments().getString(CourseId);
+        }
+
     }
 
     @Override
@@ -86,7 +90,7 @@ public class AnnouncementListFragment extends Fragment implements SwipeRefreshLa
             Snackbar.make(mRecyclerView, "null getActivity!", Snackbar.LENGTH_SHORT).show();
             return linearLayout;
         }
-        // 将读取已置顶课程列表的SharedPreferences传递给CourseListRecyclerViewAdapter
+
         // SharedPreferences sharedPreferences = fa.getSharedPreferences("pinnedAnnouncementList", Context.MODE_PRIVATE);
         adapter = new AnnouncementListRecyclerViewAdapter(new ArrayList<AnnouncementInfo>());
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -122,7 +126,6 @@ public class AnnouncementListFragment extends Fragment implements SwipeRefreshLa
                 mRecyclerView.setVisibility(show ? View.GONE : View.VISIBLE);
             }
         });
-
         mAnnouncementListSwipeContainer.setRefreshing(show);
     }
 
@@ -135,7 +138,7 @@ public class AnnouncementListFragment extends Fragment implements SwipeRefreshLa
         //主要是有个course id一串数字是不一样的
         @Override
         protected String doInBackground(Void... params) {
-            return Utils.courseHttpGetRequest("http://course.pku.edu.cn/webapps/blackboard/execute/announcement?method=search&returnUrl=/webapps/portal/execute/tabs/tabAction?tab_tab_group_id=_3_1&tabId=_1_1");
+            return Utils.courseHttpGetRequest("http://course.pku.edu.cn/webapps/blackboard/execute/announcement?method=search&course_id=" + courseId);
         }
 
         @Override
@@ -158,7 +161,7 @@ public class AnnouncementListFragment extends Fragment implements SwipeRefreshLa
                 }
             } else {
                 // 解析返回的HTML
-                String[] rawSplit = str.split("<li class=\"clearfix\"");
+                String[] rawSplit = str.split("<h3 class");
                 ArrayList<AnnouncementInfo> announcement_list = new ArrayList<>();
 
                 FragmentActivity fa = getActivity();
@@ -166,6 +169,10 @@ public class AnnouncementListFragment extends Fragment implements SwipeRefreshLa
                     Snackbar.make(mRecyclerView, "null getActivity!", Snackbar.LENGTH_SHORT).show();
                     return;
                 }
+                // SharedPreferences sharedPreferences = fa.getSharedPreferences("pinnedAnnouncementList", Context.MODE_PRIVATE);
+                // Set<String> hset = sharedPreferences.getStringSet("key", null);
+                // if (hset == null)
+                //     hset = new HashSet<>();
 //这里是提取关键的原始字符串！！！不用分割？为什么wcb哪里把他分割了啊....还有我应该【0】元素是没有我要的东西的，从1开始？
                 for (int i = 1; i < rawSplit.length; i++) {
                     String basicInfo = Utils.betweenStrings(rawSplit[i], "transparent", " <p><div class=");
@@ -192,70 +199,6 @@ public class AnnouncementListFragment extends Fragment implements SwipeRefreshLa
         protected void onCancelled() {
             mLoadingTask = null;
             showLoading(false);
-        }
-    }
-
-    //复制wcb的courselist代码
-
-    /**
-     * 为了方便管理课程列表，将每个课程的各种信息组成一个类。
-     */
-    public static class AnnouncementInfo implements Comparable<AnnouncementInfo> {
-        private String basicInfo;
-        private String contents, authorInfo;
-        private String rawAnnouncementDate;
-
-        /**
-         * 格式："> 线性代数B第四次作业</h3>
-         * <div class="details">
-         * <p><span>发帖时间:</span> 2018年11月15日 星期四</p>
-         * <p>
-         */
-        // private int isPinned;
-
-        AnnouncementInfo(String str, String contents, String authorInfo) {
-            this.basicInfo = str;
-            this.contents = contents;
-            this.authorInfo = authorInfo;
-            rawAnnouncementDate = getAnnouncementDate();
-            //     isPinned = 0;
-        }
-
-        //        public String getBasicInfo() {
-//            return basicInfo;
-//        }
-        public String getAuthorInfo() {
-            return authorInfo;
-        }
-
-        public String getContents() {
-            return contents;
-        }
-
-        public String getAnnouncementTitle() {
-            return Utils.betweenStrings(basicInfo, "\n" +
-                    "\t\t\t\t        ", "</h3>");
-        }
-
-        public String getAnnouncementDate() {
-            return Utils.lastBetweenStrings(basicInfo, "</span> ", "</p>");
-        }
-
-        //给出可以比较的Date类型
-        private Date changeToDate() throws ParseException {
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy年M月d日", Locale.CHINA);
-            return dateFormat.parse(rawAnnouncementDate.split(" ")[0]);
-        }
-
-        @Override
-        public int compareTo(AnnouncementListFragment.AnnouncementInfo comp) {
-            try {
-//                if (this.changeToDate() == comp.changeToDate())
-                return comp.changeToDate().compareTo(this.changeToDate());
-            } catch (ParseException e) {
-//                e.printStackTrace();//这个是字符串不符合定义的格式的错误
-            }
-            return this.getAnnouncementTitle().compareTo(comp.getAnnouncementTitle());
         }
     }
 

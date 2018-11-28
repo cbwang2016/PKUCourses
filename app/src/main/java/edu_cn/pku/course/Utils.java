@@ -19,17 +19,19 @@ import edu_cn.pku.course.activities.SplashActivity;
 public class Utils {
     public static final String errorPrefix = "Error: ";
     public static final String errorPasswordIncorrect = "Password Incorrect";
+    public static final String errorSubstrings = "error when extracting substrings";
 
     private static final Context applicationContext = SplashActivity.getContextOfApplication();
 
     /**
      * 将字符串str中第一个出现的leftStr和第一个出现的rightStr之间的字符串提取出来
+     * 感觉有一个问题，l是不是应该小于leftStr.length()?
      */
     public static String betweenStrings(String str, String leftStr, String rightStr) {
         int l = str.indexOf(leftStr) + leftStr.length();
         int r = str.indexOf(rightStr);
-        if (l < 0 || r < 0 || l > r)
-            return errorPrefix + "error when extracting substrings";
+        if (l < leftStr.length() || r < 0 || l > r)
+            return errorPrefix + errorSubstrings;
         return str.substring(l, r);
     }
 
@@ -39,8 +41,8 @@ public class Utils {
     public static String lastBetweenStrings(String str, String leftStr, String rightStr) {
         int l = str.lastIndexOf(leftStr) + leftStr.length();
         int r = str.lastIndexOf(rightStr);
-        if (l < 0 || r < 0 || l > r)
-            return errorPrefix + "error when extracting substrings";
+        if (l < leftStr.length() || r < 0 || l > r)
+            return errorPrefix + errorSubstrings;
         return str.substring(l, r);
     }
 
