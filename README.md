@@ -13,7 +13,7 @@
 * [x] 公告 AnnouncementListFragment -- SJY
   * [ ] 未读内容标记
   * [ ] 未读内容提醒
-* [ ] Dashboard DashboardFragment -- HJX
+* [ ] Dashboard DashboardFragment -- HJX（使用http://course.pku.edu.cn/webapps/Bb-mobile-bb_bb60/dashboard?course_type=ALL&with_notifications=true ）
   * [ ] 新增内容
   * [ ] 未读内容标记
   * [ ] 未读内容提醒
