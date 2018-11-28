@@ -67,9 +67,10 @@ public class CourseListRecyclerViewAdapter extends RecyclerView.Adapter<CourseLi
             @Override
             public void onClick(View v) {
                 CourseListFragment.CourseInfo selected_course;
-                selected_course= coursesList.get(holder.getAdapterPosition());
+                selected_course = coursesList.get(holder.getAdapterPosition());
                 Intent intent = new Intent(mContext.getActivity(), CourseActionsActivity.class);
-                intent.putExtra("CourseId",selected_course.getCourseId());
+                intent.putExtra("CourseId", selected_course.getCourseId());
+                intent.putExtra("CourseName", selected_course.getCourseName());
                 mContext.startActivity(intent);
             }
         });
@@ -97,12 +98,12 @@ public class CourseListRecyclerViewAdapter extends RecyclerView.Adapter<CourseLi
 
 
     @Override
-    public void onAttachedToRecyclerView(RecyclerView recyclerView){
+    public void onAttachedToRecyclerView(@NonNull RecyclerView recyclerView) {
         super.onAttachedToRecyclerView(recyclerView);
     }
 
     @Override
-    public void onDetachedFromRecyclerView(RecyclerView recyclerView){
+    public void onDetachedFromRecyclerView(@NonNull RecyclerView recyclerView) {
         super.onDetachedFromRecyclerView(recyclerView);
     }
 
