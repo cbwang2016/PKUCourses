@@ -20,8 +20,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AnimationUtils;
-import android.view.animation.LayoutAnimationController;
 import android.widget.LinearLayout;
 
 import java.util.ArrayList;
@@ -79,8 +77,8 @@ public class AnnouncementListOfEachCourseFragment extends Fragment implements Sw
         mAnnouncementListSwipeContainer = linearLayout.findViewById(R.id.announcement_swipe_container);
 
         // 设置动画
-        LayoutAnimationController animation = AnimationUtils.loadLayoutAnimation(getContext(), R.anim.layout_animation_fall_down);
-        mAnnouncementListSwipeContainer.setLayoutAnimation(animation);
+//        LayoutAnimationController animation = AnimationUtils.loadLayoutAnimation(getContext(), R.anim.layout_animation_fall_down);
+//        mAnnouncementListSwipeContainer.setLayoutAnimation(animation);
         // 设置刷新的监听类为此类（监听函数onRefresh）
         mAnnouncementListSwipeContainer.setOnRefreshListener(this);
 
@@ -95,6 +93,7 @@ public class AnnouncementListOfEachCourseFragment extends Fragment implements Sw
         adapter = new AnnouncementListRecyclerViewAdapter(new ArrayList<AnnouncementInfo>());
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mRecyclerView.setAdapter(adapter);
+        courseId = getActivity().getIntent().getStringExtra("CourseId");
 
         // 显示Loading的小动画，并在后台读取课程列表
         showLoading(true);
@@ -190,7 +189,7 @@ public class AnnouncementListOfEachCourseFragment extends Fragment implements Sw
 
                 adapter.updateList(announcement_list);
                 // 显示课程列表的fancy的动画
-                mRecyclerView.scheduleLayoutAnimation();
+//                mRecyclerView.scheduleLayoutAnimation();
             }
         }
 

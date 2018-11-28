@@ -2,7 +2,6 @@ package edu_cn.pku.course.adapter;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -17,12 +16,12 @@ import org.w3c.dom.Node;
 import java.util.ArrayList;
 
 import edu_cn.pku.course.Utils;
+import edu_cn.pku.course.activities.AnnouncementListOfEachCourseActivity;
 import edu_cn.pku.course.activities.CourseActionsActivity;
 import edu_cn.pku.course.activities.GradeBookOfEachCourseActivity;
 import edu_cn.pku.course.activities.R;
 import edu_cn.pku.course.activities.WebViewActivity;
 import edu_cn.pku.course.fragments.CourseActionFragment;
-import edu_cn.pku.course.fragments.CourseListFragment;
 
 public class CourseActionsAdapter extends RecyclerView.Adapter<CourseActionsAdapter.ActionViewHolder> {
     private CourseActionFragment mContext;
@@ -70,6 +69,19 @@ public class CourseActionsAdapter extends RecyclerView.Adapter<CourseActionsAdap
                             Intent intent = new Intent(mContext.getActivity(), GradeBookOfEachCourseActivity.class);
                             Activity activity = mContext.getActivity();
                             if (activity != null) {
+                                intent.putExtra("CourseId", activity.getIntent().getStringExtra("CourseId"));
+                            }
+                            mContext.startActivity(intent);
+                        }
+                    });
+                } else if ("announcements".equals(eElement.getAttribute("linktype"))) {
+                    holder.textView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent intent = new Intent(mContext.getActivity(), AnnouncementListOfEachCourseActivity.class);
+                            Activity activity = mContext.getActivity();
+                            if (activity != null) {
+                                intent.putExtra("Title", activity.getIntent().getStringExtra("Title") + " - " + eElement.getAttribute("name"));
                                 intent.putExtra("CourseId", activity.getIntent().getStringExtra("CourseId"));
                             }
                             mContext.startActivity(intent);

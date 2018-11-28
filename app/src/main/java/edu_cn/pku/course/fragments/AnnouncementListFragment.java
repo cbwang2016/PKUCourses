@@ -20,16 +20,13 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AnimationUtils;
-import android.view.animation.LayoutAnimationController;
 import android.widget.LinearLayout;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
-import java.text.ParseException;
-
 
 import edu_cn.pku.course.Utils;
 import edu_cn.pku.course.activities.LoginActivity;
@@ -75,8 +72,8 @@ public class AnnouncementListFragment extends Fragment implements SwipeRefreshLa
         mAnnouncementListSwipeContainer = linearLayout.findViewById(R.id.announcement_swipe_container);
 
         // 设置动画
-        LayoutAnimationController animation = AnimationUtils.loadLayoutAnimation(getContext(), R.anim.layout_animation_fall_down);
-        mAnnouncementListSwipeContainer.setLayoutAnimation(animation);
+//        LayoutAnimationController animation = AnimationUtils.loadLayoutAnimation(getContext(), R.anim.layout_animation_fall_down);
+//        mAnnouncementListSwipeContainer.setLayoutAnimation(animation);
         // 设置刷新的监听类为此类（监听函数onRefresh）
         mAnnouncementListSwipeContainer.setOnRefreshListener(this);
 
@@ -183,7 +180,7 @@ public class AnnouncementListFragment extends Fragment implements SwipeRefreshLa
 
                 adapter.updateList(announcement_list);
                 // 显示课程列表的fancy的动画
-                mRecyclerView.scheduleLayoutAnimation();
+//                mRecyclerView.scheduleLayoutAnimation();
             }
         }
 
