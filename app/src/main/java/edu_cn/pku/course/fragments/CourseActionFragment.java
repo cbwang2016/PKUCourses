@@ -24,20 +24,10 @@ import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
 import android.widget.LinearLayout;
 
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
 
-import java.io.IOException;
-import java.io.StringReader;
 import java.util.ArrayList;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 
 import edu_cn.pku.course.Utils;
 import edu_cn.pku.course.activities.LoginActivity;
@@ -173,28 +163,16 @@ public class CourseActionFragment extends Fragment implements SwipeRefreshLayout
                     return;
                 }
 
-                try {
-                    DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-                    DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-                    InputSource is = new InputSource(new StringReader(str));
-                    Document doc = dBuilder.parse(is);
-                    NodeList nList = doc.getElementsByTagName("map").item(0).getChildNodes();
-                    for (int temp = 0; temp < nList.getLength(); temp++) {
-                        Node nNode = nList.item(temp);
-                        if (nNode.getNodeType() == Node.ELEMENT_NODE) {
-                            Element eElement = (Element) nNode;
-                            actions_list.add(eElement.getAttribute("name"));
+                Node rootNode = Utils.stringToNode(str);
+                if (rootNode != null) {
+                    Node nNode = rootNode.getFirstChild();
+                    if (nNode != null) {
+                        NodeList nList = nNode.getChildNodes();
+                        for (int temp = 0; temp < nList.getLength(); temp++) {
+                            Node n = nList.item(temp);
+                            actions_list.add(Utils.nodeToString(n));
                         }
                     }
-                } catch (ParserConfigurationException e) {
-                    Snackbar.make(mRecyclerView, e.getMessage(), Snackbar.LENGTH_SHORT).show();
-                    return;
-                } catch (SAXException e) {
-                    Snackbar.make(mRecyclerView, e.getMessage(), Snackbar.LENGTH_SHORT).show();
-                    return;
-                } catch (IOException e) {
-                    Snackbar.make(mRecyclerView, e.getMessage(), Snackbar.LENGTH_SHORT).show();
-                    return;
                 }
 
                 adapter.updateList(actions_list);
