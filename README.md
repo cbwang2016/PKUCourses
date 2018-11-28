@@ -27,9 +27,9 @@
   * [ ] 课程列表
 * [ ] 已下载文件的管理 DownloadedFilesListFragment -- WCB
   * [ ] 删除操作
-* [ ] 设置 SettingsActivity -- WCB
+* [x] 设置 SettingsActivity -- WCB
   * [ ] 自动更新
-  * [ ] 启动页面位置
+  * [x] 启动页面位置
   * [ ] 意见反馈
   * [ ] About
   * [ ] Github Page

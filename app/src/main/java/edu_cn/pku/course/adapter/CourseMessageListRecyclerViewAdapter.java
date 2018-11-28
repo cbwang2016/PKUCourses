@@ -28,12 +28,10 @@ public class CourseMessageListRecyclerViewAdapter extends RecyclerView.Adapter<C
 
     public CourseMessageListRecyclerViewAdapter(ArrayList<CourseMessageListFragment.CourseMessageInfo> coursemessageList) {
         this.coursemessageList = coursemessageList;
-        Collections.sort(this.coursemessageList);
     }
 
     public void updateList(ArrayList<CourseMessageListFragment.CourseMessageInfo> coursemessageList) {
         this.coursemessageList = coursemessageList;
-        Collections.sort(this.coursemessageList);
         notifyDataSetChanged();
     }
 
@@ -44,8 +42,6 @@ public class CourseMessageListRecyclerViewAdapter extends RecyclerView.Adapter<C
         return new RecyclerViewHolder(view);
     }
 
-
-    //
     @Override
     public void onBindViewHolder(@NonNull final RecyclerViewHolder holder, final int position) {
         holder.setIsRecyclable(false);
@@ -54,7 +50,6 @@ public class CourseMessageListRecyclerViewAdapter extends RecyclerView.Adapter<C
         holder.recycler_coursemessage_isadd_str.setText(coursemessageList.get(holder.getAdapterPosition()).getCourseMessageIsAdd());
         holder.recycler_coursemessage_addfiles_str.setText(coursemessageList.get(holder.getAdapterPosition()).getCourseMessageAddFiles());
         holder.recycler_coursemessage_contents_str.setText(coursemessageList.get(holder.getAdapterPosition()).getCourseMessageContents());
-
     }
 
     @Override
@@ -66,7 +61,7 @@ public class CourseMessageListRecyclerViewAdapter extends RecyclerView.Adapter<C
     class RecyclerViewHolder extends RecyclerView.ViewHolder {
 
         private View mView;
-        private TextView recycler_coursemessage_title_str,recycler_coursemessage_isadd_str,recycler_coursemessage_addfiles_str,recycler_coursemessage_contents_str;
+        private TextView recycler_coursemessage_title_str, recycler_coursemessage_isadd_str, recycler_coursemessage_addfiles_str, recycler_coursemessage_contents_str;
 
         private RecyclerViewHolder(View itemView) {
             super(itemView);
