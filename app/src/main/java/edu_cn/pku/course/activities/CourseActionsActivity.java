@@ -16,5 +16,7 @@ public class CourseActionsActivity extends AppCompatActivity {
         RecyclerView course_actions_recycle = findViewById(R.id.recycler_actions);
         course_actions_recycle.setLayoutManager(new LinearLayoutManager(CourseActionsActivity.this));
         course_actions_recycle.setAdapter(new CourseActionsAdapter(CourseActionsActivity.this));
+
+
     }
 }
