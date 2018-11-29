@@ -166,9 +166,8 @@ public class MainActivity extends AppCompatActivity
                 startActivity(intent);
                 break;
             case R.id.nav_about:
-                new AlertDialog.Builder(this)
-                        .setMessage("ZhaoRuiBo, look here.")
-                        .setPositiveButton(android.R.string.yes, null).show();
+                Intent intentAbout = new Intent(this, AboutActivity.class);
+                startActivity(intentAbout);
                 break;
             case R.id.nav_signout:
                 new AlertDialog.Builder(this)
