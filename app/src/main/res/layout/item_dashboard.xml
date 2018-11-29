@@ -19,33 +19,23 @@
         android:layout_height="match_parent"
         android:padding="16dp">
 
-        <RelativeLayout
+        <ImageView
             android:id="@+id/rela_round"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginEnd="16dp"
-            android:layout_marginRight="16dp"
-            android:background="@drawable/round"
-            android:backgroundTint="@android:color/darker_gray"
-            card_view:ignore="UnusedAttribute">
-
-            <ImageView
-                android:id="@+id/imageView"
-                android:layout_width="56dp"
-                android:layout_height="56dp"
-                android:background="@drawable/round"
-                card_view:srcCompat="@tools:sample/avatars"
-                card_view:ignore="ContentDescription" />
-        </RelativeLayout>
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:background="@drawable/ic_doc"
+            android:scaleType="centerCrop"
+            card_view:ignore="ContentDescription" />
 
         <TextView
             android:id="@+id/recycler_str"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
             android:layout_toEndOf="@id/rela_round"
             android:layout_toRightOf="@id/rela_round"
-            android:text="tv_recycler_item_1"
+            android:text="tv_recycler_item_1_hahahahahaha"
             android:textColor="@android:color/black"
             card_view:ignore="HardcodedText" />
 
@@ -54,6 +44,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/recycler_str"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
             android:layout_marginTop="4dp"
             android:layout_toEndOf="@id/rela_round"
             android:layout_toRightOf="@id/rela_round"
@@ -65,9 +57,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/recycler_sub_str"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
             android:layout_marginTop="4dp"
-            android:layout_toEndOf="@id/rela_round"
-            android:layout_toRightOf="@id/rela_round"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
             android:text="tv_recycler_item_3"
             card_view:ignore="HardcodedText" />
 
