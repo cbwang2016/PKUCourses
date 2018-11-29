@@ -27,6 +27,7 @@ import java.util.List;
 import edu_cn.pku.course.adapter.FragmentAdapter;
 import edu_cn.pku.course.fragments.AnnouncementListFragment;
 import edu_cn.pku.course.fragments.CourseListFragment;
+import edu_cn.pku.course.fragments.DashboardFragment;
 import edu_cn.pku.course.fragments.MyGradeFragment;
 import edu_cn.pku.course.fragments.SpareClassroomsFragment;
 
@@ -70,6 +71,7 @@ public class MainActivity extends AppCompatActivity
         fragments.add(SpareClassroomsFragment.newInstance());
         fragments.add(AnnouncementListFragment.newInstance());
         fragments.add(MyGradeFragment.newInstance());
+        fragments.add(DashboardFragment.newInstance());
         FragmentAdapter mFragmentAdapter = new FragmentAdapter(getSupportFragmentManager(), fragments);
         view_pager_main = findViewById(R.id.view_pager_main);
         view_pager_main.setAdapter(mFragmentAdapter);
