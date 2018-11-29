@@ -28,7 +28,16 @@
             android:layout_marginRight="16dp"
             android:background="@drawable/round"
             android:backgroundTint="@android:color/darker_gray"
-            card_view:ignore="UnusedAttribute" />
+            card_view:ignore="UnusedAttribute">
+
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                android:background="@drawable/round"
+                card_view:srcCompat="@tools:sample/avatars"
+                card_view:ignore="ContentDescription" />
+        </RelativeLayout>
 
         <TextView
             android:id="@+id/recycler_str"
