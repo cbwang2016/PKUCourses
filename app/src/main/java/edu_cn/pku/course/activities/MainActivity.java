@@ -152,13 +152,13 @@ public class MainActivity extends AppCompatActivity
             case R.id.nav_courselist:
                 view_pager_main.setCurrentItem(1);
                 break;
-            case R.id.nav_spare_classrooms:
+            case R.id.nav_announcements:
                 view_pager_main.setCurrentItem(2);
                 break;
-            case R.id.nav_announcements:
+            case R.id.nav_mygrade:
                 view_pager_main.setCurrentItem(3);
                 break;
-            case R.id.nav_mygrade:
+            case R.id.nav_spare_classrooms:
                 view_pager_main.setCurrentItem(4);
                 break;
             case R.id.nav_settings:

@@ -17,11 +17,6 @@
             android:title="课程列表"
             tools:ignore="HardcodedText" />
         <item
-            android:id="@+id/nav_spare_classrooms"
-            android:icon="@drawable/ic_spare_classrooms"
-            android:title="空闲教室"
-            tools:ignore="HardcodedText" />
-        <item
             android:id="@+id/nav_announcements"
             android:icon="@drawable/ic_announcements"
             android:title="公告"
@@ -30,6 +25,11 @@
             android:id="@+id/nav_mygrade"
             android:icon="@drawable/ic_mygrade"
             android:title="我的成绩"
+            tools:ignore="HardcodedText" />
+        <item
+            android:id="@+id/nav_spare_classrooms"
+            android:icon="@drawable/ic_spare_classrooms"
+            android:title="空闲教室"
             tools:ignore="HardcodedText" />
     </group>
 
