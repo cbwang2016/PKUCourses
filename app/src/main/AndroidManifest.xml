@@ -20,7 +20,7 @@
 
         <provider
             android:name="android.support.v4.content.FileProvider"
-            android:authorities="com.mypackage.myprovider"
+            android:authorities="edu_cn.pku.course"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data
