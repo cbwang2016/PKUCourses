@@ -67,11 +67,11 @@ public class MainActivity extends AppCompatActivity
 
         // 将CourseListFragment和AnnouncementListFragment两个fragment加入到view_pager_main内
         List<Fragment> fragments = new ArrayList<>();
+        fragments.add(DashboardFragment.newInstance());
         fragments.add(CourseListFragment.newInstance());
         fragments.add(SpareClassroomsFragment.newInstance());
         fragments.add(AnnouncementListFragment.newInstance());
         fragments.add(MyGradeFragment.newInstance());
-        fragments.add(DashboardFragment.newInstance());
         FragmentAdapter mFragmentAdapter = new FragmentAdapter(getSupportFragmentManager(), fragments);
         view_pager_main = findViewById(R.id.view_pager_main);
         view_pager_main.setAdapter(mFragmentAdapter);
@@ -146,22 +146,20 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         switch (id) {
-            case R.id.nav_courselist:
-                // Handle the camera action
-
+            case R.id.nav_dashboard:
                 view_pager_main.setCurrentItem(0);
                 break;
-            case R.id.nav_spare_classrooms:
-
+            case R.id.nav_courselist:
                 view_pager_main.setCurrentItem(1);
                 break;
-            case R.id.nav_announcements:
-
+            case R.id.nav_spare_classrooms:
                 view_pager_main.setCurrentItem(2);
                 break;
-            case R.id.nav_mygrade:
-
+            case R.id.nav_announcements:
                 view_pager_main.setCurrentItem(3);
+                break;
+            case R.id.nav_mygrade:
+                view_pager_main.setCurrentItem(4);
                 break;
             case R.id.nav_settings:
                 Intent intent = new Intent(this, SettingsActivity.class);

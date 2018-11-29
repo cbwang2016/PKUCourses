@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/tools"
-    android:id="@+id/card_view_item_recycler_view"
+    android:id="@+id/card_view_item_dashboard"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginStart="8dp"
@@ -31,12 +31,14 @@
             android:id="@+id/recycler_str"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginLeft="8dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
             android:layout_toEndOf="@id/rela_round"
             android:layout_toRightOf="@id/rela_round"
             android:text="tv_recycler_item_1_hahahahahaha"
             android:textColor="@android:color/black"
+            android:textStyle="bold"
+            android:textSize="16sp"
             card_view:ignore="HardcodedText" />
 
         <TextView
@@ -44,8 +46,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/recycler_str"
-            android:layout_marginStart="8dp"
-            android:layout_marginLeft="8dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
             android:layout_marginTop="4dp"
             android:layout_toEndOf="@id/rela_round"
             android:layout_toRightOf="@id/rela_round"

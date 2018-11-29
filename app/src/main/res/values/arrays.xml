@@ -2,11 +2,11 @@
 <resources>
 
     <string-array name="settings_list_preference_titles">
+        <item>Dashboard</item>
         <item>课程列表</item>
         <item>空闲教室</item>
         <item>公告</item>
         <item>我的成绩</item>
-        <item>通知板</item>
     </string-array>
     <string-array name="settings_list_preference_values">
         <item>0</item>

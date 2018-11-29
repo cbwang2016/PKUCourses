@@ -61,7 +61,6 @@ public class CourseActionsAdapter extends RecyclerView.Adapter<CourseActionsAdap
                             mContext.startActivity(intent);
                         }
                     });
-                    holder.textView.setClickable(true);
                 } else if ("student_gradebook".equals(eElement.getAttribute("linktype"))) {
                     holder.textView.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -101,9 +100,9 @@ public class CourseActionsAdapter extends RecyclerView.Adapter<CourseActionsAdap
                         }
                     });
                 }
+                holder.textView.setClickable(true);
             } else {
                 holder.textView.setText(Utils.errorPrefix + "nNode.getNodeType() != Node.ELEMENT_NODE");
-
             }
         }
     }

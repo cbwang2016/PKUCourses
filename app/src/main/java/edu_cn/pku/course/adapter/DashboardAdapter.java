@@ -1,10 +1,14 @@
 package edu_cn.pku.course.adapter;
 
+import android.os.Build;
 import android.support.annotation.NonNull;
+import android.support.annotation.RequiresApi;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -29,11 +33,16 @@ public class DashboardAdapter extends RecyclerView.Adapter<DashboardAdapter.Dash
         return new DashboardViewHolder(LayoutInflater.from(mContext.getContext()).inflate(R.layout.item_dashboard, parent, false));
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     @Override
     public void onBindViewHolder(@NonNull DashboardViewHolder holder, int i) {
         holder.recycler_title.setText(item_list.get(holder.getAdapterPosition()).getTitle());
         holder.recycler_sub_str.setText(item_list.get(holder.getAdapterPosition()).getCourseName());
         holder.recycler_time_str.setText(item_list.get(holder.getAdapterPosition()).getRelativeTime());
+        holder.card_view_item_dashboard.setClickable(true);
+        if (item_list.get(holder.getAdapterPosition()).getSourceId().contains("GradeDetail")) {
+            holder.imageView.setBackground(mContext.getResources().getDrawable(R.drawable.ic_mygrade));
+        }
     }
 
     @Override
@@ -49,6 +58,8 @@ public class DashboardAdapter extends RecyclerView.Adapter<DashboardAdapter.Dash
 
     class DashboardViewHolder extends RecyclerView.ViewHolder {
 
+        private CardView card_view_item_dashboard;
+        ImageView imageView;
         private TextView recycler_title, recycler_sub_str, recycler_time_str;
 
         DashboardViewHolder(@NonNull View itemView) {
@@ -56,6 +67,8 @@ public class DashboardAdapter extends RecyclerView.Adapter<DashboardAdapter.Dash
             recycler_title = itemView.findViewById(R.id.recycler_str);
             recycler_sub_str = itemView.findViewById(R.id.recycler_sub_str);
             recycler_time_str = itemView.findViewById(R.id.recycler_time_str);
+            card_view_item_dashboard = itemView.findViewById(R.id.card_view_item_dashboard);
+            imageView = itemView.findViewById(R.id.rela_round);
         }
     }
 }

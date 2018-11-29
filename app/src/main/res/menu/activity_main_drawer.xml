@@ -7,6 +7,11 @@
         android:id="@+id/menu_top"
         android:checkableBehavior="single">
         <item
+            android:id="@+id/nav_dashboard"
+            android:icon="@drawable/ic_dashboard"
+            android:title="Dashboard"
+            tools:ignore="HardcodedText" />
+        <item
             android:id="@+id/nav_courselist"
             android:icon="@drawable/ic_list"
             android:title="课程列表"
@@ -18,18 +23,13 @@
             tools:ignore="HardcodedText" />
         <item
             android:id="@+id/nav_announcements"
-            android:icon="@drawable/ic_annoucements"
+            android:icon="@drawable/ic_announcements"
             android:title="公告"
             tools:ignore="HardcodedText" />
         <item
             android:id="@+id/nav_mygrade"
             android:icon="@drawable/ic_mygrade"
             android:title="我的成绩"
-            tools:ignore="HardcodedText" />
-        <item
-            android:id="@+id/nav_notificationboard"
-            android:icon="@drawable/ic_dashboard"
-            android:title="Dashboard"
             tools:ignore="HardcodedText" />
     </group>
 

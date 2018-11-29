@@ -149,7 +149,7 @@ public class DashboardFragment extends Fragment implements SwipeRefreshLayout.On
                     NodeList nCoursesList = rootNode.getFirstChild().getChildNodes();
                     for (int temp = 0; temp < nList.getLength(); temp++) {
                         Element feed_item = (Element) nList.item(temp);
-                        if (feed_item.getAttribute("contentid") != null) {
+                        if (feed_item.hasAttribute("contentid")) {
                             for (int temp2 = 0; temp2 < nCoursesList.getLength(); temp2++) {
                                 Element course_item = (Element) nCoursesList.item(temp2);
                                 if (course_item.getAttribute("bbid").equals(feed_item.getAttribute("courseid")))
@@ -260,6 +260,10 @@ public class DashboardFragment extends Fragment implements SwipeRefreshLayout.On
 
         public String getCourseId() {
             return n.getAttribute("courseid");
+        }
+
+        public String getSourceId() {
+            return n.getAttribute("sourceid");
         }
 
         public String getRelativeTime() {
