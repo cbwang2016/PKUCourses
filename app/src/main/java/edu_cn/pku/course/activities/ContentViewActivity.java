@@ -10,6 +10,7 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
@@ -32,12 +33,14 @@ import org.w3c.dom.NodeList;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 import edu_cn.pku.course.Utils;
 import edu_cn.pku.course.adapter.ContentViewAdapter;
+import pub.devrel.easypermissions.EasyPermissions;
 
-public class ContentViewActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener {
+public class ContentViewActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener, EasyPermissions.PermissionCallbacks {
 
     private AttachedFilesListLoadingTask mLoadingTask = null;
     private SwipeRefreshLayout mSwipeContainer;
@@ -116,6 +119,16 @@ public class ContentViewActivity extends AppCompatActivity implements SwipeRefre
         });
 
         mSwipeContainer.setRefreshing(show);
+    }
+
+    @Override
+    public void onPermissionsGranted(int requestCode, @NonNull List<String> perms) {
+        adapter.startDownload();
+    }
+
+    @Override
+    public void onPermissionsDenied(int requestCode, @NonNull List<String> perms) {
+
     }
 
     @SuppressLint("StaticFieldLeak")

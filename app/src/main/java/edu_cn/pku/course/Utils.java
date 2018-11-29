@@ -4,12 +4,10 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Environment;
 
-import org.w3c.dom.CharacterData;
 import org.w3c.dom.Document;
-import org.w3c.dom.Element;
 import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
@@ -45,28 +43,15 @@ public class Utils {
 
     private static final Context applicationContext = SplashActivity.getContextOfApplication();
 
+    public static boolean isSDCardPresent() {
+        return Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED);
+    }
+
     public static String readableFileSize(long size) {
         if (size <= 0) return "0";
         final String[] units = new String[]{"B", "kB", "MB", "GB", "TB"};
         int digitGroups = (int) (Math.log10(size) / Math.log10(1024));
         return new DecimalFormat("#,##0.#").format(size / Math.pow(1024, digitGroups)) + " " + units[digitGroups];
-    }
-
-    public static String getCharacterDataFromElement(Element e) {
-
-        NodeList list = e.getChildNodes();
-        String data;
-
-        for (int index = 0; index < list.getLength(); index++) {
-            if (list.item(index) instanceof CharacterData) {
-                CharacterData child = (CharacterData) list.item(index);
-                data = child.getData();
-
-                if (data != null && data.trim().length() > 0)
-                    return child.getData();
-            }
-        }
-        return "";
     }
 
     public static Node stringToNode(String str) {
