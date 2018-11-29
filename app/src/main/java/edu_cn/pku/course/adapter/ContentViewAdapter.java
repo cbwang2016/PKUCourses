@@ -81,13 +81,15 @@ public class ContentViewAdapter extends RecyclerView.Adapter<ContentViewAdapter.
                                                 .setPositiveButton(android.R.string.yes, null).show();
                                     }
                                     list.get(holder.getAdapterPosition()).setDownloaded(false);
-                                    notifyDataSetChanged(); // bug here
+                                    notifyDataSetChanged();
                                 }
                             })
                             .setNegativeButton(android.R.string.no, null).show();
                     return true;
                 }
             });
+        } else {
+            holder.card_view_item_content.setCardBackgroundColor(Color.WHITE);
         }
     }
 
