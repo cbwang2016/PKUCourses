@@ -17,8 +17,6 @@ import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
-import com.r0adkll.slidr.Slidr;
-
 public class WebViewActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener {
 
     private SwipeRefreshLayout mSwipeContainer;
@@ -89,7 +87,7 @@ public class WebViewActivity extends AppCompatActivity implements SwipeRefreshLa
         mSwipeContainer.setRefreshing(true);
         mWebView.loadUrl("http://course.pku.edu.cn" + getIntent().getStringExtra("WebViewUrl"));
 
-        Slidr.attach(this);
+//        Slidr.attach(this);
     }
 
     @Override

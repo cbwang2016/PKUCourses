@@ -64,7 +64,7 @@
             android:theme="@style/AppTheme.Slidr" />
         <activity
             android:name=".WebViewActivity"
-            android:theme="@style/AppTheme.Slidr" />
+            android:theme="@style/AppTheme" />
         <activity
             android:name=".AnnouncementListOfEachCourseActivity"
             android:theme="@style/AppTheme.Slidr" />
