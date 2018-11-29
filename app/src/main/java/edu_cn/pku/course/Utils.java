@@ -40,7 +40,7 @@ public class Utils {
     public static final String errorPrefix = "Error: ";
     public static final String errorPasswordIncorrect = "Password Incorrect";
     public static final String errorSubstrings = "error when extracting substrings";
-    public static final String downloadFolder = "Download/PKU_Courses/";
+    public static final String downloadFolder = "PKU_Courses/";
 
     private static final Context applicationContext = SplashActivity.getContextOfApplication();
 

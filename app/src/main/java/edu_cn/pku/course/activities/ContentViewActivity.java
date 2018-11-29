@@ -166,7 +166,7 @@ public class ContentViewActivity extends AppCompatActivity implements SwipeRefre
         currentDownloadUrl = item.getUrl();
         currentDownloadFileName = item.getFileName();
         if (item.isDownloaded()) {
-            openFile(Environment.getExternalStorageDirectory() + File.separator + Utils.downloadFolder + currentDownloadFileName);
+            openFile(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) + File.separator + Utils.downloadFolder + currentDownloadFileName);
             return;
         }
         //check if app has permission to write to the external storage.
@@ -177,7 +177,7 @@ public class ContentViewActivity extends AppCompatActivity implements SwipeRefre
         } else {
             //If permission is not present request for the same.
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                EasyPermissions.requestPermissions(ContentViewActivity.this, "PKU Courses是开源软件，绝不会滥用权限。请授权存储权限以下载文件。", WRITE_REQUEST_CODE, Manifest.permission.READ_EXTERNAL_STORAGE);
+                EasyPermissions.requestPermissions(ContentViewActivity.this, "PKU Courses是开源软件，绝不会滥用权限。请授权存储权限以下载文件。", WRITE_REQUEST_CODE, Manifest.permission.WRITE_EXTERNAL_STORAGE);
             }
         }
     }
@@ -229,7 +229,7 @@ public class ContentViewActivity extends AppCompatActivity implements SwipeRefre
                 fileName = currentDownloadFileName;
 
                 //External directory path to save file
-                folder = Environment.getExternalStorageDirectory() + File.separator + Utils.downloadFolder;
+                folder = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) + File.separator + Utils.downloadFolder;
 
                 //Create androiddeft folder if it does not exist
                 File directory = new File(folder);
@@ -308,7 +308,7 @@ public class ContentViewActivity extends AppCompatActivity implements SwipeRefre
         newIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         newIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         try {
-            getApplicationContext().startActivity(newIntent);
+            startActivity(newIntent);
         } catch (ActivityNotFoundException e) {
             Toast.makeText(getApplicationContext(), "No handler for this type of file.", Toast.LENGTH_LONG).show();
         }

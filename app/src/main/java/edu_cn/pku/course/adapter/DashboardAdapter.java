@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Build;
 import android.support.annotation.NonNull;
-import android.support.annotation.RequiresApi;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -37,7 +36,6 @@ public class DashboardAdapter extends RecyclerView.Adapter<DashboardAdapter.Dash
         return new DashboardViewHolder(LayoutInflater.from(mContext.getContext()).inflate(R.layout.item_dashboard, parent, false));
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     @Override
     public void onBindViewHolder(@NonNull final DashboardViewHolder holder, int i) {
         holder.recycler_title.setText(item_list.get(holder.getAdapterPosition()).getTitle());
@@ -45,7 +43,9 @@ public class DashboardAdapter extends RecyclerView.Adapter<DashboardAdapter.Dash
         holder.recycler_time_str.setText(item_list.get(holder.getAdapterPosition()).getRelativeTime());
         holder.card_view_item_dashboard.setClickable(true);
         if (item_list.get(holder.getAdapterPosition()).getSourceId().contains("GradeDetail")) {
-            holder.imageView.setBackground(mContext.getResources().getDrawable(R.drawable.ic_mygrade));
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                holder.imageView.setBackground(mContext.getResources().getDrawable(R.drawable.ic_mygrade));
+            }
             holder.card_view_item_dashboard.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -59,7 +59,9 @@ public class DashboardAdapter extends RecyclerView.Adapter<DashboardAdapter.Dash
                 }
             });
         } else {
-            holder.imageView.setBackground(mContext.getResources().getDrawable(R.drawable.ic_doc));
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                holder.imageView.setBackground(mContext.getResources().getDrawable(R.drawable.ic_doc));
+            }
             holder.card_view_item_dashboard.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

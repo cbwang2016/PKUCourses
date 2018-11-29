@@ -74,7 +74,7 @@ public class ContentViewAdapter extends RecyclerView.Adapter<ContentViewAdapter.
                             .setMessage("您是否想删除此文件（" + list.get(holder.getAdapterPosition()).getFileName() + "）的本地缓存？")
                             .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int whichButton) {
-                                    boolean tmp = new File(Environment.getExternalStorageDirectory() + File.separator + Utils.downloadFolder + list.get(holder.getAdapterPosition()).getFileName()).delete();
+                                    boolean tmp = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) + File.separator + Utils.downloadFolder + list.get(holder.getAdapterPosition()).getFileName()).delete();
                                     if (!tmp) {
                                         new AlertDialog.Builder(mContext)
                                                 .setMessage("文件删除失败")
@@ -90,13 +90,14 @@ public class ContentViewAdapter extends RecyclerView.Adapter<ContentViewAdapter.
             });
         } else {
             holder.card_view_item_content.setCardBackgroundColor(Color.WHITE);
+            holder.card_view_item_content.setLongClickable(false);
         }
     }
 
     public void refreshList() {
         if (EasyPermissions.hasPermissions(mContext, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
             for (ContentViewActivity.AttachedFileItem tmp : this.list) {
-                String filePath = Environment.getExternalStorageDirectory() + File.separator + Utils.downloadFolder + tmp.getFileName();
+                String filePath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) + File.separator + Utils.downloadFolder + tmp.getFileName();
                 if (new File(filePath).exists()) {
                     tmp.setDownloaded(true);
                 }
@@ -109,7 +110,7 @@ public class ContentViewAdapter extends RecyclerView.Adapter<ContentViewAdapter.
         this.list = item_list;
         if (EasyPermissions.hasPermissions(mContext, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
             for (ContentViewActivity.AttachedFileItem tmp : this.list) {
-                String filePath = Environment.getExternalStorageDirectory() + File.separator + Utils.downloadFolder + tmp.getFileName();
+                String filePath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) + File.separator + Utils.downloadFolder + tmp.getFileName();
                 if (new File(filePath).exists()) {
                     tmp.setDownloaded(true);
                 }
