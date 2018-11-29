@@ -262,6 +262,10 @@ public class DashboardFragment extends Fragment implements SwipeRefreshLayout.On
             return n.getAttribute("courseid");
         }
 
+        public String getContentId() {
+            return n.getAttribute("contentid");
+        }
+
         public String getSourceId() {
             return n.getAttribute("sourceid");
         }

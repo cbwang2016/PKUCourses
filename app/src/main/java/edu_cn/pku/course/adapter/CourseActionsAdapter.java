@@ -17,6 +17,7 @@ import java.util.ArrayList;
 
 import edu_cn.pku.course.Utils;
 import edu_cn.pku.course.activities.AnnouncementListOfEachCourseActivity;
+import edu_cn.pku.course.activities.ContentViewActivity;
 import edu_cn.pku.course.activities.CourseActionsActivity;
 import edu_cn.pku.course.activities.GradeBookOfEachCourseActivity;
 import edu_cn.pku.course.activities.R;
@@ -82,6 +83,20 @@ public class CourseActionsAdapter extends RecyclerView.Adapter<CourseActionsAdap
                             if (activity != null) {
                                 intent.putExtra("Title", activity.getIntent().getStringExtra("Title") + " - " + eElement.getAttribute("name"));
                                 intent.putExtra("CourseId", activity.getIntent().getStringExtra("CourseId"));
+                            }
+                            mContext.startActivity(intent);
+                        }
+                    });
+                } else if (eElement.hasAttribute("contentid")) {
+                    holder.textView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent intent = new Intent(mContext.getActivity(), ContentViewActivity.class);
+                            Activity activity = mContext.getActivity();
+                            if (activity != null) {
+                                intent.putExtra("Title", eElement.getAttribute("name"));
+                                intent.putExtra("CourseId", activity.getIntent().getStringExtra("CourseId"));
+                                intent.putExtra("content_id", eElement.getAttribute("contentid"));
                             }
                             mContext.startActivity(intent);
                         }

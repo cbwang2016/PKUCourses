@@ -1,5 +1,7 @@
 package edu_cn.pku.course.adapter;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
@@ -14,6 +16,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import edu_cn.pku.course.activities.ContentViewActivity;
 import edu_cn.pku.course.activities.R;
 import edu_cn.pku.course.fragments.DashboardFragment;
 
@@ -35,11 +38,24 @@ public class DashboardAdapter extends RecyclerView.Adapter<DashboardAdapter.Dash
 
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     @Override
-    public void onBindViewHolder(@NonNull DashboardViewHolder holder, int i) {
+    public void onBindViewHolder(@NonNull final DashboardViewHolder holder, int i) {
         holder.recycler_title.setText(item_list.get(holder.getAdapterPosition()).getTitle());
         holder.recycler_sub_str.setText(item_list.get(holder.getAdapterPosition()).getCourseName());
         holder.recycler_time_str.setText(item_list.get(holder.getAdapterPosition()).getRelativeTime());
         holder.card_view_item_dashboard.setClickable(true);
+        holder.card_view_item_dashboard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(mContext.getActivity(), ContentViewActivity.class);
+                Activity activity = mContext.getActivity();
+                if (activity != null) {
+                    intent.putExtra("Title", item_list.get(holder.getAdapterPosition()).getTitle());
+                    intent.putExtra("CourseId", item_list.get(holder.getAdapterPosition()).getCourseId());
+                    intent.putExtra("content_id", item_list.get(holder.getAdapterPosition()).getContentId());
+                }
+                mContext.startActivity(intent);
+            }
+        });
         if (item_list.get(holder.getAdapterPosition()).getSourceId().contains("GradeDetail")) {
             holder.imageView.setBackground(mContext.getResources().getDrawable(R.drawable.ic_mygrade));
         }

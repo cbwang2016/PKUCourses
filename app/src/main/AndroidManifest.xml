@@ -56,6 +56,9 @@
         <activity
             android:name=".AnnouncementListOfEachCourseActivity"
             android:theme="@style/AppTheme.Slidr" />
+        <activity
+            android:name=".ContentViewActivity"
+            android:theme="@style/AppTheme.Slidr" />
     </application>
 
 </manifest>
