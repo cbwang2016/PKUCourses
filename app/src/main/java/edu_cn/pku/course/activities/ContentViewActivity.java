@@ -408,6 +408,7 @@ public class ContentViewActivity extends AppCompatActivity implements SwipeRefre
             }
             mLoadingTask = null;
             showLoading(false);
+            mSwipeContainer.setEnabled(false);
         }
 
         // 没什么用的函数

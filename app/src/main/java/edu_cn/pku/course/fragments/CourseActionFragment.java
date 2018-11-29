@@ -34,7 +34,7 @@ import edu_cn.pku.course.activities.LoginActivity;
 import edu_cn.pku.course.activities.R;
 import edu_cn.pku.course.adapter.CourseActionsAdapter;
 
-public class CourseActionFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
+public class CourseActionFragment extends Fragment {
     private String courseId;
 
     private CourseActionFragment.ActionsLoadingTask mLoadingTask = null;
@@ -78,7 +78,7 @@ public class CourseActionFragment extends Fragment implements SwipeRefreshLayout
         LayoutAnimationController animation = AnimationUtils.loadLayoutAnimation(getContext(), R.anim.layout_animation_fall_down);
         mCourseActionSwipeContainer.setLayoutAnimation(animation);
         // 设置刷新的监听类为此类（监听函数onRefresh）
-        mCourseActionSwipeContainer.setOnRefreshListener(this);
+        mCourseActionSwipeContainer.setEnabled(false);
 
         adapter = new CourseActionsAdapter(new ArrayList<String>(), this);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -96,25 +96,11 @@ public class CourseActionFragment extends Fragment implements SwipeRefreshLayout
                 mLoadingTask = new CourseActionFragment.ActionsLoadingTask();
                 mLoadingTask.execute((Void) null);
             } else {
-                mCourseActionSwipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-                    @Override
-                    public void onRefresh() {
-                        mCourseActionSwipeContainer.setRefreshing(false);
-                    }
-                });
                 attachXmlToView(Utils.stringToNode(xmlStr));
             }
         }
 
         return linearLayout;
-    }
-
-    @Override
-    public void onRefresh() {
-        if (mLoadingTask == null) {
-            mLoadingTask = new CourseActionFragment.ActionsLoadingTask();
-            mLoadingTask.execute((Void) null);
-        }
     }
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
