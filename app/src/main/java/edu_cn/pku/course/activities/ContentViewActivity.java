@@ -10,6 +10,8 @@ import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ResolveInfo;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -301,7 +303,7 @@ public class ContentViewActivity extends AppCompatActivity implements SwipeRefre
         grantUriPermission(getPackageName(), data, Intent.FLAG_GRANT_READ_URI_PERMISSION);
         MimeTypeMap myMime = MimeTypeMap.getSingleton();
         Intent newIntent = new Intent(Intent.ACTION_VIEW);
-        String mimeType = myMime.getMimeTypeFromExtension(fileExt(filePath).substring(1));
+        String mimeType = myMime.getMimeTypeFromExtension(fileExt(filePath));
         newIntent.setDataAndType(data, mimeType);
         newIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         newIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
@@ -310,6 +312,17 @@ public class ContentViewActivity extends AppCompatActivity implements SwipeRefre
         } catch (ActivityNotFoundException e) {
             Toast.makeText(getApplicationContext(), "No handler for this type of file.", Toast.LENGTH_LONG).show();
         }
+    }
+
+    public Drawable getIcon(String fileName) {
+        final Intent innt = new Intent(Intent.ACTION_VIEW);
+        MimeTypeMap myMime = MimeTypeMap.getSingleton();
+        String mimeType = myMime.getMimeTypeFromExtension(fileExt(fileName));
+        innt.setType(mimeType);
+        final List<ResolveInfo> matches = getPackageManager().queryIntentActivities(innt, 0);
+        if (matches.size() == 0)
+            return null;
+        return matches.get(0).loadIcon(getPackageManager());
     }
 
     @NonNull

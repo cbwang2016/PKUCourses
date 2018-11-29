@@ -3,6 +3,8 @@ package edu_cn.pku.course.adapter;
 import android.Manifest;
 import android.content.DialogInterface;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
@@ -43,6 +45,11 @@ public class ContentViewAdapter extends RecyclerView.Adapter<ContentViewAdapter.
     public void onBindViewHolder(@NonNull final ContentViewItemHolder holder, int i) {
         holder.content_view_file_name.setText(list.get(holder.getAdapterPosition()).getFileName());
         holder.content_view_file_size.setText(list.get(holder.getAdapterPosition()).getFileSize());
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            Drawable tmp = mContext.getIcon(list.get(holder.getAdapterPosition()).getFileName());
+            if (tmp != null)
+                holder.content_view_icon.setBackground(tmp);
+        }
 
         holder.card_view_item_content.setClickable(true);
         holder.card_view_item_content.setOnClickListener(new View.OnClickListener() {
@@ -58,7 +65,7 @@ public class ContentViewAdapter extends RecyclerView.Adapter<ContentViewAdapter.
 
         if (list.get(holder.getAdapterPosition()).isDownloaded()) {
             System.out.println("is Downloaded!!!");
-            holder.card_view_item_content.setCardBackgroundColor(Color.parseColor("#66BB6A"));
+            holder.card_view_item_content.setCardBackgroundColor(Color.parseColor("#4CAF50"));
             holder.card_view_item_content.setLongClickable(true);
             holder.card_view_item_content.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
@@ -117,7 +124,7 @@ public class ContentViewAdapter extends RecyclerView.Adapter<ContentViewAdapter.
     class ContentViewItemHolder extends RecyclerView.ViewHolder {
 
         private CardView card_view_item_content;
-        ImageView content_view_icon;
+        private ImageView content_view_icon;
         private TextView content_view_file_name, content_view_file_size;
 
         ContentViewItemHolder(@NonNull View itemView) {
