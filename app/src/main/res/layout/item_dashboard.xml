@@ -1,45 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/relative_item"
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/tools"
+    android:id="@+id/card_view_item_recycler_view"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:clickable="true"
-    android:focusable="true"
+    android:layout_marginStart="8dp"
+    android:layout_marginLeft="8dp"
+    android:layout_marginTop="4dp"
+    android:layout_marginEnd="8dp"
+    android:layout_marginRight="8dp"
+    android:layout_marginBottom="4dp"
     android:foreground="?attr/selectableItemBackground"
-    android:orientation="vertical">
+    card_view:cardCornerRadius="@dimen/card_recycler_corner_radius"
+    card_view:cardElevation="@dimen/card_recycler_elevation">
 
-    <TextView
-        android:id="@+id/recycler_str"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingLeft="@dimen/activity_horizontal_margin"
-        android:paddingTop="@dimen/activity_vertical_margin"
-        android:paddingRight="@dimen/activity_horizontal_margin"
-        android:textColor="@android:color/black"
-        android:textSize="18sp"
-        android:textStyle="bold" />
+        android:layout_height="match_parent"
+        android:padding="16dp">
 
-    <TextView
-        android:id="@+id/recycler_sub_str"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:lineSpacingExtra="5sp"
-        android:paddingLeft="@dimen/activity_horizontal_margin"
-        android:paddingRight="@dimen/activity_horizontal_margin"
-        android:paddingBottom="@dimen/activity_vertical_margin" />
+        <RelativeLayout
+            android:id="@+id/rela_round"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            android:background="@drawable/round"
+            android:backgroundTint="@android:color/darker_gray"
+            card_view:ignore="UnusedAttribute" />
 
-    <TextView
-        android:id="@+id/recycler_time_str"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:lineSpacingExtra="5sp"
-        android:paddingLeft="@dimen/activity_horizontal_margin"
-        android:paddingRight="@dimen/activity_horizontal_margin"
-        android:paddingBottom="@dimen/activity_vertical_margin" />
+        <TextView
+            android:id="@+id/recycler_str"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@id/rela_round"
+            android:layout_toRightOf="@id/rela_round"
+            android:text="tv_recycler_item_1"
+            android:textColor="@android:color/black"
+            card_view:ignore="HardcodedText" />
 
-    <View
-        android:layout_width="fill_parent"
-        android:layout_height="1dp"
-        android:background="#F5F5F5" />
+        <TextView
+            android:id="@+id/recycler_sub_str"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/recycler_str"
+            android:layout_marginTop="4dp"
+            android:layout_toEndOf="@id/rela_round"
+            android:layout_toRightOf="@id/rela_round"
+            android:text="tv_recycler_item_2"
+            card_view:ignore="HardcodedText" />
 
-</LinearLayout>
+        <TextView
+            android:id="@+id/recycler_time_str"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/recycler_sub_str"
+            android:layout_marginTop="4dp"
+            android:layout_toEndOf="@id/rela_round"
+            android:layout_toRightOf="@id/rela_round"
+            android:text="tv_recycler_item_3"
+            card_view:ignore="HardcodedText" />
+
+    </RelativeLayout>
+</android.support.v7.widget.CardView>
