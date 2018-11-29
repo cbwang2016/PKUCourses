@@ -22,6 +22,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -136,8 +140,6 @@ public class AnnouncementListFragment extends Fragment implements SwipeRefreshLa
 
         @Override
         protected void onPostExecute(final String str) {
-            mLoadingTask = null;
-            showLoading(false);
 
             // 出现了错误
             if (str.startsWith(Utils.errorPrefix)) {
@@ -154,32 +156,25 @@ public class AnnouncementListFragment extends Fragment implements SwipeRefreshLa
                 }
             } else {
                 // 解析返回的HTML
-                String[] rawSplit = str.split("<li class=\"clearfix\"");
                 ArrayList<AnnouncementInfo> announcement_list = new ArrayList<>();
 
                 FragmentActivity fa = getActivity();
                 if (fa == null) {
                     return;
                 }
-//这里是提取关键的原始字符串！！！不用分割？为什么wcb哪里把他分割了啊....还有我应该【0】元素是没有我要的东西的，从1开始？
-                for (int i = 1; i < rawSplit.length; i++) {
-                    String basicInfo = Utils.betweenStrings(rawSplit[i], "transparent", " <p><div class=");
-                    String contents = Utils.betweenStrings(rawSplit[i], "<p><div class=\"vtbegenerated\">", "<div class=\"announcementInfo\">").split("</div></p>\n" +
-                            "\t\t\t\t\t\t {4}</div>\n")[0];
-                    String authorInfo = Utils.lastBetweenStrings(rawSplit[i], "<div class=\"announcementInfo\">", "</div>")
-                            .replaceAll("<p>", "")
-                            .replaceFirst("</p>", "<br>")
-                            .replaceAll("</p>", "")
-                            .replaceAll("\t", "");
-                    AnnouncementInfo ai;
-                    ai = new AnnouncementInfo(basicInfo, contents, authorInfo);
-                    announcement_list.add(ai);
+
+                Element list = Jsoup.parse(str).getElementById("announcementList");
+                Elements nList = list.children();
+
+                for (int temp = 0; temp < nList.size(); temp++) {
+                    Element n = nList.get(temp);
+                    announcement_list.add(new AnnouncementInfo(n));
                 }
 
                 adapter.updateList(announcement_list);
-                // 显示课程列表的fancy的动画
-//                mRecyclerView.scheduleLayoutAnimation();
             }
+            mLoadingTask = null;
+            showLoading(false);
         }
 
         // 没什么用的函数
@@ -196,9 +191,7 @@ public class AnnouncementListFragment extends Fragment implements SwipeRefreshLa
      * 为了方便管理课程列表，将每个课程的各种信息组成一个类。
      */
     public static class AnnouncementInfo implements Comparable<AnnouncementInfo> {
-        private String basicInfo;
-        private String contents, authorInfo;
-        private String rawAnnouncementDate;
+        private Element nNode;
 
         /**
          * 格式："> 线性代数B第四次作业</h3>
@@ -208,38 +201,30 @@ public class AnnouncementListFragment extends Fragment implements SwipeRefreshLa
          */
         // private int isPinned;
 
-        AnnouncementInfo(String str, String contents, String authorInfo) {
-            this.basicInfo = str;
-            this.contents = contents;
-            this.authorInfo = authorInfo;
-            rawAnnouncementDate = getAnnouncementDate();
-            //     isPinned = 0;
+        AnnouncementInfo(Element nNode) {
+            this.nNode = nNode;
         }
 
-        //        public String getBasicInfo() {
-//            return basicInfo;
-//        }
         public String getAuthorInfo() {
-            return authorInfo;
+            return nNode.getElementsByClass("announcementInfo").first().toString();
         }
 
         public String getContents() {
-            return contents;
+            return nNode.getElementsByClass("details").first().getElementsByClass("vtbegenerated").first().toString();
         }
 
         public String getAnnouncementTitle() {
-            return Utils.betweenStrings(basicInfo, "\n" +
-                    "\t\t\t\t        ", "</h3>");
+            return nNode.child(0).text();
         }
 
         public String getAnnouncementDate() {
-            return Utils.lastBetweenStrings(basicInfo, "</span> ", "</p>");
+            return nNode.getElementsByClass("details").first().child(0).text().replace("发帖时间: ", "");
         }
 
         //给出可以比较的Date类型
         private Date changeToDate() throws ParseException {
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy年M月d日", Locale.CHINA);
-            return dateFormat.parse(rawAnnouncementDate.split(" ")[0]);
+            return dateFormat.parse(getAnnouncementDate().split(" ")[0]);
         }
 
         @Override

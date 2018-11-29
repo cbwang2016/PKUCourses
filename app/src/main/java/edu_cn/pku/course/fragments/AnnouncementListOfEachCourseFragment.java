@@ -22,6 +22,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+
 import java.util.ArrayList;
 
 import edu_cn.pku.course.Utils;
@@ -159,30 +163,19 @@ public class AnnouncementListOfEachCourseFragment extends Fragment implements Sw
                 }
             } else {
                 // 解析返回的HTML
-                String[] rawSplit = str.split("<h3 class");
                 ArrayList<AnnouncementInfo> announcement_list = new ArrayList<>();
 
                 FragmentActivity fa = getActivity();
                 if (fa == null) {
                     return;
                 }
-                // SharedPreferences sharedPreferences = fa.getSharedPreferences("pinnedAnnouncementList", Context.MODE_PRIVATE);
-                // Set<String> hset = sharedPreferences.getStringSet("key", null);
-                // if (hset == null)
-                //     hset = new HashSet<>();
-//这里是提取关键的原始字符串！！！不用分割？为什么wcb哪里把他分割了啊....还有我应该【0】元素是没有我要的东西的，从1开始？
-                for (int i = 1; i < rawSplit.length; i++) {
-                    String basicInfo = Utils.betweenStrings(rawSplit[i], "transparent", " <p><div class=");
-                    String contents = Utils.betweenStrings(rawSplit[i], "<p><div class=\"vtbegenerated\">", "<div class=\"announcementInfo\">").split("</div></p>\n" +
-                            "\t\t\t\t\t\t {4}</div>\n")[0];
-                    String authorInfo = Utils.lastBetweenStrings(rawSplit[i], "<div class=\"announcementInfo\">", "</div>")
-                            .replaceAll("<p>", "")
-                            .replaceFirst("</p>", "<br>")
-                            .replaceAll("</p>", "")
-                            .replaceAll("\t", "");
-                    AnnouncementInfo ai;
-                    ai = new AnnouncementInfo(basicInfo, contents, authorInfo);
-                    announcement_list.add(ai);
+
+                Element list = Jsoup.parse(str).getElementById("announcementList");
+                Elements nList = list.children();
+
+                for (int temp = 0; temp < nList.size(); temp++) {
+                    Element n = nList.get(temp);
+                    announcement_list.add(new AnnouncementInfo(n));
                 }
 
                 adapter.updateList(announcement_list);
