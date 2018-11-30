@@ -24,6 +24,10 @@ import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
 import android.widget.LinearLayout;
 
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
@@ -130,7 +134,7 @@ public class CourseListFragment extends Fragment implements SwipeRefreshLayout.O
 
         @Override
         protected String doInBackground(Void... params) {
-            return Utils.courseHttpPostRequest("http://course.pku.edu.cn/webapps/portal/execute/tabs/tabAction", "action=refreshAjaxModule&modId=_4_1&tabId=_1_1&tab_tab_group_id=_3_1");
+            return Utils.courseHttpGetRequest("http://course.pku.edu.cn/webapps/Bb-mobile-bb_bb60/dashboard?course_type=ALL&with_notifications=false");
         }
 
         @Override
@@ -152,31 +156,34 @@ public class CourseListFragment extends Fragment implements SwipeRefreshLayout.O
                     Snackbar.make(mRecyclerView, str, Snackbar.LENGTH_SHORT).show();
                 }
             } else {
+
                 // 解析返回的HTML
-                String[] rawSplit = str.split("</li>");
-                ArrayList<CourseInfo> courses_list = new ArrayList<>();
+                Node rootNode = Utils.stringToNode(str);
+                if (rootNode != null) {
 
-                FragmentActivity fa = getActivity();
-                if (fa == null) {
-                    return;
+                    FragmentActivity fa = getActivity();
+                    if (fa == null) {
+                        return;
+                    }
+                    SharedPreferences sharedPreferences = fa.getSharedPreferences("pinnedCourseList", Context.MODE_PRIVATE);
+                    Set<String> hset = sharedPreferences.getStringSet("key", null);
+                    if (hset == null)
+                        hset = new HashSet<>();
+
+                    ArrayList<CourseInfo> courses_list = new ArrayList<>();
+                    NodeList nCoursesList = rootNode.getFirstChild().getChildNodes();
+                    for (int temp = 0; temp < nCoursesList.getLength(); temp++) {
+                        CourseInfo ci = new CourseInfo((Element) nCoursesList.item(temp));
+                        if (hset.contains(ci.getRawCourseName()))
+                            ci.setPinned(1);
+                        courses_list.add(ci);
+                    }
+
+                    adapter.updateList(courses_list);
+                    // 显示课程列表的fancy的动画
+                    mRecyclerView.scheduleLayoutAnimation();
+
                 }
-                SharedPreferences sharedPreferences = fa.getSharedPreferences("pinnedCourseList", Context.MODE_PRIVATE);
-                Set<String> hset = sharedPreferences.getStringSet("key", null);
-                if (hset == null)
-                    hset = new HashSet<>();
-
-                for (int i = 0; i < rawSplit.length - 1; i++) {
-                    String tmp = Utils.betweenStrings(rawSplit[i], "target=\"_top\">", "</a>").split(": ")[1];
-                    String course_id = Utils.betweenStrings(rawSplit[i], "Course%26id%3D", "%26url%3D");
-                    CourseInfo ci = new CourseInfo(tmp, course_id);
-                    if (hset.contains(tmp))
-                        ci.setPinned(1);
-                    courses_list.add(ci);
-                }
-
-                adapter.updateList(courses_list);
-                // 显示课程列表的fancy的动画
-                mRecyclerView.scheduleLayoutAnimation();
             }
         }
 
@@ -192,13 +199,11 @@ public class CourseListFragment extends Fragment implements SwipeRefreshLayout.O
      * 为了方便管理课程列表，将每个课程的各种信息组成一个类。
      */
     public class CourseInfo implements Comparable<CourseInfo> {
-        private String rawStr; // 格式： 004-00432108-0006156320-1: 数学物理方法 (上)(18-19学年第1学期)
+        private Element nNode;
         private int isPinned;
-        private String courseId;
 
-        CourseInfo(String str, String course_id) {
-            rawStr = str;
-            courseId = course_id;
+        CourseInfo(Element nNode) {
+            this.nNode = nNode;
             isPinned = 0;
         }
 
@@ -210,20 +215,20 @@ public class CourseListFragment extends Fragment implements SwipeRefreshLayout.O
             return isPinned;
         }
 
-        public String getRawStr() {
-            return rawStr;
+        public String getCourseId() {
+            return nNode.getAttribute("bbid");
         }
 
-        public String getCourseId() {
-            return courseId;
+        public String getRawCourseName() {
+            return nNode.getAttribute("name");
         }
 
         public String getCourseName() {
-            return rawStr.split("\\([0-9]")[0];
+            return nNode.getAttribute("name").split("\\([0-9]")[0];
         }
 
         public String getSemesterString() {
-            return Utils.lastBetweenStrings(rawStr, "(", ")");
+            return Utils.lastBetweenStrings(nNode.getAttribute("name"), "(", ")");
         }
 
         private int getSemesterYear() {
@@ -231,7 +236,7 @@ public class CourseListFragment extends Fragment implements SwipeRefreshLayout.O
         }
 
         private int getSemesterNumber() {
-            return Integer.parseInt(Utils.betweenStrings(rawStr, "学年第", "学期"));
+            return Integer.parseInt(Utils.betweenStrings(nNode.getAttribute("name"), "学年第", "学期"));
         }
 
         @Override

@@ -53,7 +53,7 @@ public class DashboardAdapter extends RecyclerView.Adapter<DashboardAdapter.Dash
                     Activity activity = mContext.getActivity();
                     if (activity != null) {
                         intent.putExtra("Title", item_list.get(holder.getAdapterPosition()).getTitle());
-                        intent.putExtra("content_id", item_list.get(holder.getAdapterPosition()).getContentId());
+                        intent.putExtra("CourseId", item_list.get(holder.getAdapterPosition()).getCourseId());
                     }
                     mContext.startActivity(intent);
                 }

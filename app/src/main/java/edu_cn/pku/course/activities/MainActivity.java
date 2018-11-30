@@ -69,9 +69,9 @@ public class MainActivity extends AppCompatActivity
         List<Fragment> fragments = new ArrayList<>();
         fragments.add(DashboardFragment.newInstance());
         fragments.add(CourseListFragment.newInstance());
-        fragments.add(SpareClassroomsFragment.newInstance());
         fragments.add(AnnouncementListFragment.newInstance());
         fragments.add(MyGradeFragment.newInstance());
+        fragments.add(SpareClassroomsFragment.newInstance());
         FragmentAdapter mFragmentAdapter = new FragmentAdapter(getSupportFragmentManager(), fragments);
         view_pager_main = findViewById(R.id.view_pager_main);
         view_pager_main.setAdapter(mFragmentAdapter);
