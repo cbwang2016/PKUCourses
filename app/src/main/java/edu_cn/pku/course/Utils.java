@@ -153,7 +153,9 @@ public class Utils {
                 conn.setDoOutput(true);
                 conn.getOutputStream().write(postData);
             }
-            if (conn.getResponseCode() == 302) {
+            InputStream in1 = conn.getInputStream();
+            String firstTimeResponse = convertStreamToString(in1);
+            if (conn.getResponseCode() == 302 || firstTimeResponse.contains("NOT_LOGGED_IN")) {
                 // session expired
                 String results = renewSession();
                 if (results.equals("")) {
@@ -178,9 +180,8 @@ public class Utils {
                     return errorPrefix + results;
                 }
             }
-            InputStream in = conn.getInputStream();
 
-            return convertStreamToString(in);
+            return firstTimeResponse;
         } catch (Exception e) {
             return errorPrefix + e.getMessage();
         } finally {
