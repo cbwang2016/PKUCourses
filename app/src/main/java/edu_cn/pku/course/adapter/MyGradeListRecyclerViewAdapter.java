@@ -15,7 +15,6 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-import edu_cn.pku.course.activities.CourseActionsActivity;
 import edu_cn.pku.course.activities.GradeBookOfEachCourseActivity;
 import edu_cn.pku.course.activities.R;
 import edu_cn.pku.course.fragments.CourseListFragment;
@@ -84,7 +83,7 @@ public class MyGradeListRecyclerViewAdapter extends RecyclerView.Adapter<MyGrade
                 Set<String> set = new HashSet<>();
                 for (MyGradeFragment.CourseInfo k : coursesList)
                     if (k.isPinned() == 1)
-                        set.add(k.getRawStr());
+                        set.add(k.getRawCourseName());
                 editor.putStringSet("key", set);
                 editor.apply();
 

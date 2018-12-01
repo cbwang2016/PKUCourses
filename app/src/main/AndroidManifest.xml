@@ -40,7 +40,6 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".LoginActivity"
-            android:label="@string/title_activity_login"
             android:parentActivityName=".MainActivity"
             tools:targetApi="jelly_bean">
             <meta-data

@@ -204,7 +204,8 @@ public class AnnouncementListFragment extends Fragment implements SwipeRefreshLa
         }
 
         public String getContents() {
-            return nNode.getElementsByClass("details").first().getElementsByClass("vtbegenerated").first().toString();
+            Element tmp = nNode.getElementsByClass("details").first().getElementsByClass("vtbegenerated").first();
+            return tmp == null ? "" : tmp.toString();
         }
 
         public String getAnnouncementTitle() {

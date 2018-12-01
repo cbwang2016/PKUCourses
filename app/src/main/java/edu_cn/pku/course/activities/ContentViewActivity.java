@@ -385,6 +385,11 @@ public class ContentViewActivity extends AppCompatActivity implements SwipeRefre
                             content_view_time.setText(contentNode.getAttribute("datemodified"));
                         }
 
+                        if (contentNode.getAttribute("contenthandler").equals("resource/x-bb-externallink")) {
+                            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(contentNode.getAttribute("viewUrl")));
+                            startActivity(browserIntent);
+                        }
+
                         if ((contentNode).getElementsByTagName("body").getLength() > 0 && contentNode.getElementsByTagName("body").item(0).getFirstChild() != null) {
                             content_view_content_detail.getSettings().setDefaultTextEncodingName("UTF-8");
                             content_view_content_detail.loadData(
@@ -394,8 +399,8 @@ public class ContentViewActivity extends AppCompatActivity implements SwipeRefre
                             content_view_content_detail.setVisibility(View.GONE);
                         }
 
-                        ArrayList<AttachedFileItem> item_list = new ArrayList<>();
                         if ((contentNode).getElementsByTagName("attachments").getLength() > 0) {
+                            ArrayList<AttachedFileItem> item_list = new ArrayList<>();
                             NodeList nList = (contentNode).getElementsByTagName("attachments").item(0).getChildNodes();
                             for (int i = 0; i < nList.getLength(); i++) {
                                 item_list.add(new AttachedFileItem((Element) nList.item(i)));
