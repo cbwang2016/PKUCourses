@@ -1,18 +1,18 @@
 package edu_cn.pku.course.activities;
 
-import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
 import android.view.MenuItem;
 
 import com.r0adkll.slidr.Slidr;
 
-public class GradeBookOfEachCourseActivity extends AppCompatActivity {
+public class AnnouncementBodyActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_grade_book_of_each_course);
+        setContentView(R.layout.activity_announcement_body);
         setTitle(getIntent().getStringExtra("Title"));
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {

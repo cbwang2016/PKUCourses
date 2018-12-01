@@ -18,7 +18,6 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="AllowBackup,GoogleAppIndexingWarning,UnusedAttribute">
-
         <provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="edu_cn.pku.course"
@@ -72,6 +71,7 @@
         <activity
             android:name=".ContentViewActivity"
             android:theme="@style/AppTheme.Slidr" />
+        <activity android:name=".AnnouncementBodyActivity"/>
     </application>
 
 </manifest>

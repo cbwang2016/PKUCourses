@@ -18,17 +18,18 @@ import edu_cn.pku.course.activities.AnnouncementBodyActivity;
 import edu_cn.pku.course.activities.AnnouncementListOfEachCourseActivity;
 import edu_cn.pku.course.activities.R;
 import edu_cn.pku.course.fragments.AnnouncementListFragment;
+import edu_cn.pku.course.fragments.AnnouncementListOfEachCourseFragment;
 
 /**
  * Created by zhang on 2016.08.07.
  */
-public class AnnouncementListRecyclerViewAdapter extends RecyclerView.Adapter<AnnouncementListRecyclerViewAdapter.RecyclerViewHolder> {
+public class AnnouncementListOfEachCourseAdapter extends RecyclerView.Adapter<AnnouncementListOfEachCourseAdapter.RecyclerViewHolder> {
 
     private ArrayList<AnnouncementListFragment.AnnouncementInfo> announcementList;
-    private AnnouncementListFragment mContext;
+    private AnnouncementListOfEachCourseFragment mContext;
     //private SharedPreferences sharedPreferences;
 
-    public AnnouncementListRecyclerViewAdapter(ArrayList<AnnouncementListFragment.AnnouncementInfo> announcementList, AnnouncementListFragment context) {
+    public AnnouncementListOfEachCourseAdapter(ArrayList<AnnouncementListFragment.AnnouncementInfo> announcementList, AnnouncementListOfEachCourseFragment context) {
         this.announcementList = announcementList;
         Collections.sort(this.announcementList);
         this.mContext = context;
@@ -72,7 +73,6 @@ public class AnnouncementListRecyclerViewAdapter extends RecyclerView.Adapter<An
     public int getItemCount() {
         return announcementList.size();
     }
-
 
     class RecyclerViewHolder extends RecyclerView.ViewHolder {
 

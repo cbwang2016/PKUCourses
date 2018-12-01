@@ -20,101 +20,71 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AnimationUtils;
-import android.view.animation.LayoutAnimationController;
 import android.widget.LinearLayout;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
 
 import java.util.ArrayList;
 
 import edu_cn.pku.course.Utils;
 import edu_cn.pku.course.activities.LoginActivity;
 import edu_cn.pku.course.activities.R;
-import edu_cn.pku.course.adapter.AnnouncementListOfEachCourseAdapter;
-import edu_cn.pku.course.fragments.AnnouncementListFragment.AnnouncementInfo;
+import edu_cn.pku.course.adapter.AnnouncementBodyAdapter;
 
+public class AnnouncementBodyFragment extends Fragment {
 
-public class AnnouncementListOfEachCourseFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
-
-    private AnnouncementLoadingTask mLoadingTask = null;
+    private AnnouncementBodyFragment.ActionsLoadingTask mLoadingTask = null;
     private RecyclerView mRecyclerView;
-    private AnnouncementListOfEachCourseAdapter adapter;
-    private SwipeRefreshLayout mAnnouncementListSwipeContainer;
-    private static final String CourseId = "param1";
+    private SwipeRefreshLayout mAnnouncementBodySwipeContainer;
+    private AnnouncementBodyAdapter adapter;
+    private static final String AnnouncementId = "param1";
 
-    private String courseId;
+    private String announcementId;
 
-    public AnnouncementListOfEachCourseFragment() {
+    public AnnouncementBodyFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     *
-     * @return A new instance of fragment CoursesListFragment.
-     */
-    public static AnnouncementListOfEachCourseFragment newInstance(String courseId) {
-        AnnouncementListOfEachCourseFragment fragment = new AnnouncementListOfEachCourseFragment();
+    public static AnnouncementBodyFragment newInstance(String announcementId) {
+        AnnouncementBodyFragment fragment = new AnnouncementBodyFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
-        args.putString(CourseId, courseId);
+        args.putString(AnnouncementId, announcementId);
         return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            courseId = getArguments().getString(CourseId);
-        }
-
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        LinearLayout linearLayout = (LinearLayout) inflater.inflate(R.layout.fragment_announcement_list, container, false);
+        LinearLayout linearLayout = (LinearLayout) inflater.inflate(R.layout.fragment_announcement_body, container, false);
         // 查找xml文件中的对象并保存进Java变量
-        mRecyclerView = linearLayout.findViewById(R.id.recycler_announcement_list);
-        mAnnouncementListSwipeContainer = linearLayout.findViewById(R.id.announcement_swipe_container);
+        mRecyclerView = linearLayout.findViewById(R.id.recycler_announcement_body);
+        mAnnouncementBodySwipeContainer = linearLayout.findViewById(R.id.announcement_body_swipe_container);
 
         // 设置动画
-        LayoutAnimationController animation = AnimationUtils.loadLayoutAnimation(getContext(), R.anim.layout_animation_fall_down);
-        mAnnouncementListSwipeContainer.setLayoutAnimation(animation);
+//        LayoutAnimationController animation = AnimationUtils.loadLayoutAnimation(getContext(), R.anim.layout_animation_fall_down);
+//       mAnnouncementBodySwipeContainer.setLayoutAnimation(animation);
         // 设置刷新的监听类为此类（监听函数onRefresh）
-        mAnnouncementListSwipeContainer.setOnRefreshListener(this);
+        mAnnouncementBodySwipeContainer.setEnabled(false);
 
         FragmentActivity fa = getActivity();
-        // 为了消除编译器Warning，需要判断一下是不是null，其实这基本上不可能出现null
         if (fa == null) {
+            announcementId = "";
             return linearLayout;
         }
-
-        // SharedPreferences sharedPreferences = fa.getSharedPreferences("pinnedAnnouncementList", Context.MODE_PRIVATE);
-        adapter = new AnnouncementListOfEachCourseAdapter(new ArrayList<AnnouncementInfo>(), this);
+        adapter = new AnnouncementBodyAdapter(new ArrayList<AnnouncementListFragment.AnnouncementInfo>());
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mRecyclerView.setAdapter(adapter);
-        courseId = getActivity().getIntent().getStringExtra("CourseId");
-
-        // 显示Loading的小动画，并在后台读取课程列表
-        showLoading(true);
-        mLoadingTask = new AnnouncementLoadingTask();
-        mLoadingTask.execute((Void) null);
+        announcementId = getActivity().getIntent().getStringExtra("AnnouncementId");
 
         return linearLayout;
-    }
-
-
-    @Override
-    public void onRefresh() {
-        if (mLoadingTask == null) {
-            mLoadingTask = new AnnouncementLoadingTask();
-            mLoadingTask.execute((Void) null);
-        }
     }
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
@@ -130,19 +100,20 @@ public class AnnouncementListOfEachCourseFragment extends Fragment implements Sw
                 mRecyclerView.setVisibility(show ? View.GONE : View.VISIBLE);
             }
         });
-        mAnnouncementListSwipeContainer.setRefreshing(show);
+
+        mAnnouncementBodySwipeContainer.setRefreshing(show);
     }
 
-    @SuppressLint("StaticFieldLeak")
-    private class AnnouncementLoadingTask extends AsyncTask<Void, Void, String> {
 
-        AnnouncementLoadingTask() {
+    @SuppressLint("StaticFieldLeak")
+    private class ActionsLoadingTask extends AsyncTask<Void, Void, String> {
+
+        ActionsLoadingTask() {
         }
 
-        //主要是有个course id一串数字是不一样的
         @Override
         protected String doInBackground(Void... params) {
-            return Utils.courseHttpGetRequest("http://course.pku.edu.cn/webapps/blackboard/execute/announcement?method=search&course_id=" + courseId);
+            return Utils.courseHttpGetRequest("http://course.pku.edu.cn/webapps/blackboard/execute/announcement?method=search&returnUrl=/webapps/portal/execute/tabs/tabAction?tab_tab_group_id=_3_1&tabId=_1_1");
         }
 
         @Override
@@ -164,29 +135,17 @@ public class AnnouncementListOfEachCourseFragment extends Fragment implements Sw
                     Snackbar.make(mRecyclerView, str, Snackbar.LENGTH_SHORT).show();
                 }
             } else {
-                // 解析返回的HTML
-                ArrayList<AnnouncementInfo> announcement_list = new ArrayList<>();
-
                 FragmentActivity fa = getActivity();
                 if (fa == null) {
                     return;
                 }
-
-                Element list = Jsoup.parse(str).getElementById("announcementList");
-                Elements nList = list.children();
-
-                for (int temp = 0; temp < nList.size(); temp++) {
-                    Element n = nList.get(temp);
-                    announcement_list.add(new AnnouncementInfo(n));
-                }
-
-                adapter.updateList(announcement_list);
-                // 显示课程列表的fancy的动画
-                mRecyclerView.scheduleLayoutAnimation();
+                Element n = Jsoup.parse(str).getElementById(announcementId);
+                ArrayList<AnnouncementListFragment.AnnouncementInfo> announcement_body_list = new ArrayList<>();
+                announcement_body_list.add(new AnnouncementListFragment.AnnouncementInfo(n));
+                adapter.updateList(announcement_body_list);
             }
         }
 
-        // 没什么用的函数
         @Override
         protected void onCancelled() {
             mLoadingTask = null;
@@ -208,5 +167,5 @@ public class AnnouncementListOfEachCourseFragment extends Fragment implements Sw
         startActivity(intent);
         getActivity().finish();
     }
-}
 
+}

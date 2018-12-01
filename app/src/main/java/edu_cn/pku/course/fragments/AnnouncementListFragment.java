@@ -20,6 +20,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LayoutAnimationController;
 import android.widget.LinearLayout;
 
 import org.jsoup.Jsoup;
@@ -76,8 +78,8 @@ public class AnnouncementListFragment extends Fragment implements SwipeRefreshLa
         mAnnouncementListSwipeContainer = linearLayout.findViewById(R.id.announcement_swipe_container);
 
         // 设置动画
-//        LayoutAnimationController animation = AnimationUtils.loadLayoutAnimation(getContext(), R.anim.layout_animation_fall_down);
-//        mAnnouncementListSwipeContainer.setLayoutAnimation(animation);
+        LayoutAnimationController animation = AnimationUtils.loadLayoutAnimation(getContext(), R.anim.layout_animation_fall_down);
+        mAnnouncementListSwipeContainer.setLayoutAnimation(animation);
         // 设置刷新的监听类为此类（监听函数onRefresh）
         mAnnouncementListSwipeContainer.setOnRefreshListener(this);
 
@@ -88,7 +90,7 @@ public class AnnouncementListFragment extends Fragment implements SwipeRefreshLa
         }
         // 将读取已置顶课程列表的SharedPreferences传递给CourseListRecyclerViewAdapter
         // SharedPreferences sharedPreferences = fa.getSharedPreferences("pinnedAnnouncementList", Context.MODE_PRIVATE);
-        adapter = new AnnouncementListRecyclerViewAdapter(new ArrayList<AnnouncementInfo>());
+        adapter = new AnnouncementListRecyclerViewAdapter(new ArrayList<AnnouncementInfo>(), this);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mRecyclerView.setAdapter(adapter);
 
@@ -140,7 +142,8 @@ public class AnnouncementListFragment extends Fragment implements SwipeRefreshLa
 
         @Override
         protected void onPostExecute(final String str) {
-
+            mLoadingTask = null;
+            showLoading(false);
             // 出现了错误
             if (str.startsWith(Utils.errorPrefix)) {
                 if (str.equals(Utils.errorPrefix + Utils.errorPasswordIncorrect)) {
@@ -170,11 +173,10 @@ public class AnnouncementListFragment extends Fragment implements SwipeRefreshLa
                     Element n = nList.get(temp);
                     announcement_list.add(new AnnouncementInfo(n));
                 }
-
                 adapter.updateList(announcement_list);
+                // 显示课程列表的fancy的动画
+                mRecyclerView.scheduleLayoutAnimation();
             }
-            mLoadingTask = null;
-            showLoading(false);
         }
 
         // 没什么用的函数
@@ -192,14 +194,6 @@ public class AnnouncementListFragment extends Fragment implements SwipeRefreshLa
      */
     public static class AnnouncementInfo implements Comparable<AnnouncementInfo> {
         private Element nNode;
-
-        /**
-         * 格式："> 线性代数B第四次作业</h3>
-         * <div class="details">
-         * <p><span>发帖时间:</span> 2018年11月15日 星期四</p>
-         * <p>
-         */
-        // private int isPinned;
 
         AnnouncementInfo(Element nNode) {
             this.nNode = nNode;
@@ -219,6 +213,10 @@ public class AnnouncementListFragment extends Fragment implements SwipeRefreshLa
 
         public String getAnnouncementDate() {
             return nNode.getElementsByClass("details").first().child(0).text().replace("发帖时间: ", "");
+        }
+
+        public String getAnnouncementId() {
+            return nNode.attr("id");
         }
 
         //给出可以比较的Date类型

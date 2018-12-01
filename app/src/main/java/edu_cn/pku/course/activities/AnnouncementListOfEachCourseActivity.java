@@ -12,8 +12,7 @@ public class AnnouncementListOfEachCourseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_announcement);
-
+        setContentView(R.layout.activity_announcement_list);
         setTitle(getIntent().getStringExtra("Title"));
         final ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
