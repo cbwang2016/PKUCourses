@@ -24,7 +24,7 @@
 
 
 ## Todo
-* [ ] 我的成绩改用xml解析 -- SJY
+* [x] 我的成绩改用xml解析 -- SJY
 * [ ] About -- ZRB
 * [ ] 自动更新 -- WCB
 * [x] 用户量统计 -- WCB
