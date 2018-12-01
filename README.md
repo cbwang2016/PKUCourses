@@ -27,7 +27,7 @@
 * [ ] 我的成绩改用xml解析 -- SJY
 * [ ] About -- ZRB
 * [ ] 自动更新 -- WCB
-* [ ] 用户量统计 -- WCB
+* [x] 用户量统计 -- WCB
 * [ ] Dashboard显示公告 -- HJX
 * [ ] Dashboard未读内容标记 -- HJX
 * [ ] 公告具体内容可以点进去之后再显示 -- SJY
