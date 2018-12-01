@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center_horizontal"
-    android:orientation="vertical"
+    android:orientation="horizontal"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
@@ -24,7 +24,9 @@
     <ScrollView
         android:id="@+id/login_form"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        >
 
         <LinearLayout
             android:id="@+id/studentid_login_form"
@@ -32,47 +34,85 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <android.support.design.widget.TextInputLayout
+
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="40dp">
+
+                <ImageView
+                    android:id="@+id/ic_user"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="10dp"
+                    android:src="@mipmap/icon_user" />
 
                 <EditText
                     android:id="@+id/studentid"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/prompt_studentid"
-                    android:inputType="text"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="20dp"
+                    android:layout_toRightOf="@id/ic_user"
+                    android:background="@null"
+                    android:cursorVisible="false"
+                    android:hint="请输入学号"
+                    android:inputType="number"
                     android:maxLines="1"
-                    android:singleLine="true" />
+                    android:textColor="#000"
+                    android:textColorHint="#717070"
+                    android:textSize="15dp" />
 
-            </android.support.design.widget.TextInputLayout>
+            </RelativeLayout>
 
-            <android.support.design.widget.TextInputLayout
+
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="40dp"
+                android:layout_marginTop="10dp">
+
+                <ImageView
+                    android:id="@+id/iv_paw"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="10dp"
+                    android:src="@mipmap/icon_password" />
 
                 <EditText
                     android:id="@+id/password"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/prompt_password"
-                    android:imeActionId="6"
-                    android:imeActionLabel="@string/action_sign_in_short"
-                    android:imeOptions="actionUnspecified"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="20dp"
+                    android:layout_toRightOf="@id/iv_paw"
+                    android:background="@null"
+                    android:cursorVisible="false"
+                    android:hint="请输入密码"
                     android:inputType="textPassword"
                     android:maxLines="1"
-                    android:singleLine="true" />
+                    android:textColor="#000"
+                    android:textColorHint="#717070"
+                    android:textSize="15dp" />
 
-            </android.support.design.widget.TextInputLayout>
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:background="#c1bcbc" />
 
             <Button
                 android:id="@+id/studentid_sign_in_button"
-                style="?android:textAppearanceSmall"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="@string/action_sign_in"
-                android:textStyle="bold" />
+                android:layout_height="50dp"
+                android:layout_marginLeft="40dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginRight="40dp"
+                android:background="@color/colorPrimary"
+                android:text="登录"
+                android:textColor="#fff"
+                android:textSize="14dp" />
 
         </LinearLayout>
     </ScrollView>

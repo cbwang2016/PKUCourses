@@ -57,6 +57,7 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         setupActionBar();
 
+
         // 查找xml文件中的对象并保存进Java变量
         mStudentidView = (EditText) findViewById(R.id.studentid);
         mLoginFormView = findViewById(R.id.login_form);
