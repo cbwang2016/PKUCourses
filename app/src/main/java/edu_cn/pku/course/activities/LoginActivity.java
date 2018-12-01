@@ -85,7 +85,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-
+        setTitle("请登录校园网账号");
     }
 
     /**

@@ -41,7 +41,6 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".LoginActivity"
-            android:label="请登录校园网账号"
             android:parentActivityName=".MainActivity"
             tools:targetApi="jelly_bean">
             <meta-data
