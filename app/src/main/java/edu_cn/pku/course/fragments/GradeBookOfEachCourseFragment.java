@@ -24,6 +24,10 @@ import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
 import android.widget.LinearLayout;
 
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+
 import java.util.ArrayList;
 
 import edu_cn.pku.course.Utils;
@@ -32,8 +36,6 @@ import edu_cn.pku.course.activities.R;
 import edu_cn.pku.course.adapter.GradeBookListRecyclerViewAdapter;
 
 import static edu_cn.pku.course.Utils.errorPrefix;
-import static edu_cn.pku.course.Utils.errorSubstrings;
-
 
 public class GradeBookOfEachCourseFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
 
@@ -41,7 +43,9 @@ public class GradeBookOfEachCourseFragment extends Fragment implements SwipeRefr
     private RecyclerView mRecyclerView;
     private SwipeRefreshLayout mGradeBookSwipeContainer;
     private GradeBookListRecyclerViewAdapter adapter;
-    private static String courseId = null;
+    private static String CourseId = "Param1";
+
+    private String courseId;
 
     public GradeBookOfEachCourseFragment() {
         // Required empty public constructor
@@ -53,16 +57,20 @@ public class GradeBookOfEachCourseFragment extends Fragment implements SwipeRefr
      *
      * @return A new instance of fragment CoursesListFragment.
      */
-    public static GradeBookOfEachCourseFragment newInstance() {
+    public static GradeBookOfEachCourseFragment newInstance(String courseId) {
         GradeBookOfEachCourseFragment fragment = new GradeBookOfEachCourseFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
+        args.putString(CourseId, courseId);
         return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            courseId = getArguments().getString(CourseId);
+        }
     }
 
     @Override
@@ -124,6 +132,21 @@ public class GradeBookOfEachCourseFragment extends Fragment implements SwipeRefr
         mGradeBookSwipeContainer.setRefreshing(show);
     }
 
+    private void attachXmlToView(Node nNode) {
+        ArrayList<GradeInfo> grade_list = new ArrayList<>();
+        if (nNode != null) {
+            NodeList nList = nNode.getChildNodes();
+            for (int temp = 0; temp < nList.getLength(); temp++) {
+                Node n = nList.item(temp);
+                GradeInfo gi = new GradeInfo(Utils.nodeToString(n));
+                grade_list.add(gi);
+            }
+        }
+        adapter.updateList(grade_list);
+        // 显示课程列表的fancy的动画
+        mRecyclerView.scheduleLayoutAnimation();
+    }
+
     @SuppressLint("StaticFieldLeak")
     private class LoadingTask extends AsyncTask<Void, Void, String> {
 
@@ -133,7 +156,7 @@ public class GradeBookOfEachCourseFragment extends Fragment implements SwipeRefr
         //主要是有个course id一串数字是不一样的
         @Override
         protected String doInBackground(Void... params) {
-            return Utils.courseHttpGetRequest("http://course.pku.edu.cn/webapps/gradebook/do/student/viewGrades?course_id=" + courseId);
+            return Utils.courseHttpGetRequest("http://course.pku.edu.cn/webapps/Bb-mobile-bb_bb60/courseData?course_section=GRADES&course_id=" + courseId);
         }
 
         @Override
@@ -156,55 +179,17 @@ public class GradeBookOfEachCourseFragment extends Fragment implements SwipeRefr
                 }
             } else {
                 // 解析返回的HTML
-                String[] rawSplit = str.split("return mygrades_utils.showComment");
                 ArrayList<GradeInfo> grade_list = new ArrayList<>();
 
                 FragmentActivity fa = getActivity();
                 if (fa == null) {
                     return;
                 }
-                for (int i = 1; i < rawSplit.length; i++) {
-                    if (Utils.betweenStrings(rawSplit[i], "<td headers=\"grade ", "<span class").equals(errorPrefix + errorSubstrings) || !Utils.betweenStrings(rawSplit[i], "<td headers=\"grade ", "<strong><img src='/images/").equals(errorPrefix + errorSubstrings)) {
-                        //没有评分的情况和没有总分的情况，就直接静态搞掉算了...
-                        String rawGrade = "<strong>-</strong></a><span class=\"out-of\">" + "<" + "EndEndEnd";
-                        String title = Utils.betweenStrings(rawSplit[i], "'TH')\">", "</a>");
-                        String description = "";
-                        if (!Utils.betweenStrings(rawSplit[i], "\"vtbegenerated\"> ", "</div></div>").equals(errorPrefix + errorSubstrings))
-                            description = Utils.betweenStrings(rawSplit[i], "\"vtbegenerated\"> ", "</div></div>");
-                        GradeInfo ai;
-                        ai = new GradeInfo(rawGrade, title, description);
-                        grade_list.add(ai);
-                    } else if (!Utils.betweenStrings(rawSplit[i], "<td headers=\"grade", "             <a href=\"/webapps").equals(errorPrefix + errorSubstrings)) {
-                        String rawGrade = Utils.betweenStrings(rawSplit[i], "<td headers=\"grade", "/span>");
-                        rawGrade = rawGrade + "EndEndEnd";
-                        rawGrade = rawGrade.replaceAll(" ", "").replaceAll("\t", "").replaceAll("\n", "");
-                        String title = Utils.betweenStrings(rawSplit[i], "'TH')\">", "</a>");
-                        String description = "";
-                        if (!Utils.betweenStrings(rawSplit[i], "\"vtbegenerated\"> ", "</div></div>").equals(errorPrefix + errorSubstrings))
-                            description = Utils.betweenStrings(rawSplit[i], "\"vtbegenerated\"> ", "</div></div>");
-                        GradeInfo ai;
-                        ai = new GradeInfo(rawGrade, title, description);
-                        grade_list.add(ai);
-                    } else {
-                        //字体是黑色的，没有链接，手动加上截取识别符，手动修改使它可以识别
-                        String rawGrade = Utils.betweenStrings(rawSplit[i], "<td headers=\"grade ", "<span class") + "</strong></a> <span class=\"out-of\">" + Utils.betweenStrings(rawSplit[i], "<span class=\"out-of\">", "</span") + "<" + "EndEndEnd";
-                        String withoutHead = rawGrade.substring(5, rawGrade.length());
-                        withoutHead = "<strong>" + withoutHead;
-                        String noSpace = withoutHead.replaceAll(" ", "").replaceAll("\t", "").replaceAll("\n", "");
-                        String title = Utils.betweenStrings(rawSplit[i], "'TH')\">", "</a>");
-                        String description = "";
-                        if (!Utils.betweenStrings(rawSplit[i], "\"vtbegenerated\"> ", "</div></div>").equals(errorPrefix + errorSubstrings))
-                            description = Utils.betweenStrings(rawSplit[i], "\"vtbegenerated\"> ", "</div></div>");
-                        GradeInfo ai;
-                        ai = new GradeInfo(noSpace, title, description);
-                        grade_list.add(ai);
-                    }
 
+                Node rootNode = Utils.stringToNode(str);
+                if (rootNode != null) {
+                    attachXmlToView(rootNode.getFirstChild());
                 }
-
-                adapter.updateList(grade_list);
-                // 显示课程列表的fancy的动画
-                mRecyclerView.scheduleLayoutAnimation();
             }
         }
 
@@ -221,35 +206,31 @@ public class GradeBookOfEachCourseFragment extends Fragment implements SwipeRefr
      * 为了方便管理成绩，将每个成绩的各种信息组成一个类。
      */
     public static class GradeInfo {
-        private String rawGrade;
-        private String title;
-        private String description;
+        private Element eElement;
 
-
-        GradeInfo(String str1, String str2, String str3) {
-            rawGrade = str1; //格式： 2">
-            title = str2;
-            description = str3;
+        GradeInfo(String str) {
+            Node temp = Utils.stringToNode(str);
+            eElement = (Element) temp;
         }
 
         public String getGrade() {
-            if (Utils.betweenStrings(rawGrade, "\"out-of\">", "<EndEndEnd").equals(errorPrefix + errorSubstrings))
-                return "-";
-            return Utils.betweenStrings(rawGrade, "<strong>", "</strong></a>");
+            return eElement.getAttribute("grade");
         }
 
         public String getDetailedGrade() {
-            if (Utils.betweenStrings(rawGrade, "\"out-of\">", "<EndEndEnd").equals(errorPrefix + errorSubstrings) || Utils.betweenStrings(rawGrade, "<strong>", "</strong></a>").equals(errorPrefix + errorSubstrings))
-                return "-/-";
-            return Utils.betweenStrings(rawGrade, "<strong>", "</strong></a>") + Utils.betweenStrings(rawGrade, "\"out-of\">", "<EndEndEnd");
+            if (eElement.getAttribute("pointspossible").equals("0.0"))
+                return eElement.getAttribute("grade") + "/" + "-";
+            return eElement.getAttribute("grade") + "/" + eElement.getAttribute("pointspossible");
         }
 
         public String getGradeTitle() {
-            return title;
+            return eElement.getAttribute("name");
         }
 
         public String getGradeDescription() {
-            return description;
+            if (eElement.getAttribute("comments") == null)
+                return "";
+            return eElement.getAttribute("comments");
         }
     }
 

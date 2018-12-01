@@ -11,7 +11,6 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-import edu_cn.pku.course.activities.CourseActionsActivity;
 import edu_cn.pku.course.activities.R;
 import edu_cn.pku.course.fragments.GradeBookOfEachCourseFragment;
 
@@ -27,7 +26,6 @@ public class GradeBookListRecyclerViewAdapter extends RecyclerView.Adapter<Grade
     //更新列表
     public void updateList(ArrayList<GradeBookOfEachCourseFragment.GradeInfo> gradeBookList) {
         this.gradeBookList = gradeBookList;
-        notifyDataSetChanged();
     }
 
     @NonNull
