@@ -4,7 +4,7 @@
 
 兼容的Android版本：Android 4.0.3 - Android 9
 
-##第三方库列表
+## 第三方库列表
 ```
 com.r0adkll:slidableactivity:2.0.6
 org.jsoup:jsoup:1.11.3
