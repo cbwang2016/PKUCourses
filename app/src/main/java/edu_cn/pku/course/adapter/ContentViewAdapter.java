@@ -70,21 +70,21 @@ public class ContentViewAdapter extends RecyclerView.Adapter<ContentViewAdapter.
             holder.card_view_item_content.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
-                    new AlertDialog.Builder(mContext)
+                    new AlertDialog.Builder(mContext,R.style.AlertDialogTheme)
                             .setMessage("您是否想删除此文件（" + list.get(holder.getAdapterPosition()).getFileName() + "）的本地缓存？")
-                            .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                            .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int whichButton) {
                                     boolean tmp = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) + File.separator + Utils.downloadFolder + list.get(holder.getAdapterPosition()).getFileName()).delete();
                                     if (!tmp) {
                                         new AlertDialog.Builder(mContext)
                                                 .setMessage("文件删除失败")
-                                                .setPositiveButton(android.R.string.yes, null).show();
+                                                .setPositiveButton("确定", null).show();
                                     }
                                     list.get(holder.getAdapterPosition()).setDownloaded(false);
                                     notifyDataSetChanged();
                                 }
                             })
-                            .setNegativeButton(android.R.string.no, null).show();
+                            .setNegativeButton("取消", null).show();
                     return true;
                 }
             });

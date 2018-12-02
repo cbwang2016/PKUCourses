@@ -44,6 +44,9 @@ public class CourseListFragment extends Fragment implements SwipeRefreshLayout.O
     private SwipeRefreshLayout mCourseListSwipeContainer;
     private CourseListRecyclerViewAdapter adapter;
 
+
+
+
     public CourseListFragment() {
         // Required empty public constructor
     }
@@ -76,11 +79,13 @@ public class CourseListFragment extends Fragment implements SwipeRefreshLayout.O
         mRecyclerView = linearLayout.findViewById(R.id.recycler_courses);
         mCourseListSwipeContainer = linearLayout.findViewById(R.id.course_list_swipe_container);
 
+
         // 设置动画
         LayoutAnimationController animation = AnimationUtils.loadLayoutAnimation(getContext(), R.anim.layout_animation_fall_down);
         mCourseListSwipeContainer.setLayoutAnimation(animation);
         // 设置刷新的监听类为此类（监听函数onRefresh）
         mCourseListSwipeContainer.setOnRefreshListener(this);
+
 
         FragmentActivity fa = getActivity();
         // 为了消除编译器Warning，需要判断一下是不是null，其实这基本上不可能出现null
@@ -93,11 +98,13 @@ public class CourseListFragment extends Fragment implements SwipeRefreshLayout.O
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mRecyclerView.setAdapter(adapter);
 
+
+
+
         // 显示Loading的小动画，并在后台读取课程列表
         showLoading(true);
         mLoadingTask = new CoursesLoadingTask();
         mLoadingTask.execute((Void) null);
-
         return linearLayout;
     }
 
