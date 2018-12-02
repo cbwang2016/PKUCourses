@@ -35,6 +35,8 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     private ViewPager view_pager_main;
     NavigationView navigationView;
+    CourseListFragment courseListFragment;
+    MyGradeFragment myGradeFragment;
 
     @SuppressLint("CutPasteId")
     @Override
@@ -68,9 +70,9 @@ public class MainActivity extends AppCompatActivity
         // 将CourseListFragment和AnnouncementListFragment两个fragment加入到view_pager_main内
         List<Fragment> fragments = new ArrayList<>();
         fragments.add(DashboardFragment.newInstance());
-        fragments.add(CourseListFragment.newInstance());
+        fragments.add(courseListFragment = CourseListFragment.newInstance());
         fragments.add(AnnouncementListFragment.newInstance());
-        fragments.add(MyGradeFragment.newInstance());
+        fragments.add(myGradeFragment = MyGradeFragment.newInstance());
         fragments.add(SpareClassroomsFragment.newInstance());
         FragmentAdapter mFragmentAdapter = new FragmentAdapter(getSupportFragmentManager(), fragments);
         view_pager_main = findViewById(R.id.view_pager_main);
@@ -86,6 +88,11 @@ public class MainActivity extends AppCompatActivity
         view_pager_main.setCurrentItem(launch_page_index);
     }
 
+    private boolean checkLongPressHint() {
+        SharedPreferences sharedPreferences = getSharedPreferences("longPressHint", Context.MODE_PRIVATE);
+        return !sharedPreferences.getBoolean("showed", false);
+    }
+
     private ViewPager.OnPageChangeListener pageChangeListener = new ViewPager.OnPageChangeListener() {
         @Override
         public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -98,6 +105,13 @@ public class MainActivity extends AppCompatActivity
             // 设置屏幕左上角的标题、以及左侧抽屉栏中被选中的对象
             setTitle(navigationView.getMenu().getItem(position).getTitle());
             navigationView.getMenu().getItem(position).setChecked(true);
+
+            if (checkLongPressHint()) {
+                if (position == 1)
+                    courseListFragment.showLongPressHint();
+                else if (position == 3)
+                    myGradeFragment.showLongPressHint();
+            }
         }
 
         @Override
