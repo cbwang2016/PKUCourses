@@ -15,6 +15,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import edu_cn.pku.course.activities.AnnouncementBodyActivity;
 import edu_cn.pku.course.activities.ContentViewActivity;
 import edu_cn.pku.course.activities.GradeBookOfEachCourseActivity;
 import edu_cn.pku.course.activities.R;
@@ -42,9 +43,25 @@ public class DashboardAdapter extends RecyclerView.Adapter<DashboardAdapter.Dash
         holder.recycler_sub_str.setText(item_list.get(holder.getAdapterPosition()).getCourseName());
         holder.recycler_time_str.setText(item_list.get(holder.getAdapterPosition()).getRelativeTime());
         holder.card_view_item_dashboard.setClickable(true);
-        if (item_list.get(holder.getAdapterPosition()).getSourceId().contains("GradeDetail")) {
+        if (item_list.get(holder.getAdapterPosition()).getType().equals("ANNOUNCEMENT")) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                holder.imageView.setBackground(mContext.getResources().getDrawable(R.drawable.ic_mygrade));
+                holder.imageView.setBackground(mContext.getResources().getDrawable(R.drawable.ic_announcements_round));
+            }
+            holder.card_view_item_dashboard.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(mContext.getActivity(), AnnouncementBodyActivity.class);
+                    Activity activity = mContext.getActivity();
+                    if (activity != null) {
+                        intent.putExtra("Title", item_list.get(holder.getAdapterPosition()).getTitle());
+                        intent.putExtra("AnnouncementId", item_list.get(holder.getAdapterPosition()).getItemId());
+                    }
+                    mContext.startActivity(intent);
+                }
+            });
+        } else if (item_list.get(holder.getAdapterPosition()).getSourceId().contains("GradeDetail")) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                holder.imageView.setBackground(mContext.getResources().getDrawable(R.drawable.ic_mygrade_round));
             }
             holder.card_view_item_dashboard.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -60,7 +77,7 @@ public class DashboardAdapter extends RecyclerView.Adapter<DashboardAdapter.Dash
             });
         } else {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                holder.imageView.setBackground(mContext.getResources().getDrawable(R.drawable.ic_doc));
+                holder.imageView.setBackground(mContext.getResources().getDrawable(R.drawable.ic_doc_round));
             }
             holder.card_view_item_dashboard.setOnClickListener(new View.OnClickListener() {
                 @Override

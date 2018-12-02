@@ -23,7 +23,7 @@
             tools:ignore="HardcodedText" />
         <item
             android:id="@+id/nav_mygrade"
-            android:icon="@drawable/ic_mygrade"
+            android:icon="@drawable/ic_mygrade_round"
             android:title="我的成绩"
             tools:ignore="HardcodedText" />
         <item

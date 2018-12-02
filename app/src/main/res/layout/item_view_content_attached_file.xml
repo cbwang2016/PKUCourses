@@ -23,7 +23,7 @@
             android:id="@+id/content_view_icon"
             android:layout_width="56dp"
             android:layout_height="56dp"
-            android:background="@drawable/ic_doc"
+            android:background="@drawable/ic_doc_round"
             android:scaleType="centerCrop"
             card_view:ignore="ContentDescription" />
 
