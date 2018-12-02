@@ -35,12 +35,14 @@ import java.util.Set;
 import edu_cn.pku.course.Utils;
 import edu_cn.pku.course.activities.LoginActivity;
 import edu_cn.pku.course.activities.R;
+import edu_cn.pku.course.activities.SplashActivity;
 import edu_cn.pku.course.adapter.CourseListRecyclerViewAdapter;
 
 public class CourseListFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
 
     private CoursesLoadingTask mLoadingTask = null;
-    private RecyclerView mRecyclerView;
+    private RecyclerView mRecyclerView = null;
+    private boolean showLongPressHintFlag = false;
     private SwipeRefreshLayout mCourseListSwipeContainer;
     private CourseListRecyclerViewAdapter adapter;
 
@@ -49,6 +51,25 @@ public class CourseListFragment extends Fragment implements SwipeRefreshLayout.O
 
     public CourseListFragment() {
         // Required empty public constructor
+    }
+
+    public void showLongPressHint() {
+        if (mRecyclerView == null || !mRecyclerView.isAttachedToWindow()) {
+            showLongPressHintFlag = true;
+            return;
+        }
+        Snackbar.make(mRecyclerView, "温馨提示：长按课程可以置顶", Snackbar.LENGTH_SHORT)
+                .setAction("我知道了", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        SharedPreferences sharedPreferences = SplashActivity.contextOfApplication.getSharedPreferences("longPressHint", Context.MODE_PRIVATE);
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.putBoolean("showed", true);
+                        editor.apply();
+                    }
+                })
+                .show();
+        showLongPressHintFlag = false;
     }
 
     /**
@@ -190,6 +211,8 @@ public class CourseListFragment extends Fragment implements SwipeRefreshLayout.O
                     // 显示课程列表的fancy的动画
                     mRecyclerView.scheduleLayoutAnimation();
 
+                    if (showLongPressHintFlag)
+                        showLongPressHint();
                 }
             }
         }

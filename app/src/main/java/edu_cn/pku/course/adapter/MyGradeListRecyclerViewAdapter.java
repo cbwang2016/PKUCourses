@@ -17,6 +17,8 @@ import java.util.Set;
 
 import edu_cn.pku.course.activities.GradeBookOfEachCourseActivity;
 import edu_cn.pku.course.activities.R;
+import edu_cn.pku.course.fragments.CourseListFragment;
+import edu_cn.pku.course.fragments.GradeBookOfEachCourseFragment;
 import edu_cn.pku.course.fragments.MyGradeFragment;
 
 // * Created by zhang on 2016.08.07.
@@ -64,6 +66,7 @@ public class MyGradeListRecyclerViewAdapter extends RecyclerView.Adapter<MyGrade
             public void onClick(View v) {
                 Intent intent = new Intent(mContext.getActivity(), GradeBookOfEachCourseActivity.class);
                 intent.putExtra("CourseId", coursesList.get(holder.getAdapterPosition()).getCourseId());
+                intent.putExtra("Title", "成绩—" + coursesList.get(holder.getAdapterPosition()).getCourseName());
                 mContext.startActivity(intent);
             }
         });

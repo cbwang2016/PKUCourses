@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'mtj-circle-plugin'
 
 android {
     compileSdkVersion 28
@@ -32,4 +33,13 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+}
+
+MtjCirclePluginConfig {
+    // 设置appkey
+    appkey = 'a8bacbbf8d'
+    // 设置debug 开关，如果需要查看日志则打开开关，为避免影响性能建议上线前关闭（设置为false）
+    debug = false
+    // 默认启动此插件，如果开发者不需要可以禁用（设置为false）
+    enabled = true
 }
