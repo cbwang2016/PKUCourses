@@ -200,7 +200,7 @@ public class ContentViewActivity extends AppCompatActivity implements SwipeRefre
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            this.progressDialog = new ProgressDialog(ContentViewActivity.this);
+            this.progressDialog = new ProgressDialog(ContentViewActivity.this,R.style.AlertDialogTheme);
             this.progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
             this.progressDialog.setCancelable(false);
             this.progressDialog.show();
