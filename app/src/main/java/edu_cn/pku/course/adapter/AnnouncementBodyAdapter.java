@@ -1,8 +1,10 @@
 package edu_cn.pku.course.adapter;
 
 
+import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,16 +40,14 @@ public class AnnouncementBodyAdapter extends RecyclerView.Adapter<AnnouncementBo
 
         holder.announcement_title_str.setText(announcementBodyList.get(holder.getAdapterPosition()).getAnnouncementTitle());
         holder.announcement_date_str.setText(announcementBodyList.get(holder.getAdapterPosition()).getAnnouncementDate());
-        holder.announcement_contents.setText(announcementBodyList.get(holder.getAdapterPosition()).getContents());
-        holder.announcement_author.setText(announcementBodyList.get(holder.getAdapterPosition()).getAuthorInfo());
-        //看不懂下面的东西，等wcb来改一下....好像是用来防止空白公告的？
-        /**if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-         holder.recycler_announcement_contents.setText(Html.fromHtml(announcementList.get(holder.getAdapterPosition()).getContents(), Html.FROM_HTML_MODE_COMPACT));
-         holder.recycler_announcement_author.setText(Html.fromHtml(announcementList.get(holder.getAdapterPosition()).getAuthorInfo(), Html.FROM_HTML_MODE_COMPACT));
-         } else {
-         holder.recycler_announcement_contents.setText(Html.fromHtml(announcementList.get(holder.getAdapterPosition()).getContents()));
-         holder.recycler_announcement_author.setText(Html.fromHtml(announcementList.get(holder.getAdapterPosition()).getAuthorInfo()));
-         }**/
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            holder.announcement_contents.setText(Html.fromHtml(announcementBodyList.get(holder.getAdapterPosition()).getContents(), Html.FROM_HTML_MODE_COMPACT));
+            holder.announcement_author.setText(Html.fromHtml(announcementBodyList.get(holder.getAdapterPosition()).getAuthorInfo(), Html.FROM_HTML_MODE_COMPACT));
+        } else {
+            holder.announcement_contents.setText(Html.fromHtml(announcementBodyList.get(holder.getAdapterPosition()).getContents()));
+            holder.announcement_author.setText(Html.fromHtml(announcementBodyList.get(holder.getAdapterPosition()).getAuthorInfo()));
+        }
     }
 
     @Override

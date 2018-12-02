@@ -34,7 +34,7 @@ import edu_cn.pku.course.adapter.AnnouncementBodyAdapter;
 
 public class AnnouncementBodyFragment extends Fragment {
 
-    private AnnouncementBodyFragment.ActionsLoadingTask mLoadingTask = null;
+    private AnnouncementBodyLoadingTask mLoadingTask = null;
     private RecyclerView mRecyclerView;
     private SwipeRefreshLayout mAnnouncementBodySwipeContainer;
     private AnnouncementBodyAdapter adapter;
@@ -84,6 +84,11 @@ public class AnnouncementBodyFragment extends Fragment {
         mRecyclerView.setAdapter(adapter);
         announcementId = getActivity().getIntent().getStringExtra("AnnouncementId");
 
+        // 显示Loading的小动画，并在后台读取课程列表
+        showLoading(true);
+        mLoadingTask = new AnnouncementBodyLoadingTask();
+        mLoadingTask.execute((Void) null);
+
         return linearLayout;
     }
 
@@ -106,9 +111,9 @@ public class AnnouncementBodyFragment extends Fragment {
 
 
     @SuppressLint("StaticFieldLeak")
-    private class ActionsLoadingTask extends AsyncTask<Void, Void, String> {
+    private class AnnouncementBodyLoadingTask extends AsyncTask<Void, Void, String> {
 
-        ActionsLoadingTask() {
+        AnnouncementBodyLoadingTask() {
         }
 
         @Override
