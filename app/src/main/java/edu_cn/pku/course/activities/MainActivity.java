@@ -101,7 +101,6 @@ public class MainActivity extends AppCompatActivity
 
         @Override
         public void onPageSelected(int position) {
-
             // 设置屏幕左上角的标题、以及左侧抽屉栏中被选中的对象
             setTitle(navigationView.getMenu().getItem(position).getTitle());
             navigationView.getMenu().getItem(position).setChecked(true);
@@ -131,7 +130,8 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    /*@Override
+
+/*@Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
@@ -184,15 +184,14 @@ public class MainActivity extends AppCompatActivity
                 startActivity(intentAbout);
                 break;
             case R.id.nav_signout:
-                new AlertDialog.Builder(this)
-                        .setMessage("Do you really want to sign out?")
-                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-
+                AlertDialog.Builder builder = new AlertDialog.Builder(this,R.style.AlertDialogTheme);
+                        builder.setMessage("你确定要注销吗？");
+                        builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int whichButton) {
                                 signOut();
                             }
-                        })
-                        .setNegativeButton(android.R.string.no, null).show();
+                        });
+                        builder.setNegativeButton("取消", null).show();
                 break;
         }
 

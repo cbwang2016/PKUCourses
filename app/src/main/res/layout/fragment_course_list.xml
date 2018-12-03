@@ -19,4 +19,5 @@
             android:layout_height="wrap_content"
             android:layoutAnimation="@anim/layout_animation_fall_down" />
     </android.support.v4.widget.SwipeRefreshLayout>
+
 </LinearLayout>
