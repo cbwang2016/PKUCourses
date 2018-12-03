@@ -6,8 +6,11 @@
 
     <ListView
         android:id="@+id/about_listView"
-        android:layout_width="match_parent"
+        android:layout_width="350dp"
         android:layout_height="wrap_content"
-        />
+        android:layout_marginStart="13dp"
+        android:layout_marginLeft="13dp"
+        android:layout_marginRight="13dp"
+        android:layout_marginEnd="13dp" />
 
 </LinearLayout>

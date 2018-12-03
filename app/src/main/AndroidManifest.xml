@@ -74,7 +74,6 @@
         <activity android:name=".AnnouncementBodyActivity" />
         <activity
             android:name=".GitWebViewActivity"
-            android:label="@string/title_activity_git_web_view"
             android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
