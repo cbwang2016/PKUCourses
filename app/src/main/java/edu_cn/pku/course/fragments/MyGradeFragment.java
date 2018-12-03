@@ -66,7 +66,7 @@ public class MyGradeFragment extends Fragment implements SwipeRefreshLayout.OnRe
                         editor.apply();
                     }
                 })
-                .setActionTextColor(Color.rgb(255,51,51))
+                .setActionTextColor(Color.rgb(255, 51, 51))
                 .show();
         showLongPressHintFlag = false;
     }

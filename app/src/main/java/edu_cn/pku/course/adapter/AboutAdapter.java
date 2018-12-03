@@ -9,7 +9,6 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import edu_cn.pku.course.activities.AboutActivity;
@@ -17,7 +16,7 @@ import edu_cn.pku.course.activities.R;
 
 public class AboutAdapter extends BaseAdapter {
     private Context mContext;
-    private List<AboutActivity.AboutMenu> mList = new ArrayList<>();
+    private List<AboutActivity.AboutMenu> mList;
 
     public AboutAdapter(Context context, List<AboutActivity.AboutMenu> list) {
         mContext = context;
@@ -42,14 +41,14 @@ public class AboutAdapter extends BaseAdapter {
     @SuppressLint("InflateParams")
     @Override
     public View getView(final int i, View view, ViewGroup viewGroup) {
-        ViewHolder viewHolder = null;
+        ViewHolder viewHolder;
         if (view == null) {
             viewHolder = new ViewHolder();
             view = LayoutInflater.from(mContext).inflate(R.layout.item_about_list_view, null);
-            viewHolder.mMenuTextView = (TextView) view.findViewById(R.id.item_about_text);
-            viewHolder.mImageView = (ImageView) view.findViewById(R.id.item_about_image);
-            viewHolder.mContentTextView = (TextView)view.findViewById(R.id.item_about_content_text);
-            viewHolder.mSubMenuTextView = (TextView)view.findViewById(R.id.item_about_sub_menu_text);
+            viewHolder.mMenuTextView = view.findViewById(R.id.item_about_text);
+            viewHolder.mImageView = view.findViewById(R.id.item_about_image);
+            viewHolder.mContentTextView = view.findViewById(R.id.item_about_content_text);
+            viewHolder.mSubMenuTextView = view.findViewById(R.id.item_about_sub_menu_text);
             view.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) view.getTag();

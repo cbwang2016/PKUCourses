@@ -69,7 +69,7 @@ public class CourseListFragment extends Fragment implements SwipeRefreshLayout.O
                         editor.apply();
                     }
                 })
-                .setActionTextColor(Color.rgb(255,51,51))
+                .setActionTextColor(Color.rgb(255, 51, 51))
                 .show();
         showLongPressHintFlag = false;
     }

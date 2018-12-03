@@ -85,7 +85,7 @@ public class GitWebViewActivity extends AppCompatActivity implements SwipeRefres
             }
         });
         mSwipeContainer.setRefreshing(true);
-        mWebView.loadUrl("https://github.com/cbwang2016/PKUCourses" );
+        mWebView.loadUrl("https://github.com/cbwang2016/PKUCourses");
     }
 
     @Override
