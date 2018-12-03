@@ -194,9 +194,14 @@ public class AnnouncementListOfEachCourseFragment extends Fragment implements Sw
                     announcement_list.add(new AnnouncementInfo(n));
                 }
 
-                adapter.updateList(announcement_list);
-                // 显示课程列表的fancy的动画
-                mRecyclerView.scheduleLayoutAnimation();
+                if (nList.size() == 0) {
+                    if (mRecyclerView.isAttachedToWindow())
+                        Snackbar.make(mRecyclerView, "看起来这门课没有通知...", Snackbar.LENGTH_SHORT).show();
+                } else {
+                    adapter.updateList(announcement_list);
+                    // 显示课程列表的fancy的动画
+                    mRecyclerView.scheduleLayoutAnimation();
+                }
             }
         }
 
