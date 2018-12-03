@@ -7,6 +7,7 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -58,7 +59,7 @@ public class CourseListFragment extends Fragment implements SwipeRefreshLayout.O
             showLongPressHintFlag = true;
             return;
         }
-        Snackbar.make(mRecyclerView, "温馨提示：长按课程可以置顶", Snackbar.LENGTH_SHORT)
+        Snackbar.make(mRecyclerView, "温馨提示：长按课程可以置顶", Snackbar.LENGTH_LONG)
                 .setAction("我知道了", new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -68,6 +69,7 @@ public class CourseListFragment extends Fragment implements SwipeRefreshLayout.O
                         editor.apply();
                     }
                 })
+                .setActionTextColor(Color.rgb(255,51,51))
                 .show();
         showLongPressHintFlag = false;
     }
