@@ -38,6 +38,7 @@ import edu_cn.pku.course.activities.R;
 import edu_cn.pku.course.activities.SplashActivity;
 
 public class Utils {
+    private static final String versionString = "beta v0.1.4";
     public static final String errorPrefix = "Error: ";
     public static final String errorPasswordIncorrect = "Password Incorrect";
     private static final String errorSubstrings = "error when extracting substrings";
