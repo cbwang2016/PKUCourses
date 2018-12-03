@@ -76,9 +76,6 @@
         <activity
             android:name=".AnnouncementBodyActivity"
             android:theme="@style/AppTheme.Slidr" />
-        <activity
-            android:name=".GitWebViewActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>
