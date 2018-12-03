@@ -46,18 +46,24 @@ public class AboutAdapter extends BaseAdapter {
         if (view == null) {
             viewHolder = new ViewHolder();
             view = LayoutInflater.from(mContext).inflate(R.layout.item_about_list_view, null);
-            viewHolder.mTextView = (TextView) view.findViewById(R.id.item_about_text);
+            viewHolder.mMenuTextView = (TextView) view.findViewById(R.id.item_about_text);
             viewHolder.mImageView = (ImageView) view.findViewById(R.id.item_about_image);
+            viewHolder.mContentTextView = (TextView)view.findViewById(R.id.item_about_content_text);
+            viewHolder.mSubMenuTextView = (TextView)view.findViewById(R.id.item_about_sub_menu_text);
             view.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) view.getTag();
         }
-        viewHolder.mTextView.setText(mList.get(i).getMenu());
+        viewHolder.mMenuTextView.setText(mList.get(i).getMenu());
         viewHolder.mImageView.setImageResource(mList.get(i).getImageId());
+        viewHolder.mContentTextView.setText(mList.get(i).getContent());
+        viewHolder.mSubMenuTextView.setText(mList.get(i).getSubMenu());
         return view;
     }
     class ViewHolder {
-        TextView mTextView;
+        TextView mMenuTextView;
+        TextView mSubMenuTextView;
+        TextView mContentTextView;
         ImageView mImageView;
     }
 }
