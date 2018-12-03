@@ -128,6 +128,72 @@ public class AnnouncementListFragment extends Fragment implements SwipeRefreshLa
         mAnnouncementListSwipeContainer.setRefreshing(show);
     }
 
+    public void signOut() throws Exception {
+        FragmentActivity fa = getActivity();
+        if (fa == null) {
+            throw new Exception("Unknown Error: Null getActivity()!");
+        }
+        SharedPreferences sharedPreferences = fa.getSharedPreferences("login_info", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.clear();
+        editor.apply();
+
+        Intent intent = new Intent(getActivity(), LoginActivity.class);
+        startActivity(intent);
+        getActivity().finish();
+    }
+
+    //复制wcb的courselist代码
+
+    /**
+     * 为了方便管理课程列表，将每个课程的各种信息组成一个类。
+     */
+    public static class AnnouncementInfo implements Comparable<AnnouncementInfo> {
+        private Element nNode;
+
+        AnnouncementInfo(Element nNode) {
+            this.nNode = nNode;
+        }
+
+        public String getAuthorInfo() {
+            return nNode.getElementsByClass("announcementInfo").first().toString();
+        }
+
+        public String getContents() {
+            Element tmp = nNode.getElementsByClass("details").first().getElementsByClass("vtbegenerated").first();
+            return tmp == null ? "" : tmp.toString();
+        }
+
+        public String getAnnouncementTitle() {
+            return nNode.child(0).text();
+        }
+
+        public String getAnnouncementDate() {
+            return nNode.getElementsByClass("details").first().child(0).text().replace("发帖时间: ", "");
+        }
+
+        public String getAnnouncementId() {
+            return nNode.attr("id");
+        }
+
+        //给出可以比较的Date类型
+        private Date changeToDate() throws ParseException {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy年M月d日", Locale.CHINA);
+            return dateFormat.parse(getAnnouncementDate().split(" ")[0]);
+        }
+
+        @Override
+        public int compareTo(AnnouncementListFragment.AnnouncementInfo comp) {
+            try {
+//                if (this.changeToDate() == comp.changeToDate())
+                return comp.changeToDate().compareTo(this.changeToDate());
+            } catch (ParseException e) {
+//                e.printStackTrace();//这个是字符串不符合定义的格式的错误
+            }
+            return this.getAnnouncementTitle().compareTo(comp.getAnnouncementTitle());
+        }
+    }
+
     @SuppressLint("StaticFieldLeak")
     private class AnnouncementLoadingTask extends AsyncTask<Void, Void, String> {
 
@@ -185,72 +251,6 @@ public class AnnouncementListFragment extends Fragment implements SwipeRefreshLa
             mLoadingTask = null;
             showLoading(false);
         }
-    }
-
-    //复制wcb的courselist代码
-
-    /**
-     * 为了方便管理课程列表，将每个课程的各种信息组成一个类。
-     */
-    public static class AnnouncementInfo implements Comparable<AnnouncementInfo> {
-        private Element nNode;
-
-        AnnouncementInfo(Element nNode) {
-            this.nNode = nNode;
-        }
-
-        public String getAuthorInfo() {
-            return nNode.getElementsByClass("announcementInfo").first().toString();
-        }
-
-        public String getContents() {
-            Element tmp = nNode.getElementsByClass("details").first().getElementsByClass("vtbegenerated").first();
-            return tmp == null ? "" : tmp.toString();
-        }
-
-        public String getAnnouncementTitle() {
-            return nNode.child(0).text();
-        }
-
-        public String getAnnouncementDate() {
-            return nNode.getElementsByClass("details").first().child(0).text().replace("发帖时间: ", "");
-        }
-
-        public String getAnnouncementId() {
-            return nNode.attr("id");
-        }
-
-        //给出可以比较的Date类型
-        private Date changeToDate() throws ParseException {
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy年M月d日", Locale.CHINA);
-            return dateFormat.parse(getAnnouncementDate().split(" ")[0]);
-        }
-
-        @Override
-        public int compareTo(AnnouncementListFragment.AnnouncementInfo comp) {
-            try {
-//                if (this.changeToDate() == comp.changeToDate())
-                return comp.changeToDate().compareTo(this.changeToDate());
-            } catch (ParseException e) {
-//                e.printStackTrace();//这个是字符串不符合定义的格式的错误
-            }
-            return this.getAnnouncementTitle().compareTo(comp.getAnnouncementTitle());
-        }
-    }
-
-    public void signOut() throws Exception {
-        FragmentActivity fa = getActivity();
-        if (fa == null) {
-            throw new Exception("Unknown Error: Null getActivity()!");
-        }
-        SharedPreferences sharedPreferences = fa.getSharedPreferences("login_info", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.clear();
-        editor.apply();
-
-        Intent intent = new Intent(getActivity(), LoginActivity.class);
-        startActivity(intent);
-        getActivity().finish();
     }
 }
 

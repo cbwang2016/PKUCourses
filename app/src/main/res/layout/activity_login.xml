@@ -25,8 +25,7 @@
         android:id="@+id/login_form"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        >
+        android:layout_gravity="center_vertical">
 
         <LinearLayout
             android:id="@+id/studentid_login_form"
@@ -45,7 +44,9 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="10dp"
-                    android:src="@mipmap/icon_user" />
+                    android:src="@mipmap/icon_user"
+                    tools:ignore="ContentDescription"
+                    android:layout_marginStart="10dp" />
 
                 <EditText
                     android:id="@+id/studentid"
@@ -60,7 +61,10 @@
                     android:maxLines="1"
                     android:textColor="#000"
                     android:textColorHint="#717070"
-                    android:textSize="15dp" />
+                    android:textSize="15sp"
+                    tools:ignore="Autofill,HardcodedText"
+                    android:layout_marginStart="20dp"
+                    android:layout_toEndOf="@id/ic_user" />
 
             </RelativeLayout>
 
@@ -76,7 +80,9 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="10dp"
-                    android:src="@mipmap/icon_password" />
+                    android:src="@mipmap/icon_password"
+                    tools:ignore="ContentDescription"
+                    android:layout_marginStart="10dp" />
 
                 <EditText
                     android:id="@+id/password"
@@ -91,7 +97,10 @@
                     android:maxLines="1"
                     android:textColor="#000"
                     android:textColorHint="#717070"
-                    android:textSize="15dp" />
+                    android:textSize="15sp"
+                    android:layout_marginStart="20dp"
+                    android:layout_toEndOf="@id/iv_paw"
+                    tools:ignore="Autofill,HardcodedText" />
 
             </RelativeLayout>
 
@@ -112,7 +121,8 @@
                 android:background="@color/colorPrimary"
                 android:text="登录"
                 android:textColor="#fff"
-                android:textSize="14dp" />
+                android:textSize="14sp"
+                tools:ignore="HardcodedText" />
 
         </LinearLayout>
     </ScrollView>

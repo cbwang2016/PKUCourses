@@ -108,8 +108,8 @@ public class DashboardAdapter extends RecyclerView.Adapter<DashboardAdapter.Dash
 
     class DashboardViewHolder extends RecyclerView.ViewHolder {
 
-        private CardView card_view_item_dashboard;
         ImageView imageView;
+        private CardView card_view_item_dashboard;
         private TextView recycler_title, recycler_sub_str, recycler_time_str;
 
         DashboardViewHolder(@NonNull View itemView) {

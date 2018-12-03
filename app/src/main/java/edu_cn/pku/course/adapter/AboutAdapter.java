@@ -59,6 +59,7 @@ public class AboutAdapter extends BaseAdapter {
         viewHolder.mSubMenuTextView.setText(mList.get(i).getSubMenu());
         return view;
     }
+
     class ViewHolder {
         TextView mMenuTextView;
         TextView mSubMenuTextView;

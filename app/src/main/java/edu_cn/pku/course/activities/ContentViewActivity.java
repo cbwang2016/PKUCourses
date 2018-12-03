@@ -182,6 +182,63 @@ public class ContentViewActivity extends AppCompatActivity implements SwipeRefre
         }
     }
 
+    private void openFile(String filePath) {
+        final Uri data = FileProvider.getUriForFile(getApplicationContext(), "edu_cn.pku.course", new File(filePath));
+        grantUriPermission(getPackageName(), data, Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        MimeTypeMap myMime = MimeTypeMap.getSingleton();
+        Intent newIntent = new Intent(Intent.ACTION_VIEW);
+        String mimeType = myMime.getMimeTypeFromExtension(fileExt(filePath));
+        newIntent.setDataAndType(data, mimeType);
+        newIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        newIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        try {
+            startActivity(newIntent);
+        } catch (ActivityNotFoundException e) {
+            Toast.makeText(getApplicationContext(), "No handler for this type of file.", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    public Drawable getIcon(String fileName) {
+        final Intent innt = new Intent(Intent.ACTION_VIEW);
+        MimeTypeMap myMime = MimeTypeMap.getSingleton();
+        String mimeType = myMime.getMimeTypeFromExtension(fileExt(fileName));
+        innt.setType(mimeType);
+        final List<ResolveInfo> matches = getPackageManager().queryIntentActivities(innt, 0);
+        if (matches.size() == 0)
+            return null;
+        return matches.get(0).loadIcon(getPackageManager());
+    }
+
+    @NonNull
+    private String fileExt(String url) {
+        if (url.contains("?")) {
+            url = url.substring(0, url.indexOf("?"));
+        }
+        if (url.lastIndexOf(".") == -1) {
+            return ".";
+        } else {
+            String ext = url.substring(url.lastIndexOf(".") + 1);
+            if (ext.contains("%")) {
+                ext = ext.substring(0, ext.indexOf("%"));
+            }
+            if (ext.contains("/")) {
+                ext = ext.substring(0, ext.indexOf("/"));
+            }
+            return ext.toLowerCase();
+        }
+    }
+
+    public void signOut() {
+        SharedPreferences sharedPreferences = getSharedPreferences("login_info", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.clear();
+        editor.apply();
+
+        Intent intent = new Intent(this, LoginActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
     /**
      * Async Task to download file from URL
      */
@@ -298,52 +355,6 @@ public class ContentViewActivity extends AppCompatActivity implements SwipeRefre
         }
     }
 
-    private void openFile(String filePath) {
-        final Uri data = FileProvider.getUriForFile(getApplicationContext(), "edu_cn.pku.course", new File(filePath));
-        grantUriPermission(getPackageName(), data, Intent.FLAG_GRANT_READ_URI_PERMISSION);
-        MimeTypeMap myMime = MimeTypeMap.getSingleton();
-        Intent newIntent = new Intent(Intent.ACTION_VIEW);
-        String mimeType = myMime.getMimeTypeFromExtension(fileExt(filePath));
-        newIntent.setDataAndType(data, mimeType);
-        newIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        newIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-        try {
-            startActivity(newIntent);
-        } catch (ActivityNotFoundException e) {
-            Toast.makeText(getApplicationContext(), "No handler for this type of file.", Toast.LENGTH_LONG).show();
-        }
-    }
-
-    public Drawable getIcon(String fileName) {
-        final Intent innt = new Intent(Intent.ACTION_VIEW);
-        MimeTypeMap myMime = MimeTypeMap.getSingleton();
-        String mimeType = myMime.getMimeTypeFromExtension(fileExt(fileName));
-        innt.setType(mimeType);
-        final List<ResolveInfo> matches = getPackageManager().queryIntentActivities(innt, 0);
-        if (matches.size() == 0)
-            return null;
-        return matches.get(0).loadIcon(getPackageManager());
-    }
-
-    @NonNull
-    private String fileExt(String url) {
-        if (url.contains("?")) {
-            url = url.substring(0, url.indexOf("?"));
-        }
-        if (url.lastIndexOf(".") == -1) {
-            return ".";
-        } else {
-            String ext = url.substring(url.lastIndexOf(".") + 1);
-            if (ext.contains("%")) {
-                ext = ext.substring(0, ext.indexOf("%"));
-            }
-            if (ext.contains("/")) {
-                ext = ext.substring(0, ext.indexOf("/"));
-            }
-            return ext.toLowerCase();
-        }
-    }
-
     @SuppressLint("StaticFieldLeak")
     private class AttachedFilesListLoadingTask extends AsyncTask<Void, Void, String> {
         AttachedFilesListLoadingTask() {
@@ -433,12 +444,12 @@ public class ContentViewActivity extends AppCompatActivity implements SwipeRefre
             this.n = n;
         }
 
-        public void setDownloaded(boolean b) {
-            downloaded = b;
-        }
-
         public boolean isDownloaded() {
             return downloaded;
+        }
+
+        public void setDownloaded(boolean b) {
+            downloaded = b;
         }
 
         public String getFileName() {
@@ -456,17 +467,5 @@ public class ContentViewActivity extends AppCompatActivity implements SwipeRefre
         private String getUrl() {
             return "http://course.pku.edu.cn" + n.getAttribute("uri");
         }
-    }
-
-
-    public void signOut() {
-        SharedPreferences sharedPreferences = getSharedPreferences("login_info", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.clear();
-        editor.apply();
-
-        Intent intent = new Intent(this, LoginActivity.class);
-        startActivity(intent);
-        finish();
     }
 }

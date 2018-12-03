@@ -39,12 +39,11 @@ import edu_cn.pku.course.fragments.AnnouncementListFragment.AnnouncementInfo;
 
 public class AnnouncementListOfEachCourseFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
 
+    private static final String CourseId = "param1";
     private AnnouncementLoadingTask mLoadingTask = null;
     private RecyclerView mRecyclerView;
     private AnnouncementListOfEachCourseAdapter adapter;
     private SwipeRefreshLayout mAnnouncementListSwipeContainer;
-    private static final String CourseId = "param1";
-
     private String courseId;
 
     public AnnouncementListOfEachCourseFragment() {
@@ -133,6 +132,21 @@ public class AnnouncementListOfEachCourseFragment extends Fragment implements Sw
         mAnnouncementListSwipeContainer.setRefreshing(show);
     }
 
+    public void signOut() throws Exception {
+        FragmentActivity fa = getActivity();
+        if (fa == null) {
+            throw new Exception("Unknown Error: Null getActivity()!");
+        }
+        SharedPreferences sharedPreferences = fa.getSharedPreferences("login_info", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.clear();
+        editor.apply();
+
+        Intent intent = new Intent(getActivity(), LoginActivity.class);
+        startActivity(intent);
+        getActivity().finish();
+    }
+
     @SuppressLint("StaticFieldLeak")
     private class AnnouncementLoadingTask extends AsyncTask<Void, Void, String> {
 
@@ -192,21 +206,6 @@ public class AnnouncementListOfEachCourseFragment extends Fragment implements Sw
             mLoadingTask = null;
             showLoading(false);
         }
-    }
-
-    public void signOut() throws Exception {
-        FragmentActivity fa = getActivity();
-        if (fa == null) {
-            throw new Exception("Unknown Error: Null getActivity()!");
-        }
-        SharedPreferences sharedPreferences = fa.getSharedPreferences("login_info", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.clear();
-        editor.apply();
-
-        Intent intent = new Intent(getActivity(), LoginActivity.class);
-        startActivity(intent);
-        getActivity().finish();
     }
 }
 
