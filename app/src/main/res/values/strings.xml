@@ -35,4 +35,6 @@
     <string name="todo">TODO</string>
     <string name="title_activity_git_web_view">GitWebViewActivity</string>
     <string name="content">content</string>
+    <string name="_123">123</string>
+    <string name="_1233">1233</string>
 </resources>

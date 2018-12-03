@@ -72,9 +72,6 @@
             android:theme="@style/AppTheme.Slidr" />
         <activity android:name=".AboutActivity" />
         <activity android:name=".AnnouncementBodyActivity" />
-        <activity
-            android:name=".GitWebViewActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>
