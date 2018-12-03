@@ -30,8 +30,8 @@
         app:layout_constraintEnd_toEndOf="@+id/grade_str"
         app:layout_constraintStart_toStartOf="@+id/grade_str"
         app:layout_constraintTop_toBottomOf="@+id/grade_str"
-        tools:text="分数"
-        tools:ignore="HardcodedText" />
+        tools:ignore="HardcodedText"
+        tools:text="分数" />
 
     <TextView
         android:id="@+id/grade_title_str"

@@ -2,10 +2,8 @@ package edu_cn.pku.course.adapter;
 
 
 import android.content.Intent;
-import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +13,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 import edu_cn.pku.course.activities.AnnouncementBodyActivity;
-import edu_cn.pku.course.activities.AnnouncementListOfEachCourseActivity;
 import edu_cn.pku.course.activities.R;
 import edu_cn.pku.course.fragments.AnnouncementListFragment;
 

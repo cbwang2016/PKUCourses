@@ -135,6 +135,21 @@ public class CourseActionFragment extends Fragment {
         mRecyclerView.scheduleLayoutAnimation();
     }
 
+    public void signOut() throws Exception {
+        FragmentActivity fa = getActivity();
+        if (fa == null) {
+            throw new Exception("Unknown Error: Null getActivity()!");
+        }
+        SharedPreferences sharedPreferences = fa.getSharedPreferences("login_info", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.clear();
+        editor.apply();
+
+        Intent intent = new Intent(getActivity(), LoginActivity.class);
+        startActivity(intent);
+        getActivity().finish();
+    }
+
     @SuppressLint("StaticFieldLeak")
     private class ActionsLoadingTask extends AsyncTask<Void, Void, String> {
 
@@ -183,21 +198,5 @@ public class CourseActionFragment extends Fragment {
             mLoadingTask = null;
             showLoading(false);
         }
-    }
-
-
-    public void signOut() throws Exception {
-        FragmentActivity fa = getActivity();
-        if (fa == null) {
-            throw new Exception("Unknown Error: Null getActivity()!");
-        }
-        SharedPreferences sharedPreferences = fa.getSharedPreferences("login_info", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.clear();
-        editor.apply();
-
-        Intent intent = new Intent(getActivity(), LoginActivity.class);
-        startActivity(intent);
-        getActivity().finish();
     }
 }

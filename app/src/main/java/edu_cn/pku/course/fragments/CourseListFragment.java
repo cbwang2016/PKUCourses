@@ -7,7 +7,6 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -48,10 +47,20 @@ public class CourseListFragment extends Fragment implements SwipeRefreshLayout.O
     private CourseListRecyclerViewAdapter adapter;
 
 
-
-
     public CourseListFragment() {
         // Required empty public constructor
+    }
+
+    /**
+     * 传递参数用的，这里没用到。
+     *
+     * @return A new instance of fragment CourseListFragment.
+     */
+    public static CourseListFragment newInstance() {
+        CourseListFragment fragment = new CourseListFragment();
+        Bundle args = new Bundle();
+        fragment.setArguments(args);
+        return fragment;
     }
 
     public void showLongPressHint() {
@@ -69,21 +78,8 @@ public class CourseListFragment extends Fragment implements SwipeRefreshLayout.O
                         editor.apply();
                     }
                 })
-                .setActionTextColor(Color.rgb(255,51,51))
                 .show();
         showLongPressHintFlag = false;
-    }
-
-    /**
-     * 传递参数用的，这里没用到。
-     *
-     * @return A new instance of fragment CourseListFragment.
-     */
-    public static CourseListFragment newInstance() {
-        CourseListFragment fragment = new CourseListFragment();
-        Bundle args = new Bundle();
-        fragment.setArguments(args);
-        return fragment;
     }
 
     @Override
@@ -122,8 +118,6 @@ public class CourseListFragment extends Fragment implements SwipeRefreshLayout.O
         mRecyclerView.setAdapter(adapter);
 
 
-
-
         // 显示Loading的小动画，并在后台读取课程列表
         showLoading(true);
         mLoadingTask = new CoursesLoadingTask();
@@ -154,6 +148,21 @@ public class CourseListFragment extends Fragment implements SwipeRefreshLayout.O
         });
 
         mCourseListSwipeContainer.setRefreshing(show);
+    }
+
+    public void signOut() throws Exception {
+        FragmentActivity fa = getActivity();
+        if (fa == null) {
+            throw new Exception("Unknown Error: Null getActivity()!");
+        }
+        SharedPreferences sharedPreferences = fa.getSharedPreferences("login_info", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.clear();
+        editor.apply();
+
+        Intent intent = new Intent(getActivity(), LoginActivity.class);
+        startActivity(intent);
+        getActivity().finish();
     }
 
     @SuppressLint("StaticFieldLeak")
@@ -281,20 +290,5 @@ public class CourseListFragment extends Fragment implements SwipeRefreshLayout.O
                 return comp.getSemesterNumber() - this.getSemesterNumber();
             return this.getCourseName().compareTo(comp.getCourseName());
         }
-    }
-
-    public void signOut() throws Exception {
-        FragmentActivity fa = getActivity();
-        if (fa == null) {
-            throw new Exception("Unknown Error: Null getActivity()!");
-        }
-        SharedPreferences sharedPreferences = fa.getSharedPreferences("login_info", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.clear();
-        editor.apply();
-
-        Intent intent = new Intent(getActivity(), LoginActivity.class);
-        startActivity(intent);
-        getActivity().finish();
     }
 }

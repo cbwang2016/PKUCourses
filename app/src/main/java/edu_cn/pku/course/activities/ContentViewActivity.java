@@ -16,7 +16,6 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.FileProvider;
@@ -166,7 +165,7 @@ public class ContentViewActivity extends AppCompatActivity implements SwipeRefre
         currentDownloadUrl = item.getUrl();
         currentDownloadFileName = item.getFileName();
         if (item.isDownloaded()) {
-            openFile(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) + File.separator + Utils.downloadFolder + currentDownloadFileName);
+            openFile(Utils.downloadFolder + currentDownloadFileName);
             return;
         }
         //check if app has permission to write to the external storage.
@@ -180,6 +179,63 @@ public class ContentViewActivity extends AppCompatActivity implements SwipeRefre
                 EasyPermissions.requestPermissions(ContentViewActivity.this, "PKU Courses是开源软件，绝不会滥用权限。请授权存储权限以下载文件。", WRITE_REQUEST_CODE, Manifest.permission.WRITE_EXTERNAL_STORAGE);
             }
         }
+    }
+
+    private void openFile(String filePath) {
+        final Uri data = FileProvider.getUriForFile(getApplicationContext(), "edu_cn.pku.course", new File(filePath));
+        grantUriPermission(getPackageName(), data, Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        MimeTypeMap myMime = MimeTypeMap.getSingleton();
+        Intent newIntent = new Intent(Intent.ACTION_VIEW);
+        String mimeType = myMime.getMimeTypeFromExtension(fileExt(filePath));
+        newIntent.setDataAndType(data, mimeType);
+        newIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        newIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        try {
+            startActivity(newIntent);
+        } catch (ActivityNotFoundException e) {
+            Toast.makeText(getApplicationContext(), "No handler for this type of file.", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    public Drawable getIcon(String fileName) {
+        final Intent innt = new Intent(Intent.ACTION_VIEW);
+        MimeTypeMap myMime = MimeTypeMap.getSingleton();
+        String mimeType = myMime.getMimeTypeFromExtension(fileExt(fileName));
+        innt.setType(mimeType);
+        final List<ResolveInfo> matches = getPackageManager().queryIntentActivities(innt, 0);
+        if (matches.size() == 0)
+            return null;
+        return matches.get(0).loadIcon(getPackageManager());
+    }
+
+    @NonNull
+    private String fileExt(String url) {
+        if (url.contains("?")) {
+            url = url.substring(0, url.indexOf("?"));
+        }
+        if (url.lastIndexOf(".") == -1) {
+            return ".";
+        } else {
+            String ext = url.substring(url.lastIndexOf(".") + 1);
+            if (ext.contains("%")) {
+                ext = ext.substring(0, ext.indexOf("%"));
+            }
+            if (ext.contains("/")) {
+                ext = ext.substring(0, ext.indexOf("/"));
+            }
+            return ext.toLowerCase();
+        }
+    }
+
+    public void signOut() {
+        SharedPreferences sharedPreferences = getSharedPreferences("login_info", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.clear();
+        editor.apply();
+
+        Intent intent = new Intent(this, LoginActivity.class);
+        startActivity(intent);
+        finish();
     }
 
     /**
@@ -224,12 +280,12 @@ public class ContentViewActivity extends AppCompatActivity implements SwipeRefre
                 int lengthOfFile = connection.getContentLength();
 
                 // input stream to read file - with 8k buffer
-                InputStream input = new BufferedInputStream(url.openStream(), 8192);
+                InputStream input = new BufferedInputStream(connection.getInputStream(), 8192);
 
                 fileName = currentDownloadFileName;
 
                 //External directory path to save file
-                folder = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) + File.separator + Utils.downloadFolder;
+                folder = Utils.downloadFolder;
 
                 //Create androiddeft folder if it does not exist
                 File directory = new File(folder);
@@ -298,52 +354,6 @@ public class ContentViewActivity extends AppCompatActivity implements SwipeRefre
         }
     }
 
-    private void openFile(String filePath) {
-        final Uri data = FileProvider.getUriForFile(getApplicationContext(), "edu_cn.pku.course", new File(filePath));
-        grantUriPermission(getPackageName(), data, Intent.FLAG_GRANT_READ_URI_PERMISSION);
-        MimeTypeMap myMime = MimeTypeMap.getSingleton();
-        Intent newIntent = new Intent(Intent.ACTION_VIEW);
-        String mimeType = myMime.getMimeTypeFromExtension(fileExt(filePath));
-        newIntent.setDataAndType(data, mimeType);
-        newIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        newIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-        try {
-            startActivity(newIntent);
-        } catch (ActivityNotFoundException e) {
-            Toast.makeText(getApplicationContext(), "No handler for this type of file.", Toast.LENGTH_LONG).show();
-        }
-    }
-
-    public Drawable getIcon(String fileName) {
-        final Intent innt = new Intent(Intent.ACTION_VIEW);
-        MimeTypeMap myMime = MimeTypeMap.getSingleton();
-        String mimeType = myMime.getMimeTypeFromExtension(fileExt(fileName));
-        innt.setType(mimeType);
-        final List<ResolveInfo> matches = getPackageManager().queryIntentActivities(innt, 0);
-        if (matches.size() == 0)
-            return null;
-        return matches.get(0).loadIcon(getPackageManager());
-    }
-
-    @NonNull
-    private String fileExt(String url) {
-        if (url.contains("?")) {
-            url = url.substring(0, url.indexOf("?"));
-        }
-        if (url.lastIndexOf(".") == -1) {
-            return ".";
-        } else {
-            String ext = url.substring(url.lastIndexOf(".") + 1);
-            if (ext.contains("%")) {
-                ext = ext.substring(0, ext.indexOf("%"));
-            }
-            if (ext.contains("/")) {
-                ext = ext.substring(0, ext.indexOf("/"));
-            }
-            return ext.toLowerCase();
-        }
-    }
-
     @SuppressLint("StaticFieldLeak")
     private class AttachedFilesListLoadingTask extends AsyncTask<Void, Void, String> {
         AttachedFilesListLoadingTask() {
@@ -385,10 +395,18 @@ public class ContentViewActivity extends AppCompatActivity implements SwipeRefre
                             content_view_time.setText(contentNode.getAttribute("datemodified"));
                         }
 
-                        if (contentNode.getAttribute("contenthandler").equals("resource/x-bb-externallink") ||
-                                contentNode.getAttribute("contenthandler").equals("resource/x-bb-assignment")) {
+                        if (contentNode.getAttribute("contenthandler").equals("resource/x-bb-externallink")) {
                             Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(contentNode.getAttribute("viewUrl")));
                             startActivity(browserIntent);
+                            finish();
+                        }
+
+                        if (contentNode.getAttribute("contenthandler").equals("resource/x-bb-assignment")) {
+                            Intent intent = new Intent(ContentViewActivity.this, WebViewActivity.class);
+                            intent.putExtra("Title", contentNode.getAttribute("title"));
+                            intent.putExtra("WebViewUrl", contentNode.getAttribute("viewUrl"));
+                            startActivity(intent);
+                            finish();
                         }
 
                         if ((contentNode).getElementsByTagName("body").getLength() > 0 && contentNode.getElementsByTagName("body").item(0).getFirstChild() != null) {
@@ -433,12 +451,12 @@ public class ContentViewActivity extends AppCompatActivity implements SwipeRefre
             this.n = n;
         }
 
-        public void setDownloaded(boolean b) {
-            downloaded = b;
-        }
-
         public boolean isDownloaded() {
             return downloaded;
+        }
+
+        public void setDownloaded(boolean b) {
+            downloaded = b;
         }
 
         public String getFileName() {
@@ -456,17 +474,5 @@ public class ContentViewActivity extends AppCompatActivity implements SwipeRefre
         private String getUrl() {
             return "http://course.pku.edu.cn" + n.getAttribute("uri");
         }
-    }
-
-
-    public void signOut() {
-        SharedPreferences sharedPreferences = getSharedPreferences("login_info", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.clear();
-        editor.apply();
-
-        Intent intent = new Intent(this, LoginActivity.class);
-        startActivity(intent);
-        finish();
     }
 }

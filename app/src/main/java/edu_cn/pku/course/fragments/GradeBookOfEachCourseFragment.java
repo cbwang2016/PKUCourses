@@ -39,12 +39,11 @@ import static edu_cn.pku.course.Utils.errorPrefix;
 
 public class GradeBookOfEachCourseFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
 
+    private static String CourseId = "Param1";
     private LoadingTask mLoadingTask = null;
     private RecyclerView mRecyclerView;
     private SwipeRefreshLayout mGradeBookSwipeContainer;
     private GradeBookListRecyclerViewAdapter adapter;
-    private static String CourseId = "Param1";
-
     private String courseId;
 
     public GradeBookOfEachCourseFragment() {
@@ -147,6 +146,53 @@ public class GradeBookOfEachCourseFragment extends Fragment implements SwipeRefr
         mRecyclerView.scheduleLayoutAnimation();
     }
 
+    public void signOut() throws Exception {
+        FragmentActivity fa = getActivity();
+        if (fa == null) {
+            throw new Exception("Unknown Error: Null getActivity()!");
+        }
+        SharedPreferences sharedPreferences = fa.getSharedPreferences("login_info", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.clear();
+        editor.apply();
+
+        Intent intent = new Intent(getActivity(), LoginActivity.class);
+        startActivity(intent);
+        getActivity().finish();
+    }
+
+    /**
+     * 为了方便管理成绩，将每个成绩的各种信息组成一个类。
+     */
+    public static class GradeInfo {
+        private Element eElement;
+
+        GradeInfo(String str) {
+            Node temp = Utils.stringToNode(str);
+            eElement = (Element) temp;
+        }
+
+        public String getGrade() {
+            return eElement.getAttribute("grade");
+        }
+
+        public String getDetailedGrade() {
+            if (eElement.getAttribute("pointspossible").equals("0.0"))
+                return eElement.getAttribute("grade") + "/" + "-";
+            return eElement.getAttribute("grade") + "/" + eElement.getAttribute("pointspossible");
+        }
+
+        public String getGradeTitle() {
+            return eElement.getAttribute("name");
+        }
+
+        public String getGradeDescription() {
+            if (eElement.getAttribute("comments") == null)
+                return "";
+            return eElement.getAttribute("comments");
+        }
+    }
+
     @SuppressLint("StaticFieldLeak")
     private class LoadingTask extends AsyncTask<Void, Void, String> {
 
@@ -199,54 +245,6 @@ public class GradeBookOfEachCourseFragment extends Fragment implements SwipeRefr
             mLoadingTask = null;
             showLoading(false);
         }
-    }
-
-
-    /**
-     * 为了方便管理成绩，将每个成绩的各种信息组成一个类。
-     */
-    public static class GradeInfo {
-        private Element eElement;
-
-        GradeInfo(String str) {
-            Node temp = Utils.stringToNode(str);
-            eElement = (Element) temp;
-        }
-
-        public String getGrade() {
-            return eElement.getAttribute("grade");
-        }
-
-        public String getDetailedGrade() {
-            if (eElement.getAttribute("pointspossible").equals("0.0"))
-                return eElement.getAttribute("grade") + "/" + "-";
-            return eElement.getAttribute("grade") + "/" + eElement.getAttribute("pointspossible");
-        }
-
-        public String getGradeTitle() {
-            return eElement.getAttribute("name");
-        }
-
-        public String getGradeDescription() {
-            if (eElement.getAttribute("comments") == null)
-                return "";
-            return eElement.getAttribute("comments");
-        }
-    }
-
-    public void signOut() throws Exception {
-        FragmentActivity fa = getActivity();
-        if (fa == null) {
-            throw new Exception("Unknown Error: Null getActivity()!");
-        }
-        SharedPreferences sharedPreferences = fa.getSharedPreferences("login_info", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.clear();
-        editor.apply();
-
-        Intent intent = new Intent(getActivity(), LoginActivity.class);
-        startActivity(intent);
-        getActivity().finish();
     }
 }
 

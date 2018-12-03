@@ -7,7 +7,6 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -51,6 +50,18 @@ public class MyGradeFragment extends Fragment implements SwipeRefreshLayout.OnRe
         // Required empty public constructor
     }
 
+    /**
+     * 传递参数用的，这里没用到。
+     *
+     * @return A new instance of fragment CourseListFragment.
+     */
+    public static MyGradeFragment newInstance() {
+        MyGradeFragment fragment = new MyGradeFragment();
+        Bundle args = new Bundle();
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     public void showLongPressHint() {
         if (mRecyclerView == null || !mRecyclerView.isAttachedToWindow()) {
             showLongPressHintFlag = true;
@@ -66,21 +77,8 @@ public class MyGradeFragment extends Fragment implements SwipeRefreshLayout.OnRe
                         editor.apply();
                     }
                 })
-                .setActionTextColor(Color.rgb(255,51,51))
                 .show();
         showLongPressHintFlag = false;
-    }
-
-    /**
-     * 传递参数用的，这里没用到。
-     *
-     * @return A new instance of fragment CourseListFragment.
-     */
-    public static MyGradeFragment newInstance() {
-        MyGradeFragment fragment = new MyGradeFragment();
-        Bundle args = new Bundle();
-        fragment.setArguments(args);
-        return fragment;
     }
 
     @Override
@@ -145,6 +143,21 @@ public class MyGradeFragment extends Fragment implements SwipeRefreshLayout.OnRe
         });
 
         mCourseListSwipeContainer.setRefreshing(show);
+    }
+
+    public void signOut() throws Exception {
+        FragmentActivity fa = getActivity();
+        if (fa == null) {
+            throw new Exception("Unknown Error: Null getActivity()!");
+        }
+        SharedPreferences sharedPreferences = fa.getSharedPreferences("login_info", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.clear();
+        editor.apply();
+
+        Intent intent = new Intent(getActivity(), LoginActivity.class);
+        startActivity(intent);
+        getActivity().finish();
     }
 
     @SuppressLint("StaticFieldLeak")
@@ -273,20 +286,5 @@ public class MyGradeFragment extends Fragment implements SwipeRefreshLayout.OnRe
                 return comp.getSemesterNumber() - this.getSemesterNumber();
             return this.getCourseName().compareTo(comp.getCourseName());
         }
-    }
-
-    public void signOut() throws Exception {
-        FragmentActivity fa = getActivity();
-        if (fa == null) {
-            throw new Exception("Unknown Error: Null getActivity()!");
-        }
-        SharedPreferences sharedPreferences = fa.getSharedPreferences("login_info", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.clear();
-        editor.apply();
-
-        Intent intent = new Intent(getActivity(), LoginActivity.class);
-        startActivity(intent);
-        getActivity().finish();
     }
 }
