@@ -33,4 +33,6 @@
     <string name="title_activity_main2">Main2Activity</string>
     <string name="this_is_text">this is text</string>
     <string name="todo">TODO</string>
+    <string name="title_activity_git_web_view">GitWebViewActivity</string>
+    <string name="content">content</string>
 </resources>
