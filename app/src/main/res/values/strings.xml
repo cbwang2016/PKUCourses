@@ -29,4 +29,8 @@
     <string name="title_activity_grade_book_of_each_course">" "</string>
     <string name="title_activity_web_view">WebViewActivity</string>
     <string name="title_activity_announcement">AnnouncementActivity</string>
+    <string name="textview">TextView</string>
+    <string name="title_activity_main2">Main2Activity</string>
+    <string name="this_is_text">this is text</string>
+    <string name="todo">TODO</string>
 </resources>
