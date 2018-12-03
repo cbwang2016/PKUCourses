@@ -11,6 +11,7 @@ import org.w3c.dom.Node;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringReader;
@@ -39,8 +40,8 @@ import edu_cn.pku.course.activities.SplashActivity;
 public class Utils {
     public static final String errorPrefix = "Error: ";
     public static final String errorPasswordIncorrect = "Password Incorrect";
-    public static final String errorSubstrings = "error when extracting substrings";
-    public static final String downloadFolder = "PKU_Courses/";
+    private static final String errorSubstrings = "error when extracting substrings";
+    public static final String downloadFolder = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) + File.separator + "PKU_Courses/";
 
     private static final Context applicationContext = SplashActivity.getContextOfApplication();
 

@@ -16,7 +16,6 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.FileProvider;
@@ -166,7 +165,7 @@ public class ContentViewActivity extends AppCompatActivity implements SwipeRefre
         currentDownloadUrl = item.getUrl();
         currentDownloadFileName = item.getFileName();
         if (item.isDownloaded()) {
-            openFile(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) + File.separator + Utils.downloadFolder + currentDownloadFileName);
+            openFile(Utils.downloadFolder + currentDownloadFileName);
             return;
         }
         //check if app has permission to write to the external storage.
@@ -286,7 +285,7 @@ public class ContentViewActivity extends AppCompatActivity implements SwipeRefre
                 fileName = currentDownloadFileName;
 
                 //External directory path to save file
-                folder = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) + File.separator + Utils.downloadFolder;
+                folder = Utils.downloadFolder;
 
                 //Create androiddeft folder if it does not exist
                 File directory = new File(folder);
@@ -399,6 +398,7 @@ public class ContentViewActivity extends AppCompatActivity implements SwipeRefre
                         if (contentNode.getAttribute("contenthandler").equals("resource/x-bb-externallink")) {
                             Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(contentNode.getAttribute("viewUrl")));
                             startActivity(browserIntent);
+                            finish();
                         }
 
                         if (contentNode.getAttribute("contenthandler").equals("resource/x-bb-assignment")) {
@@ -406,6 +406,7 @@ public class ContentViewActivity extends AppCompatActivity implements SwipeRefre
                             intent.putExtra("Title", contentNode.getAttribute("title"));
                             intent.putExtra("WebViewUrl", contentNode.getAttribute("viewUrl"));
                             startActivity(intent);
+                            finish();
                         }
 
                         if ((contentNode).getElementsByTagName("body").getLength() > 0 && contentNode.getElementsByTagName("body").item(0).getFirstChild() != null) {
