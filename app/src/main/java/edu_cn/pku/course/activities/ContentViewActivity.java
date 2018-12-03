@@ -200,7 +200,7 @@ public class ContentViewActivity extends AppCompatActivity implements SwipeRefre
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            this.progressDialog = new ProgressDialog(ContentViewActivity.this,R.style.AlertDialogTheme);
+            this.progressDialog = new ProgressDialog(ContentViewActivity.this, R.style.AlertDialogTheme);
             this.progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
             this.progressDialog.setCancelable(false);
             this.progressDialog.show();
@@ -385,7 +385,8 @@ public class ContentViewActivity extends AppCompatActivity implements SwipeRefre
                             content_view_time.setText(contentNode.getAttribute("datemodified"));
                         }
 
-                        if (contentNode.getAttribute("contenthandler").equals("resource/x-bb-externallink")) {
+                        if (contentNode.getAttribute("contenthandler").equals("resource/x-bb-externallink") ||
+                                contentNode.getAttribute("contenthandler").equals("resource/x-bb-assignment")) {
                             Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(contentNode.getAttribute("viewUrl")));
                             startActivity(browserIntent);
                         }
