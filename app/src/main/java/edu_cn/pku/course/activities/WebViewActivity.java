@@ -303,6 +303,7 @@ public class WebViewActivity extends AppCompatActivity implements SwipeRefreshLa
             Toast.makeText(getApplicationContext(), "File downloaded at: " + message, Toast.LENGTH_LONG).show();
 
             openFile(message);
+            finish();
         }
     }
 }

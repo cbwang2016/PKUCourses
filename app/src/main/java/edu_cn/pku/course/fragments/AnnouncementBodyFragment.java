@@ -78,7 +78,7 @@ public class AnnouncementBodyFragment extends Fragment {
             announcementId = "";
             return linearLayout;
         }
-        adapter = new AnnouncementBodyAdapter(new ArrayList<AnnouncementListFragment.AnnouncementInfo>());
+        adapter = new AnnouncementBodyAdapter(new ArrayList<AnnouncementListFragment.AnnouncementInfo>(), this);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mRecyclerView.setAdapter(adapter);
         announcementId = getActivity().getIntent().getStringExtra("AnnouncementId");
