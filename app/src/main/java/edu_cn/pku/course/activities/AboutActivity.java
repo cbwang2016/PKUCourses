@@ -5,11 +5,15 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
+
+import com.r0adkll.slidr.Slidr;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +29,10 @@ public class AboutActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_about);
         setTitle("About");
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
         getMenuList();
 
         ListView listView = findViewById(R.id.about_listView);
@@ -37,7 +45,7 @@ public class AboutActivity extends AppCompatActivity {
             @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                switch (i){
+                switch (i) {
                     case 0:
                         // “问题反馈”：发送邮件
                         Intent j = new Intent(Intent.ACTION_SEND);
@@ -62,6 +70,18 @@ public class AboutActivity extends AppCompatActivity {
                 }
             }
         });
+        Slidr.attach(this);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+        }
+
+        return (super.onOptionsItemSelected(item));
     }
 
     /**
@@ -74,7 +94,7 @@ public class AboutActivity extends AppCompatActivity {
         mList.add(new AboutMenu(R.mipmap.icon_member_980, "开发人员", "Developer", "·wcb\n      djsflj\n      jfa;fkj\n      klhf\n      肽聚了\n·sjy\n·hjx\n·zrb"));
     }
 
-    public class AboutMenu{
+    public class AboutMenu {
         private int imageId;
         private String menu;
         private String subMenu;
@@ -87,14 +107,15 @@ public class AboutActivity extends AppCompatActivity {
             this.content = content;
         }
 
-        public String getMenu(){
+        public String getMenu() {
             return menu;
         }
 
         public String getSubMenu() {
             return subMenu;
         }
-        public int getImageId(){
+
+        public int getImageId() {
             return imageId;
         }
 
