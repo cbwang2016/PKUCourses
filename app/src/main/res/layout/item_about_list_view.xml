@@ -1,60 +1,72 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="horizontal"
+    app:cardBackgroundColor="@color/colorAccent"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="10dp"
+    app:cardUseCompatPadding="true"
+    app:contentPadding="10dp"
     tools:ignore="ExtraText">
-
-    <ImageView
-        android:id="@+id/item_about_image"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="5dp"
-        android:layout_marginLeft="5dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginBottom="5dp"
-        android:layout_weight="1"
-        android:contentDescription="@string/todo"
-        app:srcCompat="@mipmap/icon_github_logo_1024" />
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginLeft="10dp"
-        android:layout_weight="10"
-        android:orientation="vertical">
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        tools:ignore="ExtraText">
 
-        <TextView
-            android:id="@+id/item_about_text"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_marginTop="10dp"
-            android:layout_weight="0"
-            android:gravity="left|center_vertical"
-            android:text="@string/this_is_text"
-            android:textAllCaps="false"
-            android:textSize="22sp"
-            android:textStyle="bold"
-            tools:ignore="NestedWeights,RtlHardcoded" />
+        <ImageView
+            android:id="@+id/item_about_image"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:layout_weight="1"
+            android:contentDescription="@string/todo"
+            app:srcCompat="@mipmap/icon_github_logo_1024" />
 
-        <TextView
-            android:id="@+id/item_about_sub_menu_text"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="0"
-            android:textSize="14sp"
-            tools:ignore="HardcodedText" />
+            android:layout_marginStart="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_weight="10"
+            android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/item_about_content_text"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="0"
-            android:text="@string/content"
-            android:textSize="18sp" />
+            <TextView
+                android:id="@+id/item_about_text"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginTop="10dp"
+                android:layout_weight="0"
+                android:gravity="left|center_vertical"
+                android:text="@string/this_is_text"
+                android:textAllCaps="false"
+                android:textSize="22sp"
+                android:textStyle="bold"
+                tools:ignore="NestedWeights,RtlHardcoded" />
+
+            <TextView
+                android:id="@+id/item_about_sub_menu_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="0"
+                android:textSize="14sp"
+                tools:ignore="HardcodedText" />
+
+            <TextView
+                android:id="@+id/item_about_content_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="0"
+                android:text="@string/content"
+                android:textSize="18sp" />
+        </LinearLayout>
+
     </LinearLayout>
-
-</LinearLayout>
+</android.support.v7.widget.CardView>
