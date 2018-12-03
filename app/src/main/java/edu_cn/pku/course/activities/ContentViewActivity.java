@@ -396,10 +396,16 @@ public class ContentViewActivity extends AppCompatActivity implements SwipeRefre
                             content_view_time.setText(contentNode.getAttribute("datemodified"));
                         }
 
-                        if (contentNode.getAttribute("contenthandler").equals("resource/x-bb-externallink") ||
-                                contentNode.getAttribute("contenthandler").equals("resource/x-bb-assignment")) {
+                        if (contentNode.getAttribute("contenthandler").equals("resource/x-bb-externallink")) {
                             Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(contentNode.getAttribute("viewUrl")));
                             startActivity(browserIntent);
+                        }
+
+                        if (contentNode.getAttribute("contenthandler").equals("resource/x-bb-assignment")) {
+                            Intent intent = new Intent(ContentViewActivity.this, WebViewActivity.class);
+                            intent.putExtra("Title", contentNode.getAttribute("title"));
+                            intent.putExtra("WebViewUrl", contentNode.getAttribute("viewUrl"));
+                            startActivity(intent);
                         }
 
                         if ((contentNode).getElementsByTagName("body").getLength() > 0 && contentNode.getElementsByTagName("body").item(0).getFirstChild() != null) {
