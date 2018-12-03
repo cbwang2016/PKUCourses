@@ -7,7 +7,6 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -78,7 +77,6 @@ public class MyGradeFragment extends Fragment implements SwipeRefreshLayout.OnRe
                         editor.apply();
                     }
                 })
-                .setActionTextColor(Color.rgb(255, 51, 51))
                 .show();
         showLongPressHintFlag = false;
     }

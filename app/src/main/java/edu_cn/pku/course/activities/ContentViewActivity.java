@@ -280,7 +280,7 @@ public class ContentViewActivity extends AppCompatActivity implements SwipeRefre
                 int lengthOfFile = connection.getContentLength();
 
                 // input stream to read file - with 8k buffer
-                InputStream input = new BufferedInputStream(url.openStream(), 8192);
+                InputStream input = new BufferedInputStream(connection.getInputStream(), 8192);
 
                 fileName = currentDownloadFileName;
 
