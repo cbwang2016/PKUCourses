@@ -70,7 +70,7 @@ public class ContentViewAdapter extends RecyclerView.Adapter<ContentViewAdapter.
             holder.card_view_item_content.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
-                    new AlertDialog.Builder(mContext,R.style.AlertDialogTheme)
+                    new AlertDialog.Builder(mContext, R.style.AlertDialogTheme)
                             .setMessage("您是否想删除此文件（" + list.get(holder.getAdapterPosition()).getFileName() + "）的本地缓存？")
                             .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int whichButton) {

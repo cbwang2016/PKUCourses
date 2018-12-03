@@ -1,15 +1,19 @@
 package edu_cn.pku.course.activities;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.Switch;
 import android.widget.Toast;
+
+import com.r0adkll.slidr.Slidr;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,14 +29,19 @@ public class AboutActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_about);
         setTitle("About");
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
         getMenuList();
 
-        ListView listView = (ListView) findViewById(R.id.about_listView);
+        ListView listView = findViewById(R.id.about_listView);
 
         final AboutAdapter adapter = new AboutAdapter(AboutActivity.this, mList);
         listView.setAdapter(adapter);
         //ListView item的点击事件
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @SuppressLint("Assert")
             @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -48,27 +57,41 @@ public class AboutActivity extends AppCompatActivity {
                         startActivity(Intent.createChooser(j, "Select email application."));
                         break;
                     case 1:
-                        startActivity(new Intent(AboutActivity.this, GitWebViewActivity.class));
+                        //Toast.makeText(AboutActivity.this, "Click item" + 8, Toast.LENGTH_SHORT).show();
+                        Intent zoom = new Intent(getBaseContext(), GitWebViewActivity.class);
+                        startActivity(zoom);
                         break;
                     case 2:
-                        Toast.makeText(AboutActivity.this, "Click item" + 8, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(AboutActivity.this, "别点了，再点功能也不会多的！\n还是给点反馈来的实在。", Toast.LENGTH_SHORT).show();
                         break;
                     case 3:
-                        Toast.makeText(AboutActivity.this, "Click item" + 7, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(AboutActivity.this, "Bloom！\n这里有四只狗\n有意向可以选购", Toast.LENGTH_SHORT).show();
                         break;
                 }
             }
         });
+        Slidr.attach(this);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+        }
+
+        return (super.onOptionsItemSelected(item));
     }
 
     /**
      * 初始化数据
      */
     private void getMenuList() {
-        mList.add(new AboutMenu(R.mipmap.icon_email_600, "问题反馈", "Select email application to send an email to the developer.", ""));
-        mList.add(new AboutMenu(R.mipmap.icon_github_logo_1024, "Github Page", "Open source code in github.", ""));
-        mList.add(new AboutMenu(R.mipmap.icon_function_768, "功能介绍", "Features", "还没想好怎么写"));
-        mList.add(new AboutMenu(R.mipmap.icon_member_980, "开发人员", "Developer", ""));
+        mList.add(new AboutMenu(R.mipmap.icon_email_600, "问题反馈", "Select email application to send an email to the developer.", null));
+        mList.add(new AboutMenu(R.mipmap.icon_github_logo_1024, "Github Page", "Open source code on GitHub.", null));
+        mList.add(new AboutMenu(R.mipmap.icon_function_768, "功能介绍", "Features", "·功能一\n      blabla\n·功能二\n      blublu"));
+        mList.add(new AboutMenu(R.mipmap.icon_member_980, "开发人员", "Developer", "·wcb\n      djsflj\n      jfa;fkj\n      klhf\n      肽聚了\n·sjy\n·hjx\n·zrb"));
     }
 
     public class AboutMenu {

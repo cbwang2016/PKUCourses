@@ -34,12 +34,11 @@ import edu_cn.pku.course.adapter.AnnouncementBodyAdapter;
 
 public class AnnouncementBodyFragment extends Fragment {
 
+    private static final String AnnouncementId = "param1";
     private AnnouncementBodyLoadingTask mLoadingTask = null;
     private RecyclerView mRecyclerView;
     private SwipeRefreshLayout mAnnouncementBodySwipeContainer;
     private AnnouncementBodyAdapter adapter;
-    private static final String AnnouncementId = "param1";
-
     private String announcementId;
 
     public AnnouncementBodyFragment() {
@@ -109,6 +108,20 @@ public class AnnouncementBodyFragment extends Fragment {
         mAnnouncementBodySwipeContainer.setRefreshing(show);
     }
 
+    public void signOut() throws Exception {
+        FragmentActivity fa = getActivity();
+        if (fa == null) {
+            throw new Exception("Unknown Error: Null getActivity()!");
+        }
+        SharedPreferences sharedPreferences = fa.getSharedPreferences("login_info", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.clear();
+        editor.apply();
+
+        Intent intent = new Intent(getActivity(), LoginActivity.class);
+        startActivity(intent);
+        getActivity().finish();
+    }
 
     @SuppressLint("StaticFieldLeak")
     private class AnnouncementBodyLoadingTask extends AsyncTask<Void, Void, String> {
@@ -156,21 +169,6 @@ public class AnnouncementBodyFragment extends Fragment {
             mLoadingTask = null;
             showLoading(false);
         }
-    }
-
-    public void signOut() throws Exception {
-        FragmentActivity fa = getActivity();
-        if (fa == null) {
-            throw new Exception("Unknown Error: Null getActivity()!");
-        }
-        SharedPreferences sharedPreferences = fa.getSharedPreferences("login_info", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.clear();
-        editor.apply();
-
-        Intent intent = new Intent(getActivity(), LoginActivity.class);
-        startActivity(intent);
-        getActivity().finish();
     }
 
 }

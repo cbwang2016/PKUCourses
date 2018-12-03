@@ -70,11 +70,14 @@
         <activity
             android:name=".ContentViewActivity"
             android:theme="@style/AppTheme.Slidr" />
-        <activity android:name=".AboutActivity" />
-        <activity android:name=".AnnouncementBodyActivity" />
+        <activity
+            android:name=".AboutActivity"
+            android:theme="@style/AppTheme.Slidr" />
+        <activity
+            android:name=".AnnouncementBodyActivity"
+            android:theme="@style/AppTheme.Slidr" />
         <activity
             android:name=".GitWebViewActivity"
-            android:label="@string/title_activity_git_web_view"
             android:theme="@style/AppTheme.NoActionBar" />
     </application>
 

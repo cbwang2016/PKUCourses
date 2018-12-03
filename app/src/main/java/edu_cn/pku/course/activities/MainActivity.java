@@ -33,10 +33,35 @@ import edu_cn.pku.course.fragments.SpareClassroomsFragment;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-    private ViewPager view_pager_main;
     NavigationView navigationView;
     CourseListFragment courseListFragment;
     MyGradeFragment myGradeFragment;
+    private ViewPager view_pager_main;
+    private ViewPager.OnPageChangeListener pageChangeListener = new ViewPager.OnPageChangeListener() {
+        @Override
+        public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+        }
+
+        @Override
+        public void onPageSelected(int position) {
+            // 设置屏幕左上角的标题、以及左侧抽屉栏中被选中的对象
+            setTitle(navigationView.getMenu().getItem(position).getTitle());
+            navigationView.getMenu().getItem(position).setChecked(true);
+
+            if (checkLongPressHint()) {
+                if (position == 1)
+                    courseListFragment.showLongPressHint();
+                else if (position == 3)
+                    myGradeFragment.showLongPressHint();
+            }
+        }
+
+        @Override
+        public void onPageScrollStateChanged(int state) {
+
+        }
+    };
 
     @SuppressLint("CutPasteId")
     @Override
@@ -92,32 +117,6 @@ public class MainActivity extends AppCompatActivity
         SharedPreferences sharedPreferences = getSharedPreferences("longPressHint", Context.MODE_PRIVATE);
         return !sharedPreferences.getBoolean("showed", false);
     }
-
-    private ViewPager.OnPageChangeListener pageChangeListener = new ViewPager.OnPageChangeListener() {
-        @Override
-        public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-        }
-
-        @Override
-        public void onPageSelected(int position) {
-            // 设置屏幕左上角的标题、以及左侧抽屉栏中被选中的对象
-            setTitle(navigationView.getMenu().getItem(position).getTitle());
-            navigationView.getMenu().getItem(position).setChecked(true);
-
-            if (checkLongPressHint()) {
-                if (position == 1)
-                    courseListFragment.showLongPressHint();
-                else if (position == 3)
-                    myGradeFragment.showLongPressHint();
-            }
-        }
-
-        @Override
-        public void onPageScrollStateChanged(int state) {
-
-        }
-    };
 
     @Override
     public void onBackPressed() {
@@ -184,14 +183,14 @@ public class MainActivity extends AppCompatActivity
                 startActivity(intentAbout);
                 break;
             case R.id.nav_signout:
-                AlertDialog.Builder builder = new AlertDialog.Builder(this,R.style.AlertDialogTheme);
-                        builder.setMessage("你确定要注销吗？");
-                        builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int whichButton) {
-                                signOut();
-                            }
-                        });
-                        builder.setNegativeButton("取消", null).show();
+                AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.AlertDialogTheme);
+                builder.setMessage("你确定要注销吗？");
+                builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        signOut();
+                    }
+                });
+                builder.setNegativeButton("取消", null).show();
                 break;
         }
 

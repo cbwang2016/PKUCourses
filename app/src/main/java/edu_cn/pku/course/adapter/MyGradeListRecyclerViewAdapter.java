@@ -17,8 +17,6 @@ import java.util.Set;
 
 import edu_cn.pku.course.activities.GradeBookOfEachCourseActivity;
 import edu_cn.pku.course.activities.R;
-import edu_cn.pku.course.fragments.CourseListFragment;
-import edu_cn.pku.course.fragments.GradeBookOfEachCourseFragment;
 import edu_cn.pku.course.fragments.MyGradeFragment;
 
 // * Created by zhang on 2016.08.07.

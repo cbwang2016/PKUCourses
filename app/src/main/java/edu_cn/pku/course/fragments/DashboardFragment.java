@@ -108,70 +108,19 @@ public class DashboardFragment extends Fragment implements SwipeRefreshLayout.On
         mSwipeContainer.setRefreshing(show);
     }
 
-    @SuppressLint("StaticFieldLeak")
-    private class DashboardLoadingTask extends AsyncTask<Void, Void, String> {
-        DashboardLoadingTask() {
+    public void signOut() throws Exception {
+        FragmentActivity fa = getActivity();
+        if (fa == null) {
+            throw new Exception("Unknown Error: Null getActivity()!");
         }
+        SharedPreferences sharedPreferences = fa.getSharedPreferences("login_info", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.clear();
+        editor.apply();
 
-        @Override
-        protected String doInBackground(Void... params) {
-            return Utils.courseHttpGetRequest("http://course.pku.edu.cn/webapps/Bb-mobile-bb_bb60/dashboard?course_type=ALL&with_notifications=true");
-        }
-
-        @Override
-        protected void onPostExecute(final String str) {
-            mLoadingTask = null;
-            showLoading(false);
-
-            // 出现了错误
-            if (str.startsWith(Utils.errorPrefix)) {
-                if (str.equals(Utils.errorPrefix + Utils.errorPasswordIncorrect)) {
-                    // 密码错误
-                    try {
-                        signOut();
-                    } catch (Exception e) {
-                        Snackbar.make(mRecyclerView, e.getMessage(), Snackbar.LENGTH_SHORT).show();
-                    }
-                } else {
-                    // 其他网络错误
-                    Snackbar.make(mRecyclerView, str, Snackbar.LENGTH_SHORT).show();
-                }
-            } else {
-
-                FragmentActivity fa = getActivity();
-                if (fa == null) {
-                    return;
-                }
-                Node rootNode = Utils.stringToNode(str);
-                if (rootNode != null) {
-                    ArrayList<DashboardItem> item_list = new ArrayList<>();
-                    NodeList nList = rootNode.getLastChild().getChildNodes();
-                    NodeList nCoursesList = rootNode.getFirstChild().getChildNodes();
-                    for (int temp = 0; temp < nList.getLength(); temp++) {
-                        Element feed_item = (Element) nList.item(temp);
-                        if (feed_item.hasAttribute("contentid") || feed_item.getAttribute("type").equals("ANNOUNCEMENT")) {
-                            for (int temp2 = 0; temp2 < nCoursesList.getLength(); temp2++) {
-                                Element course_item = (Element) nCoursesList.item(temp2);
-                                if (course_item.getAttribute("bbid").equals(feed_item.getAttribute("courseid")))
-                                    feed_item.setAttribute("courseName", course_item.getAttribute("name").split("\\([0-9]")[0]);
-                            }
-                            item_list.add(new DashboardItem(feed_item));
-                        }
-                    }
-
-                    adapter.updateList(item_list);
-                    // 显示课程列表的fancy的动画
-                    mRecyclerView.scheduleLayoutAnimation();
-                }
-            }
-        }
-
-        // 没什么用的函数
-        @Override
-        protected void onCancelled() {
-            mLoadingTask = null;
-            showLoading(false);
-        }
+        Intent intent = new Intent(getActivity(), LoginActivity.class);
+        startActivity(intent);
+        getActivity().finish();
     }
 
     private static class RelativeDateFormat {
@@ -243,6 +192,72 @@ public class DashboardFragment extends Fragment implements SwipeRefreshLayout.On
         }
     }
 
+    @SuppressLint("StaticFieldLeak")
+    private class DashboardLoadingTask extends AsyncTask<Void, Void, String> {
+        DashboardLoadingTask() {
+        }
+
+        @Override
+        protected String doInBackground(Void... params) {
+            return Utils.courseHttpGetRequest("http://course.pku.edu.cn/webapps/Bb-mobile-bb_bb60/dashboard?course_type=ALL&with_notifications=true");
+        }
+
+        @Override
+        protected void onPostExecute(final String str) {
+            mLoadingTask = null;
+            showLoading(false);
+
+            // 出现了错误
+            if (str.startsWith(Utils.errorPrefix)) {
+                if (str.equals(Utils.errorPrefix + Utils.errorPasswordIncorrect)) {
+                    // 密码错误
+                    try {
+                        signOut();
+                    } catch (Exception e) {
+                        Snackbar.make(mRecyclerView, e.getMessage(), Snackbar.LENGTH_SHORT).show();
+                    }
+                } else {
+                    // 其他网络错误
+                    Snackbar.make(mRecyclerView, str, Snackbar.LENGTH_SHORT).show();
+                }
+            } else {
+
+                FragmentActivity fa = getActivity();
+                if (fa == null) {
+                    return;
+                }
+                Node rootNode = Utils.stringToNode(str);
+                if (rootNode != null) {
+                    ArrayList<DashboardItem> item_list = new ArrayList<>();
+                    NodeList nList = rootNode.getLastChild().getChildNodes();
+                    NodeList nCoursesList = rootNode.getFirstChild().getChildNodes();
+                    for (int temp = 0; temp < nList.getLength(); temp++) {
+                        Element feed_item = (Element) nList.item(temp);
+                        if (feed_item.hasAttribute("contentid") || feed_item.getAttribute("type").equals("ANNOUNCEMENT")) {
+                            for (int temp2 = 0; temp2 < nCoursesList.getLength(); temp2++) {
+                                Element course_item = (Element) nCoursesList.item(temp2);
+                                if (course_item.getAttribute("bbid").equals(feed_item.getAttribute("courseid")))
+                                    feed_item.setAttribute("courseName", course_item.getAttribute("name").split("\\([0-9]")[0]);
+                            }
+                            item_list.add(new DashboardItem(feed_item));
+                        }
+                    }
+
+                    adapter.updateList(item_list);
+                    // 显示课程列表的fancy的动画
+                    mRecyclerView.scheduleLayoutAnimation();
+                }
+            }
+        }
+
+        // 没什么用的函数
+        @Override
+        protected void onCancelled() {
+            mLoadingTask = null;
+            showLoading(false);
+        }
+    }
+
     public class DashboardItem implements Comparable<DashboardItem> {
         Element n;
 
@@ -300,20 +315,5 @@ public class DashboardFragment extends Fragment implements SwipeRefreshLayout.On
             }
             return 0;
         }
-    }
-
-    public void signOut() throws Exception {
-        FragmentActivity fa = getActivity();
-        if (fa == null) {
-            throw new Exception("Unknown Error: Null getActivity()!");
-        }
-        SharedPreferences sharedPreferences = fa.getSharedPreferences("login_info", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.clear();
-        editor.apply();
-
-        Intent intent = new Intent(getActivity(), LoginActivity.class);
-        startActivity(intent);
-        getActivity().finish();
     }
 }

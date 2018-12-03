@@ -32,13 +32,13 @@ public class GitWebViewActivity extends AppCompatActivity implements SwipeRefres
         mWebView = findViewById(R.id.git_web_view);
 
         SharedPreferences sharedPreferences = getSharedPreferences("login_info", Context.MODE_PRIVATE);
-        String session_id = sharedPreferences.getString("session_id", null);
+        sharedPreferences.getString("session_id", null);
 
         CookieSyncManager cookieSyncManager = CookieSyncManager.createInstance(mWebView.getContext());
         CookieManager cookieManager = CookieManager.getInstance();
         cookieManager.setAcceptCookie(true);
         cookieManager.removeSessionCookie();
-        cookieManager.setCookie("https://github.com/cbwang2016/PKUCourses", "cbwang2016/PKUCourses");
+        cookieManager.setCookie("https://github.com/", "cbwang2016/PKUCourses");
         cookieSyncManager.sync();
 
         setTitle("Source Code of PKUCourses");
@@ -85,7 +85,7 @@ public class GitWebViewActivity extends AppCompatActivity implements SwipeRefres
             }
         });
         mSwipeContainer.setRefreshing(true);
-        mWebView.loadUrl("http://course.pku.edu.cn" + getIntent().getStringExtra("WebViewUrl"));
+        mWebView.loadUrl("https://github.com/cbwang2016/PKUCourses");
     }
 
     @Override
