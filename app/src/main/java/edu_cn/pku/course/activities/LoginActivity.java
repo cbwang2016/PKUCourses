@@ -76,6 +76,15 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
+        final Button mqueryButton = findViewById(R.id.query_button);
+        mqueryButton.setOnClickListener(new OnClickListener() {
+            @SuppressLint("SetTextI18n")
+            @Override
+            public void onClick(View v) {
+                Utils.showPrivacyPolicyDialog(v.getContext());
+            }
+        });
+
         // 给按钮studentid_sign_in_button增加事件监听函数，onClick事件发生时就执行attemptLogin。
         Button mstudentidSignInButton = findViewById(R.id.studentid_sign_in_button);
         mstudentidSignInButton.setOnClickListener(new OnClickListener() {

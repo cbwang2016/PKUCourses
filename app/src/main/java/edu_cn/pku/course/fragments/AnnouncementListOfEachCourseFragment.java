@@ -86,6 +86,7 @@ public class AnnouncementListOfEachCourseFragment extends Fragment implements Sw
         mAnnouncementListSwipeContainer.setLayoutAnimation(animation);
         // 设置刷新的监听类为此类（监听函数onRefresh）
         mAnnouncementListSwipeContainer.setOnRefreshListener(this);
+        mAnnouncementListSwipeContainer.setColorSchemeColors(getResources().getColor(R.color.colorPrimary), getResources().getColor(R.color.colorAccent));
 
         FragmentActivity fa = getActivity();
         // 为了消除编译器Warning，需要判断一下是不是null，其实这基本上不可能出现null
@@ -194,9 +195,14 @@ public class AnnouncementListOfEachCourseFragment extends Fragment implements Sw
                     announcement_list.add(new AnnouncementInfo(n));
                 }
 
-                adapter.updateList(announcement_list);
-                // 显示课程列表的fancy的动画
-                mRecyclerView.scheduleLayoutAnimation();
+                if (nList.size() == 0) {
+                    if (mRecyclerView.isAttachedToWindow())
+                        Snackbar.make(mRecyclerView, "看起来这门课没有通知...", Snackbar.LENGTH_SHORT).show();
+                } else {
+                    adapter.updateList(announcement_list);
+                    // 显示课程列表的fancy的动画
+                    mRecyclerView.scheduleLayoutAnimation();
+                }
             }
         }
 

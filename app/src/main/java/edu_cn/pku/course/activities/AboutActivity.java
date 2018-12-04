@@ -2,6 +2,7 @@ package edu_cn.pku.course.activities;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
@@ -57,9 +58,9 @@ public class AboutActivity extends AppCompatActivity {
                         startActivity(Intent.createChooser(j, "Select email application."));
                         break;
                     case 1:
-                        //Toast.makeText(AboutActivity.this, "Click item" + 8, Toast.LENGTH_SHORT).show();
-                        Intent zoom = new Intent(getBaseContext(), GitWebViewActivity.class);
-                        startActivity(zoom);
+                        Uri uri = Uri.parse("https://github.com/cbwang2016/PKUCourses");
+                        Intent it = new Intent(Intent.ACTION_VIEW, uri);
+                        startActivity(it);
                         break;
                     case 2:
                         Toast.makeText(AboutActivity.this, "别点了，再点功能也不会多的！\n还是给点反馈来的实在。", Toast.LENGTH_SHORT).show();
@@ -88,10 +89,14 @@ public class AboutActivity extends AppCompatActivity {
      * 初始化数据
      */
     private void getMenuList() {
-        mList.add(new AboutMenu(R.mipmap.icon_email_600, "问题反馈", "Select email application to send an email to the developer.", null));
-        mList.add(new AboutMenu(R.mipmap.icon_github_logo_1024, "Github Page", "Open source code on GitHub.", null));
-        mList.add(new AboutMenu(R.mipmap.icon_function_768, "功能介绍", "Features", "·功能一\n      blabla\n·功能二\n      blublu"));
-        mList.add(new AboutMenu(R.mipmap.icon_member_980, "开发人员", "Developer", "·wcb\n      djsflj\n      jfa;fkj\n      klhf\n      肽聚了\n·sjy\n·hjx\n·zrb"));
+        mList.add(new AboutMenu(R.mipmap.icon_email_600,"问题反馈","Select email application to send an email to the developer.",null));
+        mList.add(new AboutMenu(R.mipmap.icon_github_logo_1024,"Github Page","Open source code on GitHub.",null));
+        mList.add(new AboutMenu(R.mipmap.icon_function_768,"功能介绍","Features","·功能介绍\n"));
+        mList.add(new AboutMenu(R.mipmap.icon_member_980,"开发人员","Developer","本App由四个疯人院成员开发制作：\n" +
+                                                                                                           "·叶林楠\n    主要负责人\n"+
+                                                                                                           "·Yinian\n    策划\n"+
+                                                                                                           "·杨老师歌迷\n    打杂一号\n"+
+                                                                                                           "·丣覭\n    打杂二号\n"));
     }
 
     public class AboutMenu {

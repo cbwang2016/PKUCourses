@@ -16,7 +16,6 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.FileProvider;
@@ -29,6 +28,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.webkit.MimeTypeMap;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -98,6 +98,7 @@ public class ContentViewActivity extends AppCompatActivity implements SwipeRefre
         mRecyclerView.setAdapter(adapter);
 
         mSwipeContainer.setOnRefreshListener(this);
+        mSwipeContainer.setColorSchemeColors(getResources().getColor(R.color.colorPrimary), getResources().getColor(R.color.colorAccent));
 
         showLoading(true);
         mLoadingTask = new AttachedFilesListLoadingTask();
@@ -166,7 +167,7 @@ public class ContentViewActivity extends AppCompatActivity implements SwipeRefre
         currentDownloadUrl = item.getUrl();
         currentDownloadFileName = item.getFileName();
         if (item.isDownloaded()) {
-            openFile(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) + File.separator + Utils.downloadFolder + currentDownloadFileName);
+            openFile(Utils.downloadFolder + currentDownloadFileName);
             return;
         }
         //check if app has permission to write to the external storage.
@@ -281,12 +282,12 @@ public class ContentViewActivity extends AppCompatActivity implements SwipeRefre
                 int lengthOfFile = connection.getContentLength();
 
                 // input stream to read file - with 8k buffer
-                InputStream input = new BufferedInputStream(url.openStream(), 8192);
+                InputStream input = new BufferedInputStream(connection.getInputStream(), 8192);
 
                 fileName = currentDownloadFileName;
 
                 //External directory path to save file
-                folder = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) + File.separator + Utils.downloadFolder;
+                folder = Utils.downloadFolder;
 
                 //Create androiddeft folder if it does not exist
                 File directory = new File(folder);
@@ -399,6 +400,7 @@ public class ContentViewActivity extends AppCompatActivity implements SwipeRefre
                         if (contentNode.getAttribute("contenthandler").equals("resource/x-bb-externallink")) {
                             Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(contentNode.getAttribute("viewUrl")));
                             startActivity(browserIntent);
+                            finish();
                         }
 
                         if (contentNode.getAttribute("contenthandler").equals("resource/x-bb-assignment")) {
@@ -406,6 +408,7 @@ public class ContentViewActivity extends AppCompatActivity implements SwipeRefre
                             intent.putExtra("Title", contentNode.getAttribute("title"));
                             intent.putExtra("WebViewUrl", contentNode.getAttribute("viewUrl"));
                             startActivity(intent);
+                            finish();
                         }
 
                         if ((contentNode).getElementsByTagName("body").getLength() > 0 && contentNode.getElementsByTagName("body").item(0).getFirstChild() != null) {
@@ -413,6 +416,25 @@ public class ContentViewActivity extends AppCompatActivity implements SwipeRefre
                             content_view_content_detail.loadData(
                                     ((CharacterData) contentNode.getElementsByTagName("body").item(0).getFirstChild()).getData()
                                     , "text/html; charset=utf-8", null);
+                            content_view_content_detail.setWebViewClient(new WebViewClient() {
+                                @Override
+                                public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                                    return true;
+                                }
+
+                                @Override
+                                public void onLoadResource(WebView view, String url) {
+                                    if (url.startsWith("http://course.pku.edu.cn")) {
+                                        Intent intent = new Intent(ContentViewActivity.this, WebViewActivity.class);
+                                        intent.putExtra("Title", "正在打开链接...");
+                                        intent.putExtra("WebViewUrl", url.replaceFirst("http://course.pku.edu.cn", ""));
+                                        startActivity(intent);
+                                    } else {
+                                        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                                        startActivity(browserIntent);
+                                    }
+                                }
+                            });
                         } else {
                             content_view_content_detail.setVisibility(View.GONE);
                         }
