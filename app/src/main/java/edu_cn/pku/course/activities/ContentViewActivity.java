@@ -419,11 +419,6 @@ public class ContentViewActivity extends AppCompatActivity implements SwipeRefre
                             content_view_content_detail.setWebViewClient(new WebViewClient() {
                                 @Override
                                 public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                                    return true;
-                                }
-
-                                @Override
-                                public void onLoadResource(WebView view, String url) {
                                     if (url.startsWith("http://course.pku.edu.cn")) {
                                         Intent intent = new Intent(ContentViewActivity.this, WebViewActivity.class);
                                         intent.putExtra("Title", "正在打开链接...");
@@ -433,6 +428,7 @@ public class ContentViewActivity extends AppCompatActivity implements SwipeRefre
                                         Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
                                         startActivity(browserIntent);
                                     }
+                                    return true;
                                 }
                             });
                         } else {
