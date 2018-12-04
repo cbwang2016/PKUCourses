@@ -43,16 +43,18 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
+                    android:layout_marginStart="10dp"
                     android:layout_marginLeft="10dp"
                     android:src="@mipmap/icon_user"
-                    tools:ignore="ContentDescription"
-                    android:layout_marginStart="10dp" />
+                    tools:ignore="ContentDescription" />
 
                 <EditText
                     android:id="@+id/studentid"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:layout_marginStart="20dp"
                     android:layout_marginLeft="20dp"
+                    android:layout_toEndOf="@id/ic_user"
                     android:layout_toRightOf="@id/ic_user"
                     android:background="@null"
                     android:cursorVisible="true"
@@ -62,10 +64,7 @@
                     android:textColor="#000"
                     android:textColorHint="#717070"
                     android:textSize="15sp"
-                    tools:ignore="Autofill,HardcodedText"
-                    android:layout_marginStart="20dp"
-                    android:layout_toEndOf="@id/ic_user"
-                    />
+                    tools:ignore="Autofill,HardcodedText" />
 
             </RelativeLayout>
 
@@ -80,17 +79,18 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
+                    android:layout_marginStart="10dp"
                     android:layout_marginLeft="10dp"
                     android:src="@mipmap/icon_password"
-                    tools:ignore="ContentDescription"
-                    android:layout_marginStart="10dp"
-                    />
+                    tools:ignore="ContentDescription" />
 
                 <EditText
                     android:id="@+id/password"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:layout_marginStart="20dp"
                     android:layout_marginLeft="20dp"
+                    android:layout_toEndOf="@id/iv_paw"
                     android:layout_toRightOf="@id/iv_paw"
                     android:background="@null"
                     android:cursorVisible="true"
@@ -99,11 +99,9 @@
                     android:maxLines="1"
                     android:textColor="#000"
                     android:textColorHint="#717070"
+                    android:textCursorDrawable="@null"
                     android:textSize="15sp"
-                    android:layout_marginStart="20dp"
-                    android:layout_toEndOf="@id/iv_paw"
-                    tools:ignore="Autofill,HardcodedText"
-                    android:textCursorDrawable="@null"/>
+                    tools:ignore="Autofill,HardcodedText" />
 
             </RelativeLayout>
 
@@ -124,19 +122,20 @@
                 android:background="@color/colorPrimary"
                 android:text="登录"
                 android:textColor="#fff"
-                android:textSize="14sp"
+                android:textSize="18sp"
                 tools:ignore="HardcodedText" />
+
             <Button
                 android:id="@+id/query_button"
-                android:layout_gravity="center_horizontal"
+                style="?android:attr/borderlessButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
                 android:background="#fafafa"
-                android:text="有疑问？"
+                android:text="隐私政策"
                 android:textColor="@color/colorPrimary"
-                android:textSize="10sp"
-                style="?android:attr/borderlessButtonStyle"
-                />
+                android:textSize="12sp"
+                tools:ignore="HardcodedText" />
 
         </LinearLayout>
     </ScrollView>
