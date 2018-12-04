@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
@@ -21,9 +23,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
 
+import edu_cn.pku.course.Utils;
 import edu_cn.pku.course.adapter.FragmentAdapter;
 import edu_cn.pku.course.fragments.AnnouncementListFragment;
 import edu_cn.pku.course.fragments.CourseListFragment;
@@ -111,6 +117,10 @@ public class MainActivity extends AppCompatActivity
         setTitle(navigationView.getMenu().getItem(launch_page_index).getTitle());
         navigationView.getMenu().getItem(launch_page_index).setChecked(true);
         view_pager_main.setCurrentItem(launch_page_index);
+
+        if (sp.getBoolean("auto_check_update", true)) {
+            new CheckUpdateTask().execute((Void) null);
+        }
     }
 
     private boolean checkLongPressHint() {
@@ -211,5 +221,48 @@ public class MainActivity extends AppCompatActivity
         Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
         finish();
+    }
+
+    @SuppressLint("StaticFieldLeak")
+    private class CheckUpdateTask extends AsyncTask<Void, Void, String> {
+        CheckUpdateTask() {
+        }
+
+        @Override
+        protected String doInBackground(Void... params) {
+            return Utils.getGithubApiResponse();
+        }
+
+
+        @Override
+        protected void onPostExecute(final String str) {
+            if (!str.startsWith(Utils.errorPrefix)) {
+                try {
+                    JSONObject jo = new JSONObject(str);
+                    String latestVersionName = jo.getString("name");
+                    if (!latestVersionName.equals(Utils.versionString)) {
+                        String latestReleaseBody = jo.getString("body");
+                        final String latestReleaseDownloadUrl = ((JSONObject) jo.getJSONArray("assets").get(0)).getString("browser_download_url");
+
+                        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this, R.style.AlertDialogTheme);
+                        builder.setTitle("检测到新版本: " + latestVersionName);
+                        builder.setMessage("更新内容：\n" + latestReleaseBody);
+                        builder.setPositiveButton("下载", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(latestReleaseDownloadUrl));
+                                startActivity(browserIntent);
+                            }
+                        });
+                        builder.setNegativeButton("取消", null).show();
+                    }
+                } catch (JSONException e) {
+//                    e.printStackTrace();
+                }
+            }
+        }
+
+        @Override
+        protected void onCancelled() {
+        }
     }
 }

@@ -38,7 +38,7 @@ import edu_cn.pku.course.activities.R;
 import edu_cn.pku.course.activities.SplashActivity;
 
 public class Utils {
-    private static final String versionString = "beta v0.1.4";
+    public static final String versionString = "beta v0.1.5";
     public static final String errorPrefix = "Error: ";
     public static final String errorPasswordIncorrect = "Password Incorrect";
     private static final String errorSubstrings = "error when extracting substrings";
@@ -305,6 +305,26 @@ public class Utils {
             }
         } catch (Exception e) {
 //                e.printStackTrace();
+            return errorPrefix + e.getMessage();
+        } finally {
+            if (conn != null) {
+                conn.disconnect();
+            }
+        }
+    }
+
+    static public String getGithubApiResponse() {
+        HttpURLConnection conn = null;
+        try {
+            String request = "https://api.github.com/repos/cbwang2016/PKUCourses/releases/latest";
+            URL url = new URL(request);
+            conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("GET");
+            conn.setUseCaches(false);
+            InputStream in = conn.getInputStream();
+
+            return convertStreamToString(in);
+        } catch (Exception e) {
             return errorPrefix + e.getMessage();
         } finally {
             if (conn != null) {
