@@ -28,6 +28,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.webkit.MimeTypeMap;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -414,6 +415,25 @@ public class ContentViewActivity extends AppCompatActivity implements SwipeRefre
                             content_view_content_detail.loadData(
                                     ((CharacterData) contentNode.getElementsByTagName("body").item(0).getFirstChild()).getData()
                                     , "text/html; charset=utf-8", null);
+                            content_view_content_detail.setWebViewClient(new WebViewClient() {
+                                @Override
+                                public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                                    return true;
+                                }
+
+                                @Override
+                                public void onLoadResource(WebView view, String url) {
+                                    if (url.startsWith("http://course.pku.edu.cn")) {
+                                        Intent intent = new Intent(ContentViewActivity.this, WebViewActivity.class);
+                                        intent.putExtra("Title", "正在打开链接...");
+                                        intent.putExtra("WebViewUrl", url.replaceFirst("http://course.pku.edu.cn", ""));
+                                        startActivity(intent);
+                                    } else {
+                                        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                                        startActivity(browserIntent);
+                                    }
+                                }
+                            });
                         } else {
                             content_view_content_detail.setVisibility(View.GONE);
                         }
