@@ -6,6 +6,7 @@ import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.ActionBar;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
@@ -14,6 +15,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.KeyEvent;
@@ -73,6 +75,16 @@ public class LoginActivity extends AppCompatActivity {
                     return true;
                 }
                 return false;
+            }
+        });
+
+        final Button mqueryButton = findViewById(R.id.query_button);
+        mqueryButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext(), R.style.AlertDialogTheme);
+                builder.setMessage("声明：\n所有用户的密码将不会被开发者获取，如仍有疑问，可访问\"https://github.com/cbwang2016/PKUCourses\"查看源码，谢谢您的信任。");
+                builder.setPositiveButton("好的", null).create().show();
             }
         });
 

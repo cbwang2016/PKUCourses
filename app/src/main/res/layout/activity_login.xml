@@ -55,7 +55,7 @@
                     android:layout_marginLeft="20dp"
                     android:layout_toRightOf="@id/ic_user"
                     android:background="@null"
-                    android:cursorVisible="false"
+                    android:cursorVisible="true"
                     android:hint="请输入学号"
                     android:inputType="number"
                     android:maxLines="1"
@@ -64,7 +64,8 @@
                     android:textSize="15sp"
                     tools:ignore="Autofill,HardcodedText"
                     android:layout_marginStart="20dp"
-                    android:layout_toEndOf="@id/ic_user" />
+                    android:layout_toEndOf="@id/ic_user"
+                    />
 
             </RelativeLayout>
 
@@ -82,7 +83,8 @@
                     android:layout_marginLeft="10dp"
                     android:src="@mipmap/icon_password"
                     tools:ignore="ContentDescription"
-                    android:layout_marginStart="10dp" />
+                    android:layout_marginStart="10dp"
+                    />
 
                 <EditText
                     android:id="@+id/password"
@@ -91,7 +93,7 @@
                     android:layout_marginLeft="20dp"
                     android:layout_toRightOf="@id/iv_paw"
                     android:background="@null"
-                    android:cursorVisible="false"
+                    android:cursorVisible="true"
                     android:hint="请输入密码"
                     android:inputType="textPassword"
                     android:maxLines="1"
@@ -100,7 +102,8 @@
                     android:textSize="15sp"
                     android:layout_marginStart="20dp"
                     android:layout_toEndOf="@id/iv_paw"
-                    tools:ignore="Autofill,HardcodedText" />
+                    tools:ignore="Autofill,HardcodedText"
+                    android:textCursorDrawable="@null"/>
 
             </RelativeLayout>
 
@@ -123,6 +126,17 @@
                 android:textColor="#fff"
                 android:textSize="14sp"
                 tools:ignore="HardcodedText" />
+            <Button
+                android:id="@+id/query_button"
+                android:layout_gravity="center_horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="#fafafa"
+                android:text="有疑问？"
+                android:textColor="@color/colorPrimary"
+                android:textSize="10sp"
+                style="?android:attr/borderlessButtonStyle"
+                />
 
         </LinearLayout>
     </ScrollView>
