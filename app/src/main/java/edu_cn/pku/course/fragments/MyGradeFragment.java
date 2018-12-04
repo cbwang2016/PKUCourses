@@ -67,7 +67,7 @@ public class MyGradeFragment extends Fragment implements SwipeRefreshLayout.OnRe
             showLongPressHintFlag = true;
             return;
         }
-        Snackbar.make(mRecyclerView, "温馨提示：长按课程可以置顶", Snackbar.LENGTH_SHORT)
+        Snackbar.make(mRecyclerView, "温馨提示：长按课程可以置顶", Snackbar.LENGTH_LONG)
                 .setAction("我知道了", new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -84,6 +84,8 @@ public class MyGradeFragment extends Fragment implements SwipeRefreshLayout.OnRe
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+//        if (getArguments() != null) {
+//        }
     }
 
     @Override
@@ -95,11 +97,13 @@ public class MyGradeFragment extends Fragment implements SwipeRefreshLayout.OnRe
         mRecyclerView = linearLayout.findViewById(R.id.recycler_courses);
         mCourseListSwipeContainer = linearLayout.findViewById(R.id.course_list_swipe_container);
 
+
         // 设置动画
         LayoutAnimationController animation = AnimationUtils.loadLayoutAnimation(getContext(), R.anim.layout_animation_fall_down);
         mCourseListSwipeContainer.setLayoutAnimation(animation);
         // 设置刷新的监听类为此类（监听函数onRefresh）
         mCourseListSwipeContainer.setOnRefreshListener(this);
+
 
         FragmentActivity fa = getActivity();
         // 为了消除编译器Warning，需要判断一下是不是null，其实这基本上不可能出现null
@@ -112,11 +116,17 @@ public class MyGradeFragment extends Fragment implements SwipeRefreshLayout.OnRe
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mRecyclerView.setAdapter(adapter);
 
-        // 显示Loading的小动画，并在后台读取课程列表
-        showLoading(true);
-        mLoadingTask = new CoursesLoadingTask();
-        mLoadingTask.execute((Void) null);
-
+        try {
+            String cachedCourseList = getCachedCourseList();
+            if (cachedCourseList == null)
+                throw new Exception();
+            updateAdapter(cachedCourseList, false);
+        } catch (Exception e) {
+            // 显示Loading的小动画，并在后台读取课程列表
+            showLoading(true);
+            mLoadingTask = new CoursesLoadingTask();
+            mLoadingTask.execute((Void) null);
+        }
         return linearLayout;
     }
 
@@ -160,6 +170,58 @@ public class MyGradeFragment extends Fragment implements SwipeRefreshLayout.OnRe
         getActivity().finish();
     }
 
+    private void saveCachedCourseList(String rootNodeStr) throws Exception {
+        FragmentActivity fa = getActivity();
+        if (fa == null) {
+            throw new Exception("Unknown Error: Null getActivity()!");
+        }
+        SharedPreferences sharedPreferences = fa.getSharedPreferences("course_list", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("course_list_str", rootNodeStr);
+        editor.apply();
+    }
+
+    private String getCachedCourseList() throws Exception {
+        FragmentActivity fa = getActivity();
+        if (fa == null) {
+            throw new Exception("Unknown Error: Null getActivity()!");
+        }
+        SharedPreferences sharedPreferences = fa.getSharedPreferences("course_list", Context.MODE_PRIVATE);
+        return sharedPreferences.getString("course_list_str", null);
+    }
+
+    private void updateAdapter(String rootNodeStr, boolean showAnimation) {
+        Node rootNode = Utils.stringToNode(rootNodeStr);
+        if (rootNode != null) {
+
+            FragmentActivity fa = getActivity();
+            if (fa == null) {
+                return;
+            }
+            SharedPreferences sharedPreferences = fa.getSharedPreferences("pinnedCourseList", Context.MODE_PRIVATE);
+            Set<String> hset = sharedPreferences.getStringSet("key", null);
+            if (hset == null)
+                hset = new HashSet<>();
+
+            ArrayList<CourseInfo> courses_list = new ArrayList<>();
+            NodeList nCoursesList = rootNode.getFirstChild().getChildNodes();
+            for (int temp = 0; temp < nCoursesList.getLength(); temp++) {
+                CourseInfo ci = new CourseInfo((Element) nCoursesList.item(temp));
+                if (hset.contains(ci.getRawCourseName()))
+                    ci.setPinned(1);
+                courses_list.add(ci);
+            }
+
+            adapter.updateList(courses_list);
+            // 显示课程列表的fancy的动画
+            if (showAnimation)
+                mRecyclerView.scheduleLayoutAnimation();
+
+            if (showLongPressHintFlag)
+                showLongPressHint();
+        }
+    }
+
     @SuppressLint("StaticFieldLeak")
     private class CoursesLoadingTask extends AsyncTask<Void, Void, String> {
 
@@ -190,36 +252,12 @@ public class MyGradeFragment extends Fragment implements SwipeRefreshLayout.OnRe
                     Snackbar.make(mRecyclerView, str, Snackbar.LENGTH_SHORT).show();
                 }
             } else {
-
                 // 解析返回的HTML
-                Node rootNode = Utils.stringToNode(str);
-                if (rootNode != null) {
-
-                    FragmentActivity fa = getActivity();
-                    if (fa == null) {
-                        return;
-                    }
-                    SharedPreferences sharedPreferences = fa.getSharedPreferences("pinnedCourseList", Context.MODE_PRIVATE);
-                    Set<String> hset = sharedPreferences.getStringSet("key", null);
-                    if (hset == null)
-                        hset = new HashSet<>();
-
-                    ArrayList<CourseInfo> courses_list = new ArrayList<>();
-                    NodeList nCoursesList = rootNode.getFirstChild().getChildNodes();
-                    for (int temp = 0; temp < nCoursesList.getLength(); temp++) {
-                        CourseInfo ci = new CourseInfo((Element) nCoursesList.item(temp));
-                        if (hset.contains(ci.getRawCourseName()))
-                            ci.setPinned(1);
-                        courses_list.add(ci);
-                    }
-
-                    adapter.updateList(courses_list);
-                    // 显示课程列表的fancy的动画
-                    mRecyclerView.scheduleLayoutAnimation();
-
-                    if (showLongPressHintFlag)
-                        showLongPressHint();
-
+                updateAdapter(str, true);
+                try {
+                    saveCachedCourseList(str);
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
             }
         }
