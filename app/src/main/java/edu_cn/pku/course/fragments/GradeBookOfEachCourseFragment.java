@@ -86,6 +86,7 @@ public class GradeBookOfEachCourseFragment extends Fragment implements SwipeRefr
         mGradeBookSwipeContainer.setLayoutAnimation(animation);
         // 设置刷新的监听类为此类（监听函数onRefresh）
         mGradeBookSwipeContainer.setOnRefreshListener(this);
+        mGradeBookSwipeContainer.setColorSchemeColors(getResources().getColor(R.color.colorPrimary), getResources().getColor(R.color.colorAccent));
 
         FragmentActivity fa = getActivity();
         // 为了消除编译器Warning，需要判断一下是不是null，其实这基本上不可能出现null

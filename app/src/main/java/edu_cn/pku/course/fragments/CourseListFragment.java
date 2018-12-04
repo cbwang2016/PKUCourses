@@ -104,7 +104,7 @@ public class CourseListFragment extends Fragment implements SwipeRefreshLayout.O
         mCourseListSwipeContainer.setLayoutAnimation(animation);
         // 设置刷新的监听类为此类（监听函数onRefresh）
         mCourseListSwipeContainer.setOnRefreshListener(this);
-
+        mCourseListSwipeContainer.setColorSchemeColors(getResources().getColor(R.color.colorPrimary), getResources().getColor(R.color.colorAccent));
 
         FragmentActivity fa = getActivity();
         // 为了消除编译器Warning，需要判断一下是不是null，其实这基本上不可能出现null
@@ -176,7 +176,7 @@ public class CourseListFragment extends Fragment implements SwipeRefreshLayout.O
         if (fa == null) {
             throw new Exception("Unknown Error: Null getActivity()!");
         }
-        SharedPreferences sharedPreferences = fa.getSharedPreferences("course_list", Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = fa.getSharedPreferences("cached_xml", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString("course_list_str", rootNodeStr);
         editor.apply();
@@ -187,7 +187,7 @@ public class CourseListFragment extends Fragment implements SwipeRefreshLayout.O
         if (fa == null) {
             throw new Exception("Unknown Error: Null getActivity()!");
         }
-        SharedPreferences sharedPreferences = fa.getSharedPreferences("course_list", Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = fa.getSharedPreferences("cached_xml", Context.MODE_PRIVATE);
         return sharedPreferences.getString("course_list_str", null);
     }
 

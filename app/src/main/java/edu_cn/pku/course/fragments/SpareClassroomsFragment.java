@@ -55,6 +55,7 @@ public class SpareClassroomsFragment extends Fragment implements SwipeRefreshLay
         mWebView = linearLayout.findViewById(R.id.spare_classrooms_web_view);
 
         mSpareClassroomsSwipeContainer.setOnRefreshListener(this);
+        mSpareClassroomsSwipeContainer.setColorSchemeColors(getResources().getColor(R.color.colorPrimary), getResources().getColor(R.color.colorAccent));
 
         // 显示Loading的小动画，并在后台读取课程列表
         showLoading(true);

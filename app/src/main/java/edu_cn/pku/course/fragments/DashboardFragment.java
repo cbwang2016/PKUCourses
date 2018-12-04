@@ -1,8 +1,6 @@
 package edu_cn.pku.course.fragments;
 
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.Context;
@@ -71,6 +69,16 @@ public class DashboardFragment extends Fragment implements SwipeRefreshLayout.On
         mRecyclerView.setAdapter(adapter);
 
         mSwipeContainer.setOnRefreshListener(this);
+        mSwipeContainer.setColorSchemeColors(getResources().getColor(R.color.colorPrimary), getResources().getColor(R.color.colorAccent));
+
+        try {
+            String cachedDashboardList = getCachedDashboardList();
+            if (cachedDashboardList == null)
+                throw new Exception();
+            updateAdapter(cachedDashboardList, false);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         FragmentActivity fa = getActivity();
         if (fa != null) {
@@ -96,14 +104,14 @@ public class DashboardFragment extends Fragment implements SwipeRefreshLayout.On
         // 逐渐显示mRecyclerView的小动画
         int shortAnimTime = 200;
 
-        mRecyclerView.setVisibility(show ? View.GONE : View.VISIBLE);
-        mRecyclerView.animate().setDuration(shortAnimTime).alpha(
-                show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                mRecyclerView.setVisibility(show ? View.GONE : View.VISIBLE);
-            }
-        });
+//        mRecyclerView.setVisibility(show ? View.GONE : View.VISIBLE);
+//        mRecyclerView.animate().setDuration(shortAnimTime).alpha(
+//                show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
+//            @Override
+//            public void onAnimationEnd(Animator animation) {
+//                mRecyclerView.setVisibility(show ? View.GONE : View.VISIBLE);
+//            }
+//        });
 
         mSwipeContainer.setRefreshing(show);
     }
@@ -121,6 +129,57 @@ public class DashboardFragment extends Fragment implements SwipeRefreshLayout.On
         Intent intent = new Intent(getActivity(), LoginActivity.class);
         startActivity(intent);
         getActivity().finish();
+    }
+
+    private void saveCachedDashboardList(String rootNodeStr) throws Exception {
+        FragmentActivity fa = getActivity();
+        if (fa == null) {
+            throw new Exception("Unknown Error: Null getActivity()!");
+        }
+        SharedPreferences sharedPreferences = fa.getSharedPreferences("cached_xml", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("dashboard_list_str", rootNodeStr);
+        editor.apply();
+    }
+
+    private String getCachedDashboardList() throws Exception {
+        FragmentActivity fa = getActivity();
+        if (fa == null) {
+            throw new Exception("Unknown Error: Null getActivity()!");
+        }
+        SharedPreferences sharedPreferences = fa.getSharedPreferences("cached_xml", Context.MODE_PRIVATE);
+        return sharedPreferences.getString("dashboard_list_str", null);
+    }
+
+
+    private void updateAdapter(String rootNodeStr, boolean showAnimation) {
+
+        FragmentActivity fa = getActivity();
+        if (fa == null) {
+            return;
+        }
+        Node rootNode = Utils.stringToNode(rootNodeStr);
+        if (rootNode != null) {
+            ArrayList<DashboardItem> item_list = new ArrayList<>();
+            NodeList nList = rootNode.getLastChild().getChildNodes();
+            NodeList nCoursesList = rootNode.getFirstChild().getChildNodes();
+            for (int temp = 0; temp < nList.getLength(); temp++) {
+                Element feed_item = (Element) nList.item(temp);
+                if (feed_item.hasAttribute("contentid") || feed_item.getAttribute("type").equals("ANNOUNCEMENT")) {
+                    for (int temp2 = 0; temp2 < nCoursesList.getLength(); temp2++) {
+                        Element course_item = (Element) nCoursesList.item(temp2);
+                        if (course_item.getAttribute("bbid").equals(feed_item.getAttribute("courseid")))
+                            feed_item.setAttribute("courseName", course_item.getAttribute("name").split("\\([0-9]")[0]);
+                    }
+                    item_list.add(new DashboardItem(feed_item));
+                }
+            }
+
+            adapter.updateList(item_list);
+            // 显示课程列表的fancy的动画
+            if (showAnimation)
+                mRecyclerView.scheduleLayoutAnimation();
+        }
     }
 
     private static class RelativeDateFormat {
@@ -221,31 +280,11 @@ public class DashboardFragment extends Fragment implements SwipeRefreshLayout.On
                     Snackbar.make(mRecyclerView, str, Snackbar.LENGTH_SHORT).show();
                 }
             } else {
-
-                FragmentActivity fa = getActivity();
-                if (fa == null) {
-                    return;
-                }
-                Node rootNode = Utils.stringToNode(str);
-                if (rootNode != null) {
-                    ArrayList<DashboardItem> item_list = new ArrayList<>();
-                    NodeList nList = rootNode.getLastChild().getChildNodes();
-                    NodeList nCoursesList = rootNode.getFirstChild().getChildNodes();
-                    for (int temp = 0; temp < nList.getLength(); temp++) {
-                        Element feed_item = (Element) nList.item(temp);
-                        if (feed_item.hasAttribute("contentid") || feed_item.getAttribute("type").equals("ANNOUNCEMENT")) {
-                            for (int temp2 = 0; temp2 < nCoursesList.getLength(); temp2++) {
-                                Element course_item = (Element) nCoursesList.item(temp2);
-                                if (course_item.getAttribute("bbid").equals(feed_item.getAttribute("courseid")))
-                                    feed_item.setAttribute("courseName", course_item.getAttribute("name").split("\\([0-9]")[0]);
-                            }
-                            item_list.add(new DashboardItem(feed_item));
-                        }
-                    }
-
-                    adapter.updateList(item_list);
-                    // 显示课程列表的fancy的动画
-                    mRecyclerView.scheduleLayoutAnimation();
+                updateAdapter(str, true);
+                try {
+                    saveCachedDashboardList(str);
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
             }
         }

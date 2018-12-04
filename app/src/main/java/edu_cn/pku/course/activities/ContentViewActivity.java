@@ -98,6 +98,7 @@ public class ContentViewActivity extends AppCompatActivity implements SwipeRefre
         mRecyclerView.setAdapter(adapter);
 
         mSwipeContainer.setOnRefreshListener(this);
+        mSwipeContainer.setColorSchemeColors(getResources().getColor(R.color.colorPrimary), getResources().getColor(R.color.colorAccent));
 
         showLoading(true);
         mLoadingTask = new AttachedFilesListLoadingTask();

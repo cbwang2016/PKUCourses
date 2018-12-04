@@ -1,7 +1,5 @@
 package edu_cn.pku.course.fragments;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.Context;
@@ -82,6 +80,7 @@ public class AnnouncementListFragment extends Fragment implements SwipeRefreshLa
         mAnnouncementListSwipeContainer.setLayoutAnimation(animation);
         // 设置刷新的监听类为此类（监听函数onRefresh）
         mAnnouncementListSwipeContainer.setOnRefreshListener(this);
+        mAnnouncementListSwipeContainer.setColorSchemeColors(getResources().getColor(R.color.colorPrimary), getResources().getColor(R.color.colorAccent));
 
         FragmentActivity fa = getActivity();
         // 为了消除编译器Warning，需要判断一下是不是null，其实这基本上不可能出现null
@@ -93,6 +92,15 @@ public class AnnouncementListFragment extends Fragment implements SwipeRefreshLa
         adapter = new AnnouncementListRecyclerViewAdapter(new ArrayList<AnnouncementInfo>(), this);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mRecyclerView.setAdapter(adapter);
+
+        try {
+            String cachedList = getCachedAnnouncementsList();
+            if (cachedList == null)
+                throw new Exception();
+            updateAdapter(cachedList, false);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         // 显示Loading的小动画，并在后台读取课程列表
         showLoading(true);
@@ -116,14 +124,14 @@ public class AnnouncementListFragment extends Fragment implements SwipeRefreshLa
         // 逐渐显示mRecyclerView的小动画
         int shortAnimTime = 200;
 
-        mRecyclerView.setVisibility(show ? View.GONE : View.VISIBLE);
-        mRecyclerView.animate().setDuration(shortAnimTime).alpha(
-                show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                mRecyclerView.setVisibility(show ? View.GONE : View.VISIBLE);
-            }
-        });
+//        mRecyclerView.setVisibility(show ? View.GONE : View.VISIBLE);
+//        mRecyclerView.animate().setDuration(shortAnimTime).alpha(
+//                show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
+//            @Override
+//            public void onAnimationEnd(Animator animation) {
+//                mRecyclerView.setVisibility(show ? View.GONE : View.VISIBLE);
+//            }
+//        });
 
         mAnnouncementListSwipeContainer.setRefreshing(show);
     }
@@ -143,7 +151,48 @@ public class AnnouncementListFragment extends Fragment implements SwipeRefreshLa
         getActivity().finish();
     }
 
-    //复制wcb的courselist代码
+    private void saveCachedAnnouncementsList(String rootNodeStr) throws Exception {
+        FragmentActivity fa = getActivity();
+        if (fa == null) {
+            throw new Exception("Unknown Error: Null getActivity()!");
+        }
+        SharedPreferences sharedPreferences = fa.getSharedPreferences("cached_xml", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("dashboard_list_str", rootNodeStr);
+        editor.apply();
+    }
+
+    private String getCachedAnnouncementsList() throws Exception {
+        FragmentActivity fa = getActivity();
+        if (fa == null) {
+            throw new Exception("Unknown Error: Null getActivity()!");
+        }
+        SharedPreferences sharedPreferences = fa.getSharedPreferences("cached_xml", Context.MODE_PRIVATE);
+        return sharedPreferences.getString("dashboard_list_str", null);
+    }
+
+
+    private void updateAdapter(String rootNodeStr, boolean showAnimation) {
+        // 解析返回的HTML
+        ArrayList<AnnouncementInfo> announcement_list = new ArrayList<>();
+
+        FragmentActivity fa = getActivity();
+        if (fa == null) {
+            return;
+        }
+
+        Element list = Jsoup.parse(rootNodeStr).getElementById("announcementList");
+        Elements nList = list.children();
+
+        for (int temp = 0; temp < nList.size(); temp++) {
+            Element n = nList.get(temp);
+            announcement_list.add(new AnnouncementInfo(n));
+        }
+        adapter.updateList(announcement_list);
+        // 显示课程列表的fancy的动画
+        if (showAnimation)
+            mRecyclerView.scheduleLayoutAnimation();
+    }
 
     /**
      * 为了方便管理课程列表，将每个课程的各种信息组成一个类。
@@ -224,24 +273,12 @@ public class AnnouncementListFragment extends Fragment implements SwipeRefreshLa
                     Snackbar.make(mRecyclerView, str, Snackbar.LENGTH_SHORT).show();
                 }
             } else {
-                // 解析返回的HTML
-                ArrayList<AnnouncementInfo> announcement_list = new ArrayList<>();
-
-                FragmentActivity fa = getActivity();
-                if (fa == null) {
-                    return;
+                updateAdapter(str, true);
+                try {
+                    saveCachedAnnouncementsList(str);
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-
-                Element list = Jsoup.parse(str).getElementById("announcementList");
-                Elements nList = list.children();
-
-                for (int temp = 0; temp < nList.size(); temp++) {
-                    Element n = nList.get(temp);
-                    announcement_list.add(new AnnouncementInfo(n));
-                }
-                adapter.updateList(announcement_list);
-                // 显示课程列表的fancy的动画
-                mRecyclerView.scheduleLayoutAnimation();
             }
         }
 
