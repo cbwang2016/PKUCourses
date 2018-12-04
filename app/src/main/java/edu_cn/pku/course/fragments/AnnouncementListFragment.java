@@ -158,7 +158,7 @@ public class AnnouncementListFragment extends Fragment implements SwipeRefreshLa
         }
         SharedPreferences sharedPreferences = fa.getSharedPreferences("cached_xml", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString("dashboard_list_str", rootNodeStr);
+        editor.putString("announcement_list_str", rootNodeStr);
         editor.apply();
     }
 
@@ -168,7 +168,7 @@ public class AnnouncementListFragment extends Fragment implements SwipeRefreshLa
             throw new Exception("Unknown Error: Null getActivity()!");
         }
         SharedPreferences sharedPreferences = fa.getSharedPreferences("cached_xml", Context.MODE_PRIVATE);
-        return sharedPreferences.getString("dashboard_list_str", null);
+        return sharedPreferences.getString("announcement_list_str", null);
     }
 
 

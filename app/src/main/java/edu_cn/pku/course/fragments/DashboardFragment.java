@@ -102,7 +102,7 @@ public class DashboardFragment extends Fragment implements SwipeRefreshLayout.On
     @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
     private void showLoading(final boolean show) {
         // 逐渐显示mRecyclerView的小动画
-        int shortAnimTime = 200;
+//        int shortAnimTime = 200;
 
 //        mRecyclerView.setVisibility(show ? View.GONE : View.VISIBLE);
 //        mRecyclerView.animate().setDuration(shortAnimTime).alpha(
@@ -233,13 +233,13 @@ public class DashboardFragment extends Fragment implements SwipeRefreshLayout.On
             return toHours(date) / 24L;
         }
 
-        private static long toMonths(long date) {
-            return toDays(date) / 30L;
-        }
+//        private static long toMonths(long date) {
+//            return toDays(date) / 30L;
+//        }
 
-        private static long toYears(long date) {
-            return toMonths(date) / 365L;
-        }
+//        private static long toYears(long date) {
+//            return toMonths(date) / 365L;
+//        }
     }
 
     @SuppressLint("StaticFieldLeak")
