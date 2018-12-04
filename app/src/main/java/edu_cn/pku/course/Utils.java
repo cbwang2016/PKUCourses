@@ -34,11 +34,12 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
+import edu_cn.pku.course.activities.BuildConfig;
 import edu_cn.pku.course.activities.R;
 import edu_cn.pku.course.activities.SplashActivity;
 
 public class Utils {
-    public static final String versionString = "beta v0.1.5";
+    public static final String versionString = BuildConfig.VERSION_NAME;
     public static final String errorPrefix = "Error: ";
     public static final String errorPasswordIncorrect = "Password Incorrect";
     private static final String errorSubstrings = "error when extracting substrings";
