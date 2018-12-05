@@ -9,4 +9,5 @@
 com.r0adkll:slidableactivity:2.0.6
 org.jsoup:jsoup:1.11.3
 pub.devrel:easypermissions:2.0.0
+com.baidu.mobstat:mtj-sdk-circle:3.9.3.1
 ```
