@@ -23,6 +23,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import com.baidu.mobstat.StatService;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -121,6 +123,9 @@ public class MainActivity extends AppCompatActivity
         if (sp.getBoolean("auto_check_update", true)) {
             new CheckUpdateTask().execute((Void) null);
         }
+
+        // 百度统计
+        StatService.start(this);
     }
 
     private boolean checkLongPressHint() {
