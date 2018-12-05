@@ -1,6 +1,7 @@
 package edu_cn.pku.course.activities;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
@@ -8,10 +9,14 @@ import android.os.Bundle;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.r0adkll.slidr.Slidr;
@@ -19,17 +24,26 @@ import com.r0adkll.slidr.Slidr;
 import java.util.ArrayList;
 import java.util.List;
 
+import edu_cn.pku.course.Utils;
 import edu_cn.pku.course.adapter.AboutAdapter;
 
 
 public class AboutActivity extends AppCompatActivity {
     private List<AboutMenu> mList = new ArrayList<>();
 
+    @SuppressLint({"Assert", "InflateParams"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_about);
         setTitle("About");
+        //TextView version = (TextView)findViewById(R.id.about_version_number);
+        //TextView download = (TextView)findViewById(R.id.about_downloadFolder);
+        //String versionStr = "版本号：" + Utils.versionString;
+        //String downloadFolderStr = "下载路径：" + Utils.downloadFolder;
+        //version.setText(versionStr);
+        //download.setText(downloadFolderStr);
+
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
@@ -63,7 +77,7 @@ public class AboutActivity extends AppCompatActivity {
                         startActivity(it);
                         break;
                     case 2:
-                        Toast.makeText(AboutActivity.this, "别点了，再点功能也不会多的！\n还是给点反馈来的实在。", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(AboutActivity.this, "别点了，再点功能也不会多的！\n不如点击“问题反馈”给予我们建议。", Toast.LENGTH_SHORT).show();
                         break;
                     case 3:
                         Toast.makeText(AboutActivity.this, "Bloom！\n这里有四只狗\n有意向可以选购", Toast.LENGTH_SHORT).show();
@@ -91,12 +105,12 @@ public class AboutActivity extends AppCompatActivity {
     private void getMenuList() {
         mList.add(new AboutMenu(R.mipmap.icon_email_600,"问题反馈","Select email application to send an email to the developer.",null));
         mList.add(new AboutMenu(R.mipmap.icon_github_logo_1024,"Github Page","Open source code on GitHub.",null));
-        mList.add(new AboutMenu(R.mipmap.icon_function_768,"功能介绍","Features","·功能介绍\n"));
-        mList.add(new AboutMenu(R.mipmap.icon_member_980,"开发人员","Developer","本App由四个疯人院成员开发制作：\n" +
-                                                                                                           "·叶林楠\n    主要负责人\n"+
-                                                                                                           "·Yinian\n    策划\n"+
-                                                                                                           "·杨老师歌迷\n    打杂一号\n"+
-                                                                                                           "·丣覭\n    打杂二号\n"));
+        mList.add(new AboutMenu(R.mipmap.icon_function_768,"功能介绍","Features","此APP包含了course.pku.edu.cn的部分常用功能，例如公告、通知、课程列表及每个课程包含的内容等，另外添加了北京大学门户中空闲教室查询的功能，希望为寻找空闲教室的同学提供便利。\n"));
+        mList.add(new AboutMenu(R.mipmap.icon_member_980,"开发人员","Developer","本App由四个疯人院成员开发制作：\n\n" +
+                                                                                                           "·叶林楠\n    主要负责人\n        技术总监\n\n"+
+                                                                                                           "·Yinian\n    点子来源\n        吉祥物\n\n"+
+                                                                                                           "·杨老师歌迷\n    艺术总监\n\n"+
+                                                                                                           "·丣覭\n    ≥DDL\n        挂件\n"));
     }
 
     public class AboutMenu {
