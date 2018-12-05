@@ -229,17 +229,6 @@ public class ContentViewActivity extends AppCompatActivity implements SwipeRefre
         }
     }
 
-    public void signOut() {
-        SharedPreferences sharedPreferences = getSharedPreferences("login_info", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.clear();
-        editor.apply();
-
-        Intent intent = new Intent(this, LoginActivity.class);
-        startActivity(intent);
-        finish();
-    }
-
     /**
      * Async Task to download file from URL
      */
@@ -373,7 +362,7 @@ public class ContentViewActivity extends AppCompatActivity implements SwipeRefre
             if (str.startsWith(Utils.errorPrefix)) {
                 if (str.equals(Utils.errorPrefix + Utils.errorPasswordIncorrect)) {
                     // 密码错误
-                    signOut();
+                    Utils.SignOut(ContentViewActivity.this);
                 } else {
                     // 其他网络错误
                     Snackbar.make(mRecyclerView, str, Snackbar.LENGTH_SHORT).show();

@@ -1,6 +1,8 @@
 package edu_cn.pku.course;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -41,6 +43,7 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
 import edu_cn.pku.course.activities.BuildConfig;
+import edu_cn.pku.course.activities.LoginActivity;
 import edu_cn.pku.course.activities.R;
 import edu_cn.pku.course.activities.SplashActivity;
 
@@ -125,6 +128,18 @@ public class Utils {
                     "    <li>email: wcb@pku.edu.cn </li>\n" +
                     "</ul>";
 
+    public static void SignOut(Activity activity) {
+        // 清除存储的登陆信息
+        SplashActivity.getContextOfApplication().getSharedPreferences("login_info", Context.MODE_PRIVATE).edit().clear().apply();
+        SplashActivity.getContextOfApplication().getSharedPreferences("longPressHint", Context.MODE_PRIVATE).edit().clear().apply();
+        SplashActivity.getContextOfApplication().getSharedPreferences("cached_xml", Context.MODE_PRIVATE).edit().clear().apply();
+
+        // 回到LoginActivity
+        Intent intent = new Intent(activity, LoginActivity.class);
+        activity.startActivity(intent);
+        activity.finish();
+    }
+
     public static void showPrivacyPolicyDialog(Context context) {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(context, R.style.AlertDialogTheme);
@@ -201,7 +216,7 @@ public class Utils {
     /**
      * 将字符串str中最后出现的leftStr和最后出现的rightStr之间的字符串提取出来
      */
-    public static String lastBetweenStrings(String str, String leftStr, String rightStr) {
+    static String lastBetweenStrings(String str, String leftStr, String rightStr) {
         int l = str.lastIndexOf(leftStr) + leftStr.length();
         int r = str.lastIndexOf(rightStr);
         if (l < leftStr.length() || r < 0 || l > r)

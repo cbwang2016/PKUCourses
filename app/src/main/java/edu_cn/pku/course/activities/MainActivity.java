@@ -202,7 +202,7 @@ public class MainActivity extends AppCompatActivity
                 builder.setMessage("你确定要注销吗？");
                 builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {
-                        signOut();
+                        Utils.SignOut(MainActivity.this);
                     }
                 });
                 builder.setNegativeButton("取消", null).show();

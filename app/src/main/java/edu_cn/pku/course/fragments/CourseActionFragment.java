@@ -4,9 +4,6 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
-import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -30,7 +27,6 @@ import org.w3c.dom.NodeList;
 import java.util.ArrayList;
 
 import edu_cn.pku.course.Utils;
-import edu_cn.pku.course.activities.LoginActivity;
 import edu_cn.pku.course.activities.R;
 import edu_cn.pku.course.adapter.CourseActionsAdapter;
 
@@ -135,21 +131,6 @@ public class CourseActionFragment extends Fragment {
         mRecyclerView.scheduleLayoutAnimation();
     }
 
-    public void signOut() throws Exception {
-        FragmentActivity fa = getActivity();
-        if (fa == null) {
-            throw new Exception("Unknown Error: Null getActivity()!");
-        }
-        SharedPreferences sharedPreferences = fa.getSharedPreferences("login_info", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.clear();
-        editor.apply();
-
-        Intent intent = new Intent(getActivity(), LoginActivity.class);
-        startActivity(intent);
-        getActivity().finish();
-    }
-
     @SuppressLint("StaticFieldLeak")
     private class ActionsLoadingTask extends AsyncTask<Void, Void, String> {
 
@@ -171,7 +152,7 @@ public class CourseActionFragment extends Fragment {
                 if (str.equals(Utils.errorPrefix + Utils.errorPasswordIncorrect)) {
                     // 密码错误
                     try {
-                        signOut();
+                        Utils.SignOut(getActivity());
                     } catch (Exception e) {
                         Snackbar.make(mRecyclerView, e.getMessage(), Snackbar.LENGTH_SHORT).show();
                     }
