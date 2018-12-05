@@ -15,6 +15,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
+import edu_cn.pku.course.CourseInfo;
 import edu_cn.pku.course.activities.CourseActionsActivity;
 import edu_cn.pku.course.activities.R;
 import edu_cn.pku.course.fragments.CourseListFragment;
@@ -22,18 +23,18 @@ import edu_cn.pku.course.fragments.CourseListFragment;
 // * Created by zhang on 2016.08.07.
 public class CourseListRecyclerViewAdapter extends RecyclerView.Adapter<CourseListRecyclerViewAdapter.RecyclerViewHolder> {
 
-    private ArrayList<CourseListFragment.CourseInfo> coursesList;
+    private ArrayList<CourseInfo> coursesList;
     private SharedPreferences sharedPreferences;
     private CourseListFragment mContext;
 
-    public CourseListRecyclerViewAdapter(ArrayList<CourseListFragment.CourseInfo> coursesList, SharedPreferences sharedPreferences, CourseListFragment context) {
+    public CourseListRecyclerViewAdapter(ArrayList<CourseInfo> coursesList, SharedPreferences sharedPreferences, CourseListFragment context) {
         this.coursesList = coursesList;
         Collections.sort(this.coursesList);
         this.sharedPreferences = sharedPreferences;
         this.mContext = context;
     }
 
-    public void updateList(ArrayList<CourseListFragment.CourseInfo> coursesList) {
+    public void updateList(ArrayList<CourseInfo> coursesList) {
         this.coursesList = coursesList;
         Collections.sort(this.coursesList);
         notifyDataSetChanged();
@@ -62,7 +63,7 @@ public class CourseListRecyclerViewAdapter extends RecyclerView.Adapter<CourseLi
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                CourseListFragment.CourseInfo selected_course;
+                CourseInfo selected_course;
                 selected_course = coursesList.get(holder.getAdapterPosition());
                 Intent intent = new Intent(mContext.getActivity(), CourseActionsActivity.class);
                 intent.putExtra("CourseId", selected_course.getCourseId());
@@ -81,7 +82,7 @@ public class CourseListRecyclerViewAdapter extends RecyclerView.Adapter<CourseLi
                 notifyDataSetChanged();
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 Set<String> set = new HashSet<>();
-                for (CourseListFragment.CourseInfo k : coursesList)
+                for (CourseInfo k : coursesList)
                     if (k.isPinned() == 1)
                         set.add(k.getRawCourseName());
                 editor.putStringSet("key", set);

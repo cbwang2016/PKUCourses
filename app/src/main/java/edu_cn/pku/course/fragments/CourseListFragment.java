@@ -32,6 +32,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
+import edu_cn.pku.course.CourseInfo;
 import edu_cn.pku.course.Utils;
 import edu_cn.pku.course.activities.LoginActivity;
 import edu_cn.pku.course.activities.R;
@@ -268,62 +269,6 @@ public class CourseListFragment extends Fragment implements SwipeRefreshLayout.O
         protected void onCancelled() {
             mLoadingTask = null;
             showLoading(false);
-        }
-    }
-
-    /**
-     * 为了方便管理课程列表，将每个课程的各种信息组成一个类。
-     */
-    public class CourseInfo implements Comparable<CourseInfo> {
-        private Element nNode;
-        private int isPinned;
-
-        CourseInfo(Element nNode) {
-            this.nNode = nNode;
-            isPinned = 0;
-        }
-
-        public void setPinned(int i) {
-            isPinned = i;
-        }
-
-        public int isPinned() {
-            return isPinned;
-        }
-
-        public String getCourseId() {
-            return nNode.getAttribute("bbid");
-        }
-
-        public String getRawCourseName() {
-            return nNode.getAttribute("name");
-        }
-
-        public String getCourseName() {
-            return nNode.getAttribute("name").split("\\([0-9]")[0];
-        }
-
-        public String getSemesterString() {
-            return Utils.lastBetweenStrings(nNode.getAttribute("name"), "(", ")");
-        }
-
-        private int getSemesterYear() {
-            return Integer.parseInt(getSemesterString().split("-")[0]);
-        }
-
-        private int getSemesterNumber() {
-            return Integer.parseInt(Utils.betweenStrings(nNode.getAttribute("name"), "学年第", "学期"));
-        }
-
-        @Override
-        public int compareTo(CourseInfo comp) {
-            if (this.isPinned != comp.isPinned)
-                return comp.isPinned - this.isPinned;
-            if (this.getSemesterYear() != comp.getSemesterYear())
-                return comp.getSemesterYear() - this.getSemesterYear();
-            if (this.getSemesterNumber() != comp.getSemesterNumber())
-                return comp.getSemesterNumber() - this.getSemesterNumber();
-            return this.getCourseName().compareTo(comp.getCourseName());
         }
     }
 }

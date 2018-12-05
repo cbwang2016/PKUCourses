@@ -15,6 +15,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
+import edu_cn.pku.course.CourseInfo;
 import edu_cn.pku.course.activities.GradeBookOfEachCourseActivity;
 import edu_cn.pku.course.activities.R;
 import edu_cn.pku.course.fragments.MyGradeFragment;
@@ -22,18 +23,18 @@ import edu_cn.pku.course.fragments.MyGradeFragment;
 // * Created by zhang on 2016.08.07.
 public class MyGradeListRecyclerViewAdapter extends RecyclerView.Adapter<MyGradeListRecyclerViewAdapter.RecyclerViewHolder> {
 
-    private ArrayList<MyGradeFragment.CourseInfo> coursesList;
+    private ArrayList<CourseInfo> coursesList;
     private SharedPreferences sharedPreferences;
     private MyGradeFragment mContext;
 
-    public MyGradeListRecyclerViewAdapter(ArrayList<MyGradeFragment.CourseInfo> coursesList, SharedPreferences sharedPreferences, MyGradeFragment context) {
+    public MyGradeListRecyclerViewAdapter(ArrayList<CourseInfo> coursesList, SharedPreferences sharedPreferences, MyGradeFragment context) {
         this.coursesList = coursesList;
         Collections.sort(this.coursesList);
         this.sharedPreferences = sharedPreferences;
         this.mContext = context;
     }
 
-    public void updateList(ArrayList<MyGradeFragment.CourseInfo> coursesList) {
+    public void updateList(ArrayList<CourseInfo> coursesList) {
         this.coursesList = coursesList;
         Collections.sort(this.coursesList);
         notifyDataSetChanged();
@@ -79,7 +80,7 @@ public class MyGradeListRecyclerViewAdapter extends RecyclerView.Adapter<MyGrade
                 notifyDataSetChanged();
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 Set<String> set = new HashSet<>();
-                for (MyGradeFragment.CourseInfo k : coursesList)
+                for (CourseInfo k : coursesList)
                     if (k.isPinned() == 1)
                         set.add(k.getRawCourseName());
                 editor.putStringSet("key", set);
