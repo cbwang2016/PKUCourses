@@ -67,7 +67,8 @@
             android:id="@+id/about_listView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/ic_logo_background" />
+            android:background="@color/ic_logo_background"
+            android:scrollbars="vertical" />
     </android.support.v4.widget.NestedScrollView>
 
 </android.support.design.widget.CoordinatorLayout>

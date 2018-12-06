@@ -44,6 +44,9 @@ public class AboutActivity extends AppCompatActivity {
         getMenuList();
 
         ListView listView = findViewById(R.id.about_listView);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            listView.setNestedScrollingEnabled(true);
+        }
 
         final AboutAdapter adapter = new AboutAdapter(AboutActivity.this, mList);
         listView.setAdapter(adapter);
