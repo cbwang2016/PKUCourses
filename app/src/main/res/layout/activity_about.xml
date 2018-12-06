@@ -52,34 +52,22 @@
                     app:layout_constraintStart_toStartOf="@+id/imageView2"
                     app:layout_constraintTop_toBottomOf="@+id/imageView2"
                     tools:ignore="MissingConstraints" />
-
-                <TextView
-                    android:id="@+id/about_downloadFolder"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:text="@string/hahahaha"
-                    app:layout_constraintEnd_toEndOf="@+id/about_version_number"
-                    app:layout_constraintStart_toStartOf="@+id/about_version_number"
-                    app:layout_constraintTop_toBottomOf="@+id/about_version_number" />
             </android.support.constraint.ConstraintLayout>
-
         </android.support.design.widget.CollapsingToolbarLayout>
     </android.support.design.widget.AppBarLayout>
 
-    <android.support.v4.widget.NestedScrollView
-        xmlns:android="http://schemas.android.com/apk/res/android"
+    <android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/ic_logo_background"
+        android:fillViewport="true"
         app:layout_behavior="android.support.design.widget.AppBarLayout$ScrollingViewBehavior">
 
-
-            <ListView
-                android:id="@+id/about_listView"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@color/ic_logo_background" />
+        <ListView
+            android:id="@+id/about_listView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/ic_logo_background" />
     </android.support.v4.widget.NestedScrollView>
 
 </android.support.design.widget.CoordinatorLayout>
