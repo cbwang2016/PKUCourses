@@ -37,12 +37,12 @@ public class AboutActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_about);
         setTitle("About");
-        //TextView version = (TextView)findViewById(R.id.about_version_number);
-        //TextView download = (TextView)findViewById(R.id.about_downloadFolder);
-        //String versionStr = "版本号：" + Utils.versionString;
-        //String downloadFolderStr = "下载路径：" + Utils.downloadFolder;
-        //version.setText(versionStr);
-        //download.setText(downloadFolderStr);
+        TextView version = (TextView)findViewById(R.id.about_version_number);
+        TextView download = (TextView)findViewById(R.id.about_downloadFolder);
+        String versionStr = "版本号：" + Utils.versionString;
+        String downloadFolderStr = "下载路径：" + Utils.downloadFolder;
+        version.setText(versionStr);
+        download.setText(downloadFolderStr);
 
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
@@ -54,6 +54,7 @@ public class AboutActivity extends AppCompatActivity {
 
         final AboutAdapter adapter = new AboutAdapter(AboutActivity.this, mList);
         listView.setAdapter(adapter);
+
         //ListView item的点击事件
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @SuppressLint("Assert")
