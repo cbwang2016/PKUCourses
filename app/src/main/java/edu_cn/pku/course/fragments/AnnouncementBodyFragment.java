@@ -4,6 +4,8 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -79,10 +81,16 @@ public class AnnouncementBodyFragment extends Fragment {
         mRecyclerView.setAdapter(adapter);
         announcementId = getActivity().getIntent().getStringExtra("AnnouncementId");
 
-        // 显示Loading的小动画，并在后台读取课程列表
-        showLoading(true);
-        mLoadingTask = new AnnouncementBodyLoadingTask();
-        mLoadingTask.execute((Void) null);
+        try {
+            boolean flag = updateAdapter(getCachedAnnouncementsList());
+            if (!flag)
+                throw new Exception();
+        } catch (Exception e) {
+            // 显示Loading的小动画，并在后台读取课程列表
+            showLoading(true);
+            mLoadingTask = new AnnouncementBodyLoadingTask();
+            mLoadingTask.execute((Void) null);
+        }
 
         return linearLayout;
     }
@@ -103,6 +111,39 @@ public class AnnouncementBodyFragment extends Fragment {
 
         mAnnouncementBodySwipeContainer.setRefreshing(show);
     }
+
+    private void saveCachedAnnouncementsList(String rootNodeStr) throws Exception {
+        FragmentActivity fa = getActivity();
+        if (fa == null) {
+            throw new Exception("Unknown Error: Null getActivity()!");
+        }
+        SharedPreferences sharedPreferences = fa.getSharedPreferences("cached_xml", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("announcement_list_str", rootNodeStr);
+        editor.apply();
+    }
+
+    private String getCachedAnnouncementsList() throws Exception {
+        FragmentActivity fa = getActivity();
+        if (fa == null) {
+            throw new Exception("Unknown Error: Null getActivity()!");
+        }
+        SharedPreferences sharedPreferences = fa.getSharedPreferences("cached_xml", Context.MODE_PRIVATE);
+        return sharedPreferences.getString("announcement_list_str", null);
+    }
+
+    // return true if success
+    private boolean updateAdapter(String str) {
+        Element n = Jsoup.parse(str).getElementById(announcementId);
+        if (n != null) {
+            ArrayList<AnnouncementListFragment.AnnouncementInfo> announcement_body_list = new ArrayList<>();
+            announcement_body_list.add(new AnnouncementListFragment.AnnouncementInfo(n));
+            adapter.updateList(announcement_body_list);
+            return true;
+        }
+        return false;
+    }
+
 
     @SuppressLint("StaticFieldLeak")
     private class AnnouncementBodyLoadingTask extends AsyncTask<Void, Void, String> {
@@ -134,14 +175,13 @@ public class AnnouncementBodyFragment extends Fragment {
                     Snackbar.make(mRecyclerView, str, Snackbar.LENGTH_SHORT).show();
                 }
             } else {
-                FragmentActivity fa = getActivity();
-                if (fa == null) {
-                    return;
+                boolean flag = updateAdapter(str);
+                try {
+                    if (flag)
+                        saveCachedAnnouncementsList(str);
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-                Element n = Jsoup.parse(str).getElementById(announcementId);
-                ArrayList<AnnouncementListFragment.AnnouncementInfo> announcement_body_list = new ArrayList<>();
-                announcement_body_list.add(new AnnouncementListFragment.AnnouncementInfo(n));
-                adapter.updateList(announcement_body_list);
             }
         }
 
