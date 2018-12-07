@@ -132,7 +132,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:background="#fafafa"
-                android:text="隐私政策"
+                android:text="Privacy Policy"
                 android:textColor="@color/colorPrimary"
                 android:textSize="12sp"
                 tools:ignore="HardcodedText" />

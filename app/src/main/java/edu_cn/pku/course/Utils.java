@@ -57,9 +57,9 @@ public class Utils {
     private static final Context applicationContext = SplashActivity.getContextOfApplication();
 
     private static final String privacyPolicy =
-            "<h1>隐私政策（简短版）</h1>\n" +
+            "<h1>Privacy Policy（简短版）</h1>\n" +
                     "<p>PKU Courses是开源软件，源码位于<a href=\"https://github.com/cbwang2016/PKUCourses\">https://github.com/cbwang2016/PKUCourses</a>，我们不会主动记录任何与您身份关联的信息，当然更不会记录密码。我们的软件中使用了<a href=\"https://mtj.baidu.com\">百度统计</a>作为第三方工具，百度可能会记录如IP地址等信息用于统计。</a></p>\n" +
-                    "<h1>隐私政策（完整版）</h1>\n" +
+                    "<h1>Privacy Policy（完整版）</h1>\n" +
                     "<p>生效日期：2018年12月4日</p>\n" +
                     "<p>PKU Courses移动应用程序团队（以下简称“我们”）维护和运行PKU Courses移动应用程序。</p>\n" +
                     "<p>当您使用我们的服务以及与该数据相关联的选项时，此页面会告知您有关个人数据的收集，使用和披露的政策。我们的PKU Courses隐私政策通过<a href=\"https://www.freeprivacypolicy.com/free-privacy-policy-generator.php\">Free\n" +
