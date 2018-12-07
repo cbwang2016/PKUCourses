@@ -123,6 +123,7 @@ public class WebViewActivity extends AppCompatActivity implements SwipeRefreshLa
 
         mSwipeContainer.setRefreshing(true);
         mWebView.loadUrl("http://course.pku.edu.cn" + getIntent().getStringExtra("WebViewUrl"));
+        mWebView.setWebViewClient(new WebViewClient());
 
 //        Slidr.attach(this);
     }
