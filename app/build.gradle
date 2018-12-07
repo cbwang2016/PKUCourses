@@ -6,8 +6,8 @@ android {
         applicationId "edu_cn.pku.course.pkucourse"
         minSdkVersion 15
         targetSdkVersion 28
-        versionCode 1101
-        versionName "v1.0.2"
+        versionCode 1200
+        versionName "v1.1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
     }
