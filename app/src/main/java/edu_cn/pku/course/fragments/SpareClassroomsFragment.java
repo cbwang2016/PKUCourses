@@ -107,7 +107,8 @@ public class SpareClassroomsFragment extends Fragment implements SwipeRefreshLay
 
             // 出现了错误
             if (session.startsWith(Utils.errorPrefix)) {
-                Snackbar.make(mSpareClassroomsSwipeContainer, session, Snackbar.LENGTH_SHORT).show();
+                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT || mSpareClassroomsSwipeContainer.isAttachedToWindow())
+                    Snackbar.make(mSpareClassroomsSwipeContainer, session, Snackbar.LENGTH_SHORT).show();
             } else {
                 CookieSyncManager cookieSyncManager = CookieSyncManager.createInstance(mWebView.getContext());
                 CookieManager cookieManager = CookieManager.getInstance();
