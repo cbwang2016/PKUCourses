@@ -61,13 +61,17 @@ public class AboutActivity extends AppCompatActivity {
                 switch (i) {
                     case 0:
                         // “问题反馈”：发送邮件
-                        Intent j = new Intent(Intent.ACTION_SEND);
-                        // j.setType("text/plain"); //模拟器请使用这行
-                        j.setType("message/rfc822"); // 真机上使用这行
-                        j.putExtra(Intent.EXTRA_EMAIL, new String[]{"wcb@pku.edu.cn"});
-                        j.putExtra(Intent.EXTRA_SUBJECT, "您发现的问题及建议");
-                        j.putExtra(Intent.EXTRA_TEXT, "我们很希望能得到您的建议！！！");
-                        startActivity(Intent.createChooser(j, "Select email application."));
+//                        Intent j = new Intent(Intent.ACTION_SEND);
+//                        // j.setType("text/plain"); //模拟器请使用这行
+//                        j.setType("message/rfc822"); // 真机上使用这行
+//                        j.putExtra(Intent.EXTRA_EMAIL, new String[]{"wcb@pku.edu.cn"});
+//                        j.putExtra(Intent.EXTRA_SUBJECT, "您发现的问题及建议");
+//                        j.putExtra(Intent.EXTRA_TEXT, "我们很希望能得到您的建议！！！");
+//                        startActivity(Intent.createChooser(j, "Select email application."));
+                        Intent intent = new Intent(Intent.ACTION_VIEW);
+                        Uri data = Uri.parse("mailto:wcb@pku.edu.cn");
+                        intent.setData(data);
+                        startActivity(intent);
                         break;
                     case 1:
                         Utils.showPrivacyPolicyDialog(AboutActivity.this);
@@ -104,7 +108,7 @@ public class AboutActivity extends AppCompatActivity {
      * 初始化数据
      */
     private void getMenuList() {
-        mList.add(new AboutMenu(R.mipmap.icon_email_600, "问题反馈", "有任何问题/功能建议/bug之类的都可以反馈。", null));
+        mList.add(new AboutMenu(R.mipmap.icon_email_600, "问题反馈", "有任何问题/功能建议/bug之类的都可以反馈。这里是通过邮件反馈，如果您有GitHub账号，也许在GitHub上开个Issue是更好的选择。", null));
         mList.add(new AboutMenu(R.mipmap.icon_protect_1, "隐私保护协议", "Privacy Policy", "如果您对此开源app的隐私安全仍感到担忧，请您点击这里审阅我们的隐私保护协议。若仍有问题，请反馈给我们。\n"));
         mList.add(new AboutMenu(R.mipmap.icon_github_logo_1024, "Github Page", "Open source code on GitHub.", null));
         mList.add(new AboutMenu(R.mipmap.icon_function_768, "功能介绍", "Features", "此APP包含了course.pku.edu.cn的部分常用功能，例如公告、通知、课程列表及每个课程包含的内容等，另外添加了北京大学门户中空闲教室查询的功能，希望为寻找空闲教室的同学提供便利。\n"));
