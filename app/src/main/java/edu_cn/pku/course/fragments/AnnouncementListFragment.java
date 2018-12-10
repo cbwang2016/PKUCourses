@@ -172,11 +172,11 @@ public class AnnouncementListFragment extends Fragment implements SwipeRefreshLa
                 Element n = nList.get(temp);
                 announcement_list.add(new AnnouncementInfo(n));
             }
-            adapter.updateList(announcement_list);
-            // 显示课程列表的fancy的动画
-            if (showAnimation)
-                mRecyclerView.scheduleLayoutAnimation();
         }
+        adapter.updateList(announcement_list);
+        // 显示课程列表的fancy的动画
+        if (showAnimation)
+            mRecyclerView.scheduleLayoutAnimation();
     }
 
     /**
