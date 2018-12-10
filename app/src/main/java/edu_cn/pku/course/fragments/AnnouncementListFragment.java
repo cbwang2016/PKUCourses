@@ -165,16 +165,18 @@ public class AnnouncementListFragment extends Fragment implements SwipeRefreshLa
         }
 
         Element list = Jsoup.parse(rootNodeStr).getElementById("announcementList");
-        Elements nList = list.children();
+        if (list != null) {
+            Elements nList = list.children();
 
-        for (int temp = 0; temp < nList.size(); temp++) {
-            Element n = nList.get(temp);
-            announcement_list.add(new AnnouncementInfo(n));
+            for (int temp = 0; temp < nList.size(); temp++) {
+                Element n = nList.get(temp);
+                announcement_list.add(new AnnouncementInfo(n));
+            }
+            adapter.updateList(announcement_list);
+            // 显示课程列表的fancy的动画
+            if (showAnimation)
+                mRecyclerView.scheduleLayoutAnimation();
         }
-        adapter.updateList(announcement_list);
-        // 显示课程列表的fancy的动画
-        if (showAnimation)
-            mRecyclerView.scheduleLayoutAnimation();
     }
 
     /**
