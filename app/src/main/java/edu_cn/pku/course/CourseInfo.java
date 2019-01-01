@@ -45,13 +45,21 @@ public class CourseInfo implements Comparable<CourseInfo> {
     private int getSemesterYear() {
         if (getRawCourseName().split("\\([0-9]").length != 2)
             return -1;
-        return Integer.parseInt(getSemesterString().split("-")[0]);
+        try {
+            return Integer.parseInt(getSemesterString().split("-")[0]);
+        } catch (NumberFormatException nfe) {
+            return -1;
+        }
     }
 
     private int getSemesterNumber() {
         if (getRawCourseName().split("\\([0-9]").length != 2)
             return -1;
-        return Integer.parseInt(Utils.betweenStrings(getRawCourseName(), "学年第", "学期"));
+        try {
+            return Integer.parseInt(Utils.betweenStrings(getRawCourseName(), "学年第", "学期"));
+        } catch (NumberFormatException nfe) {
+            return -1;
+        }
     }
 
     @Override

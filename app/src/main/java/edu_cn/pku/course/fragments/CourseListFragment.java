@@ -230,11 +230,13 @@ public class CourseListFragment extends Fragment implements SwipeRefreshLayout.O
                     try {
                         Utils.SignOut(getActivity());
                     } catch (Exception e) {
-                        Snackbar.make(mRecyclerView, e.getMessage(), Snackbar.LENGTH_SHORT).show();
+                        if (mRecyclerView.isAttachedToWindow())
+                            Snackbar.make(mRecyclerView, e.getMessage(), Snackbar.LENGTH_SHORT).show();
                     }
                 } else {
                     // 其他网络错误
-                    Snackbar.make(mRecyclerView, str, Snackbar.LENGTH_SHORT).show();
+                    if (mRecyclerView.isAttachedToWindow())
+                        Snackbar.make(mRecyclerView, str, Snackbar.LENGTH_SHORT).show();
                 }
             } else {
                 // 解析返回的HTML

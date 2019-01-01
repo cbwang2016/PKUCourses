@@ -153,11 +153,13 @@ public class AnnouncementListOfEachCourseFragment extends Fragment implements Sw
                     try {
                         Utils.SignOut(getActivity());
                     } catch (Exception e) {
-                        Snackbar.make(mRecyclerView, e.getMessage(), Snackbar.LENGTH_SHORT).show();
+                        if (mRecyclerView.isAttachedToWindow())
+                            Snackbar.make(mRecyclerView, e.getMessage(), Snackbar.LENGTH_SHORT).show();
                     }
                 } else {
                     // 其他网络错误
-                    Snackbar.make(mRecyclerView, str, Snackbar.LENGTH_SHORT).show();
+                    if (mRecyclerView.isAttachedToWindow())
+                        Snackbar.make(mRecyclerView, str, Snackbar.LENGTH_SHORT).show();
                 }
             } else {
                 // 解析返回的HTML
@@ -178,7 +180,8 @@ public class AnnouncementListOfEachCourseFragment extends Fragment implements Sw
 
                 if (nList.size() == 0) {
                     if (mRecyclerView.isAttachedToWindow())
-                        Snackbar.make(mRecyclerView, "看起来这门课没有通知...", Snackbar.LENGTH_SHORT).show();
+                        if (mRecyclerView.isAttachedToWindow())
+                            Snackbar.make(mRecyclerView, "看起来这门课没有通知...", Snackbar.LENGTH_SHORT).show();
                 } else {
                     adapter.updateList(announcement_list);
                     // 显示课程列表的fancy的动画

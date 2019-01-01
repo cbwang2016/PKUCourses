@@ -1,7 +1,5 @@
 package edu_cn.pku.course.fragments;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.Context;
@@ -87,10 +85,11 @@ public class AnnouncementBodyFragment extends Fragment {
                 throw new Exception();
         } catch (Exception e) {
             // 显示Loading的小动画，并在后台读取课程列表
-            showLoading(true);
-            mLoadingTask = new AnnouncementBodyLoadingTask();
-            mLoadingTask.execute((Void) null);
         }
+
+        showLoading(true);
+        mLoadingTask = new AnnouncementBodyLoadingTask();
+        mLoadingTask.execute((Void) null);
 
         return linearLayout;
     }
@@ -100,14 +99,14 @@ public class AnnouncementBodyFragment extends Fragment {
         // 逐渐显示mRecyclerView的小动画
         int shortAnimTime = 200;
 
-        mRecyclerView.setVisibility(show ? View.GONE : View.VISIBLE);
-        mRecyclerView.animate().setDuration(shortAnimTime).alpha(
-                show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                mRecyclerView.setVisibility(show ? View.GONE : View.VISIBLE);
-            }
-        });
+//        mRecyclerView.setVisibility(show ? View.GONE : View.VISIBLE);
+//        mRecyclerView.animate().setDuration(shortAnimTime).alpha(
+//                show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
+//            @Override
+//            public void onAnimationEnd(Animator animation) {
+//                mRecyclerView.setVisibility(show ? View.GONE : View.VISIBLE);
+//            }
+//        });
 
         mAnnouncementBodySwipeContainer.setRefreshing(show);
     }
@@ -168,11 +167,13 @@ public class AnnouncementBodyFragment extends Fragment {
                     try {
                         Utils.SignOut(getActivity());
                     } catch (Exception e) {
-                        Snackbar.make(mRecyclerView, e.getMessage(), Snackbar.LENGTH_SHORT).show();
+                        if (mRecyclerView.isAttachedToWindow())
+                            Snackbar.make(mRecyclerView, e.getMessage(), Snackbar.LENGTH_SHORT).show();
                     }
                 } else {
                     // 其他网络错误
-                    Snackbar.make(mRecyclerView, str, Snackbar.LENGTH_SHORT).show();
+                    if (mRecyclerView.isAttachedToWindow())
+                        Snackbar.make(mRecyclerView, str, Snackbar.LENGTH_SHORT).show();
                 }
             } else {
                 boolean flag = updateAdapter(str);
