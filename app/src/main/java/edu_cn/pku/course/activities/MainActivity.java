@@ -126,6 +126,24 @@ public class MainActivity extends AppCompatActivity
 
         // 百度统计
         StatService.start(this);
+
+        //下载路径
+        String current_folder = sp.getString("path_preference",null);
+        String folder = sharedPreferences.getString("path_preference", null);
+        if(folder == null) {
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putString("path_preference", Utils.downloadFolder);
+            editor.apply();
+            SharedPreferences.Editor editor2 = sp.edit();
+            editor2.putString("path_preference", Utils.downloadFolder);
+            current_folder = Utils.downloadFolder;
+            editor2.apply();
+        }
+        else if(folder != current_folder){
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putString("path_preference", current_folder);
+            editor.apply();
+        }
     }
 
     private boolean checkLongPressHint() {

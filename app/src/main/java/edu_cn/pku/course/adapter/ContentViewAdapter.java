@@ -1,10 +1,13 @@
 package edu_cn.pku.course.adapter;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
@@ -28,10 +31,12 @@ public class ContentViewAdapter extends RecyclerView.Adapter<ContentViewAdapter.
 
     private ContentViewActivity mContext;
     private ArrayList<ContentViewActivity.AttachedFileItem> list;
-
+    private String folder;
     public ContentViewAdapter(ArrayList<ContentViewActivity.AttachedFileItem> list, ContentViewActivity context) {
         this.list = list;
         this.mContext = context;
+        SharedPreferences sharedPreferences = mContext.getSharedPreferences("login_info", Context.MODE_PRIVATE);
+        folder = sharedPreferences.getString("path_preference", null);
     }
 
     @NonNull
@@ -73,7 +78,7 @@ public class ContentViewAdapter extends RecyclerView.Adapter<ContentViewAdapter.
                             .setMessage("您是否想删除此文件（" + list.get(holder.getAdapterPosition()).getFileName() + "）的本地缓存？")
                             .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int whichButton) {
-                                    boolean tmp = new File(Utils.downloadFolder + list.get(holder.getAdapterPosition()).getFileName()).delete();
+                                    boolean tmp = new File(folder + list.get(holder.getAdapterPosition()).getFileName()).delete();
                                     if (!tmp) {
                                         new AlertDialog.Builder(mContext)
                                                 .setMessage("文件删除失败")
@@ -96,7 +101,7 @@ public class ContentViewAdapter extends RecyclerView.Adapter<ContentViewAdapter.
     public void refreshList() {
         if (EasyPermissions.hasPermissions(mContext, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
             for (ContentViewActivity.AttachedFileItem tmp : this.list) {
-                String filePath = Utils.downloadFolder + tmp.getFileName();
+                String filePath = folder + tmp.getFileName();
                 if (new File(filePath).exists()) {
                     tmp.setDownloaded(true);
                 }
@@ -109,7 +114,7 @@ public class ContentViewAdapter extends RecyclerView.Adapter<ContentViewAdapter.
         this.list = item_list;
         if (EasyPermissions.hasPermissions(mContext, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
             for (ContentViewActivity.AttachedFileItem tmp : this.list) {
-                String filePath = Utils.downloadFolder + tmp.getFileName();
+                String filePath = folder + tmp.getFileName();
                 if (new File(filePath).exists()) {
                     tmp.setDownloaded(true);
                 }
