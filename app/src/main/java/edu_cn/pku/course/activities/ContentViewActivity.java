@@ -16,6 +16,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.FileProvider;
@@ -72,7 +73,7 @@ public class ContentViewActivity extends AppCompatActivity implements SwipeRefre
 
     private String currentDownloadUrl = "";
     private String currentDownloadFileName = "";
-
+    static public String folder;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -105,6 +106,9 @@ public class ContentViewActivity extends AppCompatActivity implements SwipeRefre
         mLoadingTask.execute((Void) null);
 
         Slidr.attach(this);
+
+        SharedPreferences sharedPreferences = getSharedPreferences("login_info", Context.MODE_PRIVATE);
+        folder = sharedPreferences.getString("path_preference", null);
     }
 
     @Override
@@ -167,7 +171,7 @@ public class ContentViewActivity extends AppCompatActivity implements SwipeRefre
         currentDownloadUrl = item.getUrl();
         currentDownloadFileName = item.getFileName();
         if (item.isDownloaded()) {
-            openFile(Utils.downloadFolder + currentDownloadFileName);
+            openFile(folder + currentDownloadFileName);
             return;
         }
         //check if app has permission to write to the external storage.
@@ -237,7 +241,6 @@ public class ContentViewActivity extends AppCompatActivity implements SwipeRefre
 
         private ProgressDialog progressDialog;
         private String fileName;
-        private String folder;
 //        private boolean isDownloaded;
 
         /**
@@ -276,7 +279,7 @@ public class ContentViewActivity extends AppCompatActivity implements SwipeRefre
                 fileName = currentDownloadFileName;
 
                 //External directory path to save file
-                folder = Utils.downloadFolder;
+                //folder = Utils.downloadFolder;
 
                 //Create androiddeft folder if it does not exist
                 File directory = new File(folder);
