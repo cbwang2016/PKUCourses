@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.app.Activity;
 import android.preference.PreferenceManager;
 import android.util.Log;
+
+import java.io.File;
 import java.util.ArrayList;
 
 import li.filedirchoose.ChooseFileActivity;
@@ -33,7 +35,7 @@ public class SelectFolderActivity extends Activity{
             if(resPath.size() > 0) {
                 SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
                 SharedPreferences.Editor editor = sp.edit();
-                editor.putString("path_preference", resPath.get(0).toString());
+                editor.putString("path_preference", resPath.get(0).toString() + File.separator);
                 editor.apply();
             }
         }
