@@ -1,5 +1,6 @@
 package edu_cn.pku.course.activities;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.preference.ListPreference;
@@ -7,12 +8,15 @@ import android.preference.Preference;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatDelegate;
 import android.view.MenuItem;
 
 import com.r0adkll.slidr.Slidr;
 
-public class SettingsActivity extends AppCompatPreferenceActivity {
+import android.preference.PreferenceActivity;
 
+public class SettingsActivity extends PreferenceActivity{
+    private AppCompatDelegate mDelegate;
     /**
      * A preference value change listener that updates the preference's summary to reflect its new value.
      */
@@ -60,11 +64,20 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
-
         addPreferencesFromResource(R.xml.preferences_settings);
 
         bindPreferenceSummaryToValue(findPreference("launch_page"));
+        Preference pref1 = findPreference("path_preference");
+        bindPreferenceSummaryToValue(pref1);
 
+        //Listener for clicking on the path setting
+        pref1.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                setPath();
+                return true;
+            }
+        });
         getListView().setBackgroundColor(Color.WHITE);
         Slidr.attach(this);
     }
@@ -80,7 +93,25 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             }
             return true;
         }
+
         return super.onMenuItemSelected(featureId, item);
     }
 
+    public ActionBar getSupportActionBar() {
+        return getDelegate().getSupportActionBar();
+    }
+
+    private AppCompatDelegate getDelegate() {
+        if (mDelegate == null) {
+            mDelegate = AppCompatDelegate.create(this, null);
+        }
+        return mDelegate;
+    }
+
+    public void setPath()
+    {
+        Intent it = new Intent(this, SelectFolderActivity.class);
+        startActivity(it);
+        finish();
+    }
 }

@@ -19,7 +19,7 @@
             android:negativeButtonText="@null"
             android:positiveButtonText="@null"
             android:title="@string/settings_list_preference_title" />
-        <EditTextPreference
+        <Preference
             android:defaultValue="0"
             android:key="path_preference"
             android:selectAllOnFocus="true"
