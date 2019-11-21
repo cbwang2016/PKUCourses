@@ -85,7 +85,7 @@ public class AboutActivity extends AppCompatActivity {
                         ToastUtil.toast(AboutActivity.this, "别点了，再点功能也不会多的！\n不如点击“问题反馈”给予我们建议。");
                         break;
                     case 4:
-                        ToastUtil.toast(AboutActivity.this, "Bloom！\n这里有三条狗\n和一只（|ψ> = a|是狗> + b|非狗>, a,b数值可随心而取）\n有意向可以选购");
+                        ToastUtil.toast(AboutActivity.this, "Bloom！\n这里有一条狗\n和三只（|ψ> = a|是狗> + b|非狗>, a,b数值可随心而取）\n有意向可以选购");
                         break;
                 }
             }
